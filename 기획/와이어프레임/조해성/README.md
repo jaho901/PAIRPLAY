@@ -10,17 +10,17 @@
 
 #### 메인페이지
 
-<img src="README.assets/운동메인.png" alt="운동메인" style="zoom: 33%;" />
+<img src="./README.assets/운동메인.png" alt="운동메인" style="zoom: 33%;" />
 
 #### 1. 운동 시설 조회 및 예약
 
 ##### 스포츠 종목 선택									
 
-<img src="README.assets/운동장소-16499402368434.png" alt="운동장소" style="zoom: 50%;" />
+<img src="./README.assets/운동장소-16499402368434.png" alt="운동장소" style="zoom: 50%;" />
 
 ##### 운동 장소 선택
 
-<img src="README.assets/장소선택-16499401667611.png" alt="장소선택" style="zoom: 50%;" />
+<img src="./README.assets/장소선택-16499401667611.png" alt="장소선택" style="zoom: 50%;" />
 
 
 
