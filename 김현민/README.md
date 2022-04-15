@@ -22,4 +22,4 @@
 - 결제 시스템 구조 이해
     - [https://skyseven73.tistory.com/17](https://skyseven73.tistory.com/17)
     - [https://zarawebstudy.tistory.com/11](https://zarawebstudy.tistory.com/11)
-- 카카오 페이보다 훨씬 더 있어 보일 듯
+- 카카오 페이보다 훨씬 더 있어 보일 듯.
