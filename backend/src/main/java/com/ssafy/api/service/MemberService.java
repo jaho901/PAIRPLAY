@@ -1,69 +1,62 @@
 package com.ssafy.api.service;
 
-import com.ssafy.common.util.PasswordUtil;
+import com.ssafy.api.request.MemberSignupPostReq;
 import com.ssafy.domain.entity.Member;
 import com.ssafy.domain.repository.MemberRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
+@Service("memberService")
 public class MemberService {
-    @Autowired
-    MemberRepository memberRepository;
-//    @Autowired
-//    JavaMailSender javaMailSender;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private final MemberRepository memberRepository;
 
-//    @Override
-//    public Member createUser(UserRegisterPostReq userRegisterInfo) {
+//    private final JavaMailSender javaMailSender;
+
+    public MemberService(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
+
+    public Member signup(MemberSignupPostReq memberInfo) {
+        String email = memberInfo.getEmail();
+        String nickname = memberInfo.getNickname();
+//        String password = passwordEncoder.encode(memberInfo.getPassword()); // 컨트롤러에서 암오화 해서 넘겨오기
+
+        Member member = Member.builder()
+                .email(email)
+                .nickname(nickname)
+//                .password(password)
+                .build();
+        return memberRepository.save(member);
+    }
+
+//    public Member afterSignup(MemberSignupPutReq memberInfo) {
 //
-//        String nickname = userRegisterInfo.getNickname();
-//        String email = userRegisterInfo.getEmail();
-//        String password = passwordEncoder.encode(userRegisterInfo.getPassword());
-//
-//        Member user = User.builder()
+//        Member member = Member.builder()
 //                .email(email)
 //                .nickname(nickname)
 //                .password(password)
-//                .role("USER")
-//                .maskId(1)
-//                .maskBack(1)
-//                .socialId("0")
-//                .profileImg("default-profile-image.jpg")
 //                .build();
-//        return memberRepository.save(user);
+//        return memberRepository.save(member);
 //    }
-//
-    public Member getMemberById(Long memberId) {
-        // 디비에 유저 정보 조회 (userEmail 를 통한 조회).
-        Member member = memberRepository.findById(memberId).orElse(null);
 
-        System.out.println(member); // 추가
-        return member;
+    public Member getMemberById(Long memberId) {
+        // 디비에 유저 정보 조회 (memberId 를 통한 조회).
+        return memberRepository.findById(memberId).orElse(null);
     }
 
     public Member getMemberByEmail(String memberEmail) {
         // 디비에 유저 정보 조회 (userEmail 를 통한 조회).
-        Member member = memberRepository.findByEmail(memberEmail).orElse(null);
-
-        System.out.println(member); // 추가
-        return member;
+        return memberRepository.findByEmail(memberEmail).orElse(null);
     }
 
-//    @Override
-//    public User getUserByNickname(String userNickname) {
-//
-//        User user = userRepositorySupport.findByNickname(userNickname).orElse(null);
-//        return user;
-//    }
-//
-//    @Override
-//    public User getUserById(Long userId) {
-//        User user = userRepositorySupport.findUserById(userId).orElse(null);
-//        return user;
-//    }
-//
+    public Member getMemberByNickname(String memberNickname) {
+        // 디비에 유저 정보 조회 (userEmail 를 통한 조회).
+        return memberRepository.findByNickname(memberNickname).orElse(null);
+    }
+
 //    @Override
 //    public boolean sendMail(String email) {
 //        // 아이디로 메일, 비밀번호 가져오기
@@ -78,7 +71,7 @@ public class MemberService {
 //            simpleMessage.setTo(user.getEmail());
 //            simpleMessage.setSubject(user.getNickname() + "님의 임시 비밀번호");
 //            String tmpPassword = PasswordUtil.getRandomPassword(); // 임시비밀번호
-//            String tmpJwtToken = passwordEncoder.encode(tmpPassword); // 임시비밀번호의 jwtToken
+//            String tmpJwtToken = passwordEncoder.encode(tmpPassword); // 임시비밀번호의 jwtToken // 임시비밀번호 생성 암호화 컨트롤러에서 아니면 패스워드 유틸에서
 //            // password update 구문
 //            user.resetPassword(tmpJwtToken);
 //            memberRepository.save(user);

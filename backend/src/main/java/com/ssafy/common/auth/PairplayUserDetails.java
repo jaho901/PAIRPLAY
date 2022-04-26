@@ -2,6 +2,7 @@ package com.ssafy.common.auth;
 
 import com.ssafy.domain.entity.Member;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.ArrayList;
@@ -11,16 +12,17 @@ import java.util.List;
 /**
  * 현재 액세스 토큰으로 부터 인증된 유저의 부가 상세정보(활성화 여부, 만료, 롤 등) 정의.
  */
-public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
-	@Autowired
+public class PairplayUserDetails implements UserDetails {
+
 	Member member;
+
 	boolean accountNonExpired;
     boolean accountNonLocked;
     boolean credentialNonExpired;
     boolean enabled = false;
     List<GrantedAuthority> roles = new ArrayList<>();
     
-    public UserDetails(Member member) {
+    public PairplayUserDetails(Member member) {
     		super();
     		this.member = member;
     }

@@ -1,4 +1,4 @@
-package com.ssafy.common.config;
+package com.ssafy.config;
 
 import com.ssafy.common.util.JwtTokenUtil;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -73,7 +73,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Bean
     public FilterRegistrationBean loggingFilterRegistration() {
         FilterRegistrationBean registration = new FilterRegistrationBean(requestLoggingFilter());
-        registration.addUrlPatterns("/api/*");
+        registration.addUrlPatterns("/api/v1/*");
         return registration;
     }
 }
