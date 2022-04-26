@@ -1,3 +1,5 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
 plugins {
 	id 'org.springframework.boot' version '2.6.7'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
@@ -24,11 +26,7 @@ repositories {
 //	maven { url "https://~~~" }
 }
 
-// 프로젝트에 필요한 의존성을 선언
 dependencies {
-	// compile 메소드 대신 implementation 메소드 사용할 것!
-	// compile 보다 빠르고 build시 api가 노출되지 않아 보안성이 좋음.
-
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -39,9 +37,11 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 
+	implementation 'com.google.guava:guava:29.0-jre'
+
 	// ------------------- swagger ----------------------
-	implementation 'io.springfox:springfox-swagger2:2.9.2'
-	implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+	implementation 'io.springfox:springfox-swagger2:3.0.0'
+	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
 
 	// ------------------- querydsl ---------------------
 	implementation 'com.querydsl:querydsl-jpa'
@@ -56,4 +56,8 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+jar {
+	enabled = false
 }

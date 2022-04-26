@@ -1,31 +1,33 @@
 package com.ssafy.api.service;
 
 import com.ssafy.api.request.MemberSignupPostReq;
-import com.ssafy.api.request.MemberSignupPutReq;
-import com.ssafy.common.util.PasswordUtil;
 import com.ssafy.domain.entity.Member;
 import com.ssafy.domain.repository.MemberRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
+@Service("memberService")
 public class MemberService {
-    @Autowired
-    MemberRepository memberRepository;
-//    @Autowired
-//    JavaMailSender javaMailSender;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private final MemberRepository memberRepository;
+
+//    private final JavaMailSender javaMailSender;
+
+    public MemberService(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
 
     public Member signup(MemberSignupPostReq memberInfo) {
         String email = memberInfo.getEmail();
         String nickname = memberInfo.getNickname();
-        String password = passwordEncoder.encode(memberInfo.getPassword());
+//        String password = passwordEncoder.encode(memberInfo.getPassword()); // 컨트롤러에서 암오화 해서 넘겨오기
 
         Member member = Member.builder()
                 .email(email)
                 .nickname(nickname)
-                .password(password)
+//                .password(password)
                 .build();
         return memberRepository.save(member);
     }
@@ -69,7 +71,7 @@ public class MemberService {
 //            simpleMessage.setTo(user.getEmail());
 //            simpleMessage.setSubject(user.getNickname() + "님의 임시 비밀번호");
 //            String tmpPassword = PasswordUtil.getRandomPassword(); // 임시비밀번호
-//            String tmpJwtToken = passwordEncoder.encode(tmpPassword); // 임시비밀번호의 jwtToken
+//            String tmpJwtToken = passwordEncoder.encode(tmpPassword); // 임시비밀번호의 jwtToken // 임시비밀번호 생성 암호화 컨트롤러에서 아니면 패스워드 유틸에서
 //            // password update 구문
 //            user.resetPassword(tmpJwtToken);
 //            memberRepository.save(user);
