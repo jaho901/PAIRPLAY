@@ -7,10 +7,9 @@ export async function loginGetEmail({ state }, payload) {
   console.log(body, 'body')
   await $axios.post(url, body)
     .then((res) => {
-      console.log(res)
+      console.log(res);
     })
     .catch((err) => {
-      console.log(err)
-    })
+      console.log(err);
+    });
 }
-
