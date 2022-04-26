@@ -3,51 +3,51 @@
   <div class="row row-cols-1 row-cols-md-5 g-4">
     <div class="col">
       <div class="card">
-        <img src="https://as2.ftcdn.net/v2/jpg/02/97/52/81/1000_F_297528198_uu6DjM2ZqSp5y0nXMeo2WsUFOhlyeHeO.jpg" class="card-img" alt="" />
+        <img src="https://t3.ftcdn.net/jpg/03/29/60/84/240_F_329608479_vP9nFK795X8lWmoTa8DPhMgoewQ7U1lG.jpg" class="card-img" alt="" />
         <div class="card-body">
-          <p class="card-placeRegion">부산 해운대구</p>
+          <p class="card-placeRegion">This is a longer</p>
           <p class="card-title fw-bold">Card title</p>
-          <p class="card-text">부산 연제구 card with supporting text .</p>
+          <p class="card-text">This is a longer card with supporting text .</p>
         </div>
       </div>
     </div>
     <div class="col">
       <div class="card">
-        <img src="https://t4.ftcdn.net/jpg/00/00/53/99/240_F_539921_WqMApqrN2uQabcHwxTd9fYCM1XhiEt.jpg" class="card-img" alt="" />
+        <img src="https://t3.ftcdn.net/jpg/01/08/99/20/240_F_108992094_SZ5WSERYBUzfI2uookwvFQdFc6DSt9IB.jpg" class="card-img" alt="" />
         <div class="card-body">
-          <p class="card-placeRegion">부산 연제구</p>
+          <p class="card-placeRegion">This is a longer</p>
           <p class="card-title fw-bold">Card title</p>
-          <p class="card-text">부산 연제구 card with supporting text .</p>
+          <p class="card-text">This is a longer card with supporting text .</p>
         </div>
       </div>
     </div>
     <div class="col">
       <div class="card">
-        <img src="https://t4.ftcdn.net/jpg/03/08/54/91/240_F_308549122_oW7HcGySCq73g4yXKG1QGVAEGkgHJcAx.jpg" class="card-img" alt="" />
+        <img src="https://t4.ftcdn.net/jpg/02/67/46/51/240_F_267465121_hbjzEm2kJc9yowdM1TqCwdgNYZA76fse.jpg" class="card-img" alt="" />
         <div class="card-body">
-          <p class="card-placeRegion">부산 금정구</p>
+          <p class="card-placeRegion">This is a longer</p>
           <p class="card-title fw-bold">Card title</p>
-          <p class="card-text">부산 연제구 card with supporting text .</p>
+          <p class="card-text">This is a longer card with supporting text .</p>
         </div>
       </div>
     </div>
     <div class="col">
       <div class="card">
-        <img src="https://t4.ftcdn.net/jpg/01/31/59/21/240_F_131592129_eTgY2jmvtWt1uXBVV3o6Khvg1ZJERltv.jpg" class="card-img" alt="" />
+        <img src="https://t4.ftcdn.net/jpg/01/71/23/49/240_F_171234990_cSNErNz2LkXTP7YxMNzRY3jDhz0laMa2.jpg" class="card-img" alt="" />
         <div class="card-body">
-          <p class="card-placeRegion">부산 진구</p>
+          <p class="card-placeRegion">This is a longer</p>
           <p class="card-title fw-bold">Card title</p>
-          <p class="card-text">부산 연제구 card with supporting text .</p>
+          <p class="card-text">This is a longer card with supporting text .</p>
         </div>
       </div>
     </div>
     <div class="col">
       <div class="card">
-        <img src="https://t4.ftcdn.net/jpg/04/97/42/67/240_F_497426715_JxTIazdz2t2aXeTi1fRFaJIlzTIOatbv.jpg" class="card-img" alt="" />
+        <img src="https://as1.ftcdn.net/v2/jpg/03/03/44/82/1000_F_303448274_0N7iYpZ7B8Er3z7iDRa70zhxihGfjpNZ.jpg" class="card-img" alt="" />
         <div class="card-body">
-          <p class="card-placeRegion">부산 수영구</p>
+          <p class="card-placeRegion">This is a longer</p>
           <p class="card-title fw-bold">Card title</p>
-          <p class="card-text">부산 연제구 card with supporting text .</p>
+          <p class="card-text">This is a longer card with supporting text .</p>
         </div>
       </div>
     </div>
@@ -57,7 +57,7 @@
 
 <script>
 export default {
-  name: "PlaceRecommend",
+  name: "PlaceRecentView",
 
   setup() {
     // const store = userStore();
@@ -96,8 +96,7 @@ export default {
   height: 100%;
   border-radius: 10px;
   // border:0px;
-
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.3);
   // z-index: 1;
   // color: white;
 }
