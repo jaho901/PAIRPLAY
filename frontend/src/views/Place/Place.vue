@@ -4,7 +4,7 @@
     <header>헤더</header>
     <div class="PlaceBackgroundImage">
       <div class="PlaceBackgroundImageCover">
-        <div class="PlaceBackground-Content">
+        <div class="PlaceBackground-Content ms-5 ps-5">
           당신에게 적합한 <br />
           운동장소를 찾아보세요.
         </div>
@@ -12,12 +12,12 @@
     </div>
     <div class="container">
       <!-- <header></header> -->
-      <div class="category-container">
+      <div class="category container">
         <div class="category-title ps-3 mt-5 mb-4">
           <div class="fs-3 fw-bold">운동 카테고리</div>
           <div>원하는 운동 카테고리를 선택해보세요.</div>
         </div>
-        <div>카드들</div>
+        <place-category></place-category>
       </div>
       <div class="recommendPlaceForUser">유저를 위한 추천</div>
       <div class="nowdaysPlace">최근본 장소</div>
@@ -27,8 +27,11 @@
 </template>
 
 <script>
+import PlaceCategory from "./Components/PlaceCategory.vue";
 export default {
+  components: { PlaceCategory },
   name: "Place",
+
   setup() {
     // const store = userStore();
     // const route = useRoute();
@@ -45,6 +48,7 @@ header {
   width: 100%;
   height: 330px;
   background: black;
+  margin-bottom: 5rem;
   background-color: rgba(0, 0, 0, 0.4);
   background: url("https://images.pexels.com/photos/3601094/pexels-photo-3601094.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260") 50% 40% no-repeat;
   background-size: 100% auto;
@@ -60,8 +64,8 @@ header {
 .PlaceBackground-Content {
   position: absolute;
   top: 40%;
-  left: 5%;
-  font-size: 3rem;
+  /* max-width: */
+  font-size: calc(1em + 2vw);
   /* transform: translate(-50%, -50%); */
   z-index: 2;
   text-align: left;
@@ -72,8 +76,6 @@ header {
   /* max-width: 1280px; */
   margin: auto;
   background-color: wheat;
-}
-.category-container {
 }
 .category {
   background-color: wheat;
