@@ -20,10 +20,10 @@ spring:
         one-indexed-parameters: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/pairplay?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true&useSSL=false
+    url: jdbc:mysql://k6e205.p.ssafy.io:3663/pairplay?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true&useSSL=false
     hikari:
-      username: root
-      password: 1234
+      username: ssafy205
+      password: 205ssafy205!!
   devtools:
     livereload:
       enabled: true
