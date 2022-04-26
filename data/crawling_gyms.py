@@ -22,22 +22,20 @@ import random
 import pprint
 import json
 # 크롤링에서 사용하는 변수들
-headers = { 'user-agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.109 Safari/537.36'}
-baseUrl = "https://map.naver.com/v5/";
-page = 1
+headers = {'user-agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36'}
 
 def writeCSV(list):
     list_title = ['id', 'category', 'address', 'bizhour', 'homepage', 'menu', 'name', 'parkingfee', 'skyPanorama', 'streetPanorama', 'img', 'phone', 'longitude', 'latitude', 'transport', 'near', 'hashtags', 'facilities']
     # ===================================================
-    if os.path.isfile("gym_busan.csv"):
+    if os.path.isfile("gym_region.csv"):
         pass
     else:
-        with open('gym_busan.csv', 'w', newline='', encoding='utf-8-sig') as f_object:
+        with open('gym_region.csv', 'w', newline='', encoding='utf-8-sig') as f_object:
             writer_object = writer(f_object)
             writer_object.writerow(list_title)
             f_object.close()
 
-    with open('gym_busan.csv', 'a', newline='', encoding='utf-8-sig') as f_object:
+    with open('gym_region.csv', 'a', newline='', encoding='utf-8-sig') as f_object:
         writer_object = writer(f_object)
         for data in list:
             writer_object.writerow(data)
@@ -55,138 +53,129 @@ chungcheongbuk = ['충북 충주시', '충북 제천시', '충북 보은군', '�
 jeollanam = ['전남 목포시', '전남 여수시', '전남 순천시', '전남 나주시', '전남 광양시', '전남 담양군', '전남 곡성군', '전남 구례군', '전남 고흥군', '전남 보성군', '전남 화순군', '전남 장흥군', '전남 강진군', '전남 해남군', '전남 영암군', '전남 무안군', '전남 함평군', '전남 영광군', '전남 장성군', '전남 완도군', '전남 진도군', '전남 신안군']
 jeollabuk = ['전북 전주시', '전북 익산시', '전북 군산시', '전북 정읍시', '전북 김제시', '전북 남원시', '전북 완주군', '전북 고창군', '전북 부안군', '전북 임실군', '전북 순창군', '전북 진안군', '전북 무주군', '전북 장수군']
 category = ['축구', '풋살', '농구', '야구', '볼링', '골프', '테니스', '헬스', '필라테스', '격투기', '수영', '클라이밍', '배드민턴']
-# busan + seoul + gyeonggi + gangwon + gyeongnam + gyeongbuk + chungcheongnam + chungcheongbuk + jeollanam + jeollabuk
+region = busan + seoul + gyeonggi + gangwon + gyeongnam + gyeongbuk + chungcheongnam + chungcheongbuk + jeollanam + jeollabuk
 def get_region():
     ad = []
-    for i in busan:
+    for i in region:
         for j in category:
-            ad.append(i + ' ' + j)
+            ad.append(i + '%20' + j)
     return ad
 
 def crawling(search):
     global headers
     total_data = []
-    page = 1
-    exist = False
-    while True:
-        try:
-            url = "https://map.naver.com/v5/api/search?caller=pcweb&query="+search+"&type=all&page="+str(page)+"&displayCount=20&lang=ko"
-            response = requests.get(url, headers=headers)
-            html = response.text
-            time.sleep(random.uniform(1, 2))
-            soup = bs(html, 'html.parser')
-            jsonObject = json.loads(str(soup))
-            try:
-                jsonData = jsonObject["result"]["place"]["list"]
-            except:
+    url = "https://map.naver.com/v5/api/search?query="+search+"&type=all&page=1&displayCount=20&lang=ko"
+    response = requests.get(url, headers=headers)
+    html = response.text
+    soup = bs(html, 'html.parser')
+    time.sleep(random.uniform(1, 2))
+    jsonObject = json.loads(str(soup))
+    try:
+        jsonData = jsonObject["result"]["place"]["list"]
+        big, small, category = search.split(' ')
+        for i in range(len(jsonData)):
+            # 주소
+            address = jsonData[i]["address"]
+            if small not in address:
                 break
-            big, small, category = search.split(' ')
-            for i in range(len(jsonData)):
-                # 주소
-                address = jsonData[i]["address"]
-                if small not in address:
-                    exist = True
-                    break
-                # 운영일
-                if jsonData[i]["bizhourInfo"] == None:
-                    bizhour = ['매일 00:00~24:00']
-                else:
-                    bizhour = jsonData[i]["bizhourInfo"].split(" | ")
-                # id
-                id = jsonData[i]["id"]
-                # homePage
-                if jsonData[i]["homePage"]=="":
-                    homepage = "-"
-                else:
-                    homepage = jsonData[i]["homePage"]
-                # menu
-                if jsonData[i]["menuInfo"]:
-                    menu = jsonData[i]["menuInfo"].split(" | ")
-                else:
-                    menu = []
-                # 이름
-                name = jsonData[i]["name"]
-                # 주차비용
-                if jsonData[i]["parkingPrice"] == None:
-                    parkingfee = '무료'
-                else:
-                    parkingfee = jsonData[i]["parkingPrice"]
-                # skyPanorama
-                if jsonData[i]["skyPanorama"]:
-                    skyPanorama = jsonData[i]["skyPanorama"]
-                else:
-                    skyPanorama = "-"
-                # streetPanorama
-                if jsonData[i]["streetPanorama"]:
-                    streetPanorama = jsonData[i]["streetPanorama"]
-                else:
-                    streetPanorama = "-"
-                # Thumnail
-                if jsonData[i]["thumUrl"]:
-                    img = jsonData[i]["thumUrl"]
-                else:
-                    img = "-"
-                # 전화번호
-                if jsonData[i]["virtualTel"] == "":
-                    phone = "-"
-                else:
-                    phone = jsonData[i]["virtualTel"]
-                longitude = jsonData[i]["x"]
-                latitude = jsonData[i]["y"]
-                
-                new_url = "https://pcmap.place.naver.com/place/"+id+"/home"
-                new_response = requests.get(new_url, headers=headers)
-                new_response.encoding = 'utf-8'
-                new_html = new_response.text
-                time.sleep(random.uniform(0.5, 1.5))
-                new_soup = bs(new_html, 'html.parser')
-                # 대중교통
-                if new_soup.find('div', class_="_2P6sT"):
-                    trans = new_soup.find('div', class_="_2P6sT")        
-                    if trans:
-                        no = ''
-                        for i in range(len(trans.find_all('span', class_="_12Coj"))):
-                            no += trans.find_all('span', class_="_12Coj")[i].contents[0]
-                            no += ', '
-                        sub = trans.find('strong').contents[0]
-                        tra = str(trans).split("<!-- -->")
-                        ent = tra[1].replace("</strong>", "")
-                        dist = tra[2].replace("<em>", " ")
-                        transport = no + sub + ent + dist + 'm'
-                    else:
-                        transport = '-'
+            # 운영일
+            if jsonData[i]["bizhourInfo"] == None:
+                bizhour = ['매일 00:00~24:00']
+            else:
+                bizhour = jsonData[i]["bizhourInfo"].split(" | ")
+            # id
+            id = jsonData[i]["id"]
+            # homePage
+            if jsonData[i]["homePage"]=="":
+                homepage = "-"
+            else:
+                homepage = jsonData[i]["homePage"]
+            # menu
+            if jsonData[i]["menuInfo"]:
+                menu = jsonData[i]["menuInfo"].split(" | ")
+            else:
+                menu = []
+            # 이름
+            name = jsonData[i]["name"]
+            # 주차비용
+            if jsonData[i]["parkingPrice"] == None:
+                parkingfee = '무료'
+            else:
+                parkingfee = jsonData[i]["parkingPrice"]
+            # skyPanorama
+            if jsonData[i]["skyPanorama"]:
+                skyPanorama = jsonData[i]["skyPanorama"]
+            else:
+                skyPanorama = "-"
+            # streetPanorama
+            if jsonData[i]["streetPanorama"]:
+                streetPanorama = jsonData[i]["streetPanorama"]
+            else:
+                streetPanorama = "-"
+            # Thumnail
+            if jsonData[i]["thumUrl"]:
+                img = jsonData[i]["thumUrl"]
+            else:
+                img = "-"
+            # 전화번호
+            if jsonData[i]["virtualTel"] == "":
+                phone = "-"
+            else:
+                phone = jsonData[i]["virtualTel"]
+            longitude = jsonData[i]["x"]
+            latitude = jsonData[i]["y"]
+            
+            new_url = "https://pcmap.place.naver.com/place/"+id+"/home"
+            new_response = requests.get(new_url, headers=headers)
+            new_response.encoding = 'utf-8'
+            new_html = new_response.text
+            time.sleep(random.uniform(1, 2))
+            new_soup = bs(new_html, 'html.parser')
+            # 대중교통
+            if new_soup.find('div', class_="_2P6sT"):
+                trans = new_soup.find('div', class_="_2P6sT")        
+                if trans:
+                    no = ''
+                    for i in range(len(trans.find_all('span', class_="_12Coj"))):
+                        no += trans.find_all('span', class_="_12Coj")[i].contents[0]
+                        no += ', '
+                    sub = trans.find('strong').contents[0]
+                    tra = str(trans).split("<!-- -->")
+                    ent = tra[1].replace("</strong>", "")
+                    dist = tra[2].replace("<em>", " ")
+                    transport = no + sub + ent + dist + 'm'
                 else:
                     transport = '-'
-                # 찾아오는 길
-                if new_soup.find('span', class_="WoYOw"):
-                    near = new_soup.find('span', class_="WoYOw").contents[0]
-                    if len(near) >= 50:
-                        near = []
-                else:
+            else:
+                transport = '-'
+            # 찾아오는 길
+            if new_soup.find('span', class_="WoYOw"):
+                near = new_soup.find('span', class_="WoYOw").contents[0]
+                if len(near) >= 50:
                     near = []
-                # 해쉬태그
-                if new_soup.find_all("span", class_="_1RUzg"):
-                    hashtags = []
-                    for i in new_soup.find_all("span", class_="_1RUzg"):
-                        hashtags.append(i.contents[2])
-                else:
-                    hashtags = []
-                # 편의시설
-                if new_soup.find('div', class_="_1h3B_"):
-                    facilities = new_soup.find('div', class_="_1h3B_")
-                else:
-                    facilities = []
-                
-                data = [id, category, address, bizhour, homepage, menu, name, parkingfee, skyPanorama, streetPanorama, img, phone, longitude, latitude, transport, near, hashtags, facilities]
-                total_data.append(data)
-            if exist:
-                break
-            page += 1
-        except:
-            pass    
-    writeCSV(total_data) 
+            else:
+                near = []
+            # 해쉬태그
+            if new_soup.find_all("span", class_="_1RUzg"):
+                hashtags = []
+                for i in new_soup.find_all("span", class_="_1RUzg"):
+                    hashtags.append(i.contents[2])
+            else:
+                hashtags = []
+            # 편의시설
+            if new_soup.find('div', class_="_1h3B_"):
+                facilities = new_soup.find('div', class_="_1h3B_")
+            else:
+                facilities = []
+            
+            data = [id, category, address, bizhour, homepage, menu, name, parkingfee, skyPanorama, streetPanorama, img, phone, longitude, latitude, transport, near, hashtags, facilities]
+            total_data.append(data)
+        writeCSV(total_data)
+    except:
+        pass
 
 
+crawling('부산%20금정구%20축구')
 
 if __name__=='__main__':
     start_time = time.time()
