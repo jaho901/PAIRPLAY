@@ -1,4 +1,4 @@
-package com.ssafy.common.exception.handler;
+package com.ssafy.common.handler;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;

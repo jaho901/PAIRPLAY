@@ -1,4 +1,4 @@
-//package com.ssafy.common.config;
+package com.ssafy.config;//package com.ssafy.common.config;
 //
 //import com.ssafy.common.util.JwtTokenUtil;
 //import com.ssafy.db.entity.User;

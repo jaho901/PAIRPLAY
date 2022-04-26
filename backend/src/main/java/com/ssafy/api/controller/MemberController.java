@@ -9,7 +9,10 @@ import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 유저 관련 API 요청 처리를 위한 컨트롤러 정의.
@@ -131,7 +134,7 @@ public class MemberController {
 //    })
 //    public ResponseEntity<BaseResponseBody> resetPassword(@RequestBody @ApiParam(value = "이메일 정보", required = true) UserLoginPostReq email) {
 //        String tempEmail = email.getEmail();
-//
+        // 여기서 임시 비밀번호 생성 해서 service로 넘겨줘야 함
 //        System.out.println(tempEmail);
 //        if (memberService.sendMail(tempEmail)) {
 //            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "SUCCESS"));
