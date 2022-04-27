@@ -70,7 +70,7 @@ export async function login({ state }, payload) {
   console.log(state)
   await $axios.post(url, body)
     .then((res) => {
-      console.log(res)
+      console.log(res, '성공')
     })
     .catch((err) => {
       console.log(err)
