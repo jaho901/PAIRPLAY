@@ -19,7 +19,7 @@ public class Activity extends BaseEntity{
 
     boolean isTeam;
     int categoryId;
-    Long crateId;
+    Long createId;
     String title;
     String description;
     LocalDateTime meetDt;

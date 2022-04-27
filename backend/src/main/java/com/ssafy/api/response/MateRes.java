@@ -34,8 +34,17 @@ public class MateRes {
     @ApiModelProperty(name = "팀 여부")
     boolean isTeam;
 
-    public static MateRes of(Activity mate) {
+    public static MateRes of(Activity activity) {
 
-        return null;
+        MateRes res = new MateRes();
+        res.setActivityId(activity.getId());
+        res.setCreatedDate(activity.getCreatedDate());
+        res.setCategoryId(activity.getCategoryId());
+        res.setTitle(activity.getTitle());
+        res.setDescription(activity.getDescription());
+        res.setLocation(activity.getLocation());
+        res.setTeam(activity.isTeam());
+
+        return res;
     }
 }

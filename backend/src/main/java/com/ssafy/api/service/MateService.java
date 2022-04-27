@@ -1,5 +1,6 @@
 package com.ssafy.api.service;
 
+import com.ssafy.api.request.MatePostReq;
 import com.ssafy.domain.entity.Activity;
 import com.ssafy.domain.repository.MateRepository;
 import com.ssafy.domain.repository.MateRepositorySupport;
@@ -26,5 +27,25 @@ public class MateService {
         if(mates.isEmpty()) return null;
 
         return mates;
+    }
+
+    
+    
+    
+    //메이트 등록
+    public int createMate(MatePostReq mateInfo) {
+
+        Activity activity = Activity.builder()
+                .categoryId(mateInfo.getCategoryId())
+                .isTeam(mateInfo.isTeam())
+                .createId(mateInfo.getCreateId())
+                .meetDt(mateInfo.getMeetDt())
+                .title(mateInfo.getTitle())
+                .description(mateInfo.getDescription())
+                .build();
+        if(activity == null) return 500;
+
+        mateRepository.save(activity);
+        return 200;
     }
 }
