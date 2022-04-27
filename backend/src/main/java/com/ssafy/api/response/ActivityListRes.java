@@ -15,19 +15,19 @@ import java.util.List;
 @Getter
 @Setter
 @ApiModel("MateListResponse")
-public class MateListRes {
+public class ActivityListRes {
 
-    public static Page<MateRes> of(Page<Activity> mateList){
-        List<MateRes> list = new ArrayList<>();
+    public static Page<ActivityRes> of(Page<Activity> activityList){
+        List<ActivityRes> list = new ArrayList<>();
 
-        Pageable pageable = mateList.getPageable();
-        long total = mateList.getTotalElements();
+        Pageable pageable = activityList.getPageable();
+        long total = activityList.getTotalElements();
 
-        mateList.forEach(mate -> {
-            list.add(MateRes.of(mate));
+        activityList.forEach(activity -> {
+            list.add(ActivityRes.of(activity));
         });
 
-        return new PageImpl<MateRes>(list, pageable, total);
+        return new PageImpl<ActivityRes>(list, pageable, total);
     }
 
 

@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class Activity extends BaseEntity{
 
     boolean isTeam;
-    int categoryId;
+    Long categoryId;
     Long createId;
     String title;
     String description;

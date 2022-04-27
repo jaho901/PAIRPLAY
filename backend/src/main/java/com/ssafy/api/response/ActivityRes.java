@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ApiModel("MateResponse")
-public class MateRes {
+public class ActivityRes {
 
     @ApiModelProperty(name = "Activity id")
     Long activityId;
@@ -20,7 +20,7 @@ public class MateRes {
     LocalDateTime createdDate;
 
     @ApiModelProperty(name = "카테고리 번호")
-    int categoryId;
+    Long categoryId;
 
     @ApiModelProperty(name = "제목")
     String title;
@@ -34,9 +34,9 @@ public class MateRes {
     @ApiModelProperty(name = "팀 여부")
     boolean isTeam;
 
-    public static MateRes of(Activity activity) {
+    public static ActivityRes of(Activity activity) {
 
-        MateRes res = new MateRes();
+        ActivityRes res = new ActivityRes();
         res.setActivityId(activity.getId());
         res.setCreatedDate(activity.getCreatedDate());
         res.setCategoryId(activity.getCategoryId());

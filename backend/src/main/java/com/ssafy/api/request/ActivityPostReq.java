@@ -6,16 +6,21 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @ApiModel("MatePostReq")
-public class MatePostReq {
+public class ActivityPostReq {
+
+    @ApiModelProperty(name = "주소")
+    String location;
+
 
     @ApiModelProperty(name = "카테고리ID")
-    int categoryId;
+    Long categoryId;
 
     @ApiModelProperty(name = "팀/개인 구분")
     boolean isTeam;
@@ -34,6 +39,7 @@ public class MatePostReq {
 
     @ApiModelProperty(name = "내용")
     String description;
+
 
 
 }
