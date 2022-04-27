@@ -43,6 +43,7 @@ public class MateService {
                 .title(mateInfo.getTitle())
                 .description(mateInfo.getDescription())
                 .build();
+                
         if(activity == null) return 500;
 
         mateRepository.save(activity);
