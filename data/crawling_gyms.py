@@ -27,15 +27,15 @@ headers = {'user-agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/5
 def writeCSV(list):
     list_title = ['id', 'category', 'address', 'bizhour', 'homepage', 'menu', 'name', 'parkingfee', 'skyPanorama', 'streetPanorama', 'img', 'phone', 'longitude', 'latitude', 'transport', 'near', 'hashtags', 'facilities']
     # ===================================================
-    if os.path.isfile("gym_region.csv"):
+    if os.path.isfile("gym_jeollabuk.csv"):
         pass
     else:
-        with open('gym_region.csv', 'w', newline='', encoding='utf-8-sig') as f_object:
+        with open('gym_jeollabuk.csv', 'w', newline='', encoding='utf-8-sig') as f_object:
             writer_object = writer(f_object)
             writer_object.writerow(list_title)
             f_object.close()
 
-    with open('gym_region.csv', 'a', newline='', encoding='utf-8-sig') as f_object:
+    with open('gym_jeollabuk.csv', 'a', newline='', encoding='utf-8-sig') as f_object:
         writer_object = writer(f_object)
         for data in list:
             writer_object.writerow(data)
@@ -56,9 +56,9 @@ category = ['축구', '풋살', '농구', '야구', '볼링', '골프', '테니�
 region = busan + seoul + gyeonggi + gangwon + gyeongnam + gyeongbuk + chungcheongnam + chungcheongbuk + jeollanam + jeollabuk
 def get_region():
     ad = []
-    for i in region:
+    for i in jeollabuk:
         for j in category:
-            ad.append(i + '%20' + j)
+            ad.append(i + ' ' + j)
     return ad
 
 def crawling(search):
@@ -173,9 +173,8 @@ def crawling(search):
         writeCSV(total_data)
     except:
         pass
-
-
-crawling('부산%20금정구%20축구')
+    
+   
 
 if __name__=='__main__':
     start_time = time.time()
