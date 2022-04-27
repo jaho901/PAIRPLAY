@@ -1,6 +1,6 @@
 <template>
   <div style="height: 100vh; width: 100vw; margin: 0px;">
-    <div class="main"></div>
+    <div class="main">됐나?</div>
   </div>
 </template>
 
