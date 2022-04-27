@@ -7,108 +7,137 @@
       <center>
       <h1 style="margin-top: 10%; margin-bottom: 5%; font-weight: bold;">회원가입</h1>
       <div class="box my-4 d-flex align-items-center row">
-        <div class="col-2 icon email">
+        <div class="col-2 icon name">
         </div>
         <div class="v-line col-1">
         </div>
-        <input class="col-8" type="text" style="border: 0px; height: 80%;" placeholder="이름" v-model="state.email">
+        <input class="col-8" type="text" style="border: 0px; height: 80%;" placeholder="이름" v-model="state.name">
       </div>
       <div class="box my-4 d-flex align-items-center row">
-        <div class="col-2 icon nickname">
+        <div class="col-2 icon phone">
         </div>
         <div class="v-line col-1">
         </div>
-        <input class="col-8" type="text" style="border: 0px; height: 80%;" placeholder="휴대 전화" v-model="state.nickname">
+        <input class="col-8" type="text" style="border: 0px; height: 80%;" placeholder="휴대 전화" v-model="state.phone" @keyup="autoHypen">
       </div>
-      <span style="color: rgb(175 173 173); font-size: large; font-weight: 400;">생년월일</span>
-      <br>
-      <br>
       <div class="box my-4 d-flex align-items-center row">
-        <div class="col-2 icon nickname">
+        <div class="col-2 icon birthday">
         </div>
         <div class="v-line col-1">
         </div>
+        <!-- <input class="col-8" type="text" style="border: 0px; height: 80%;" placeholder="생년월일" v-model="state.birthday"> -->
+        <div class="col-8">
+          <Datepicker
+            format="YYYY-MM-DD"
+            style="width: 105%; height: 6vh; border: none; padding-left: 1%; position: relative; right: 2%;"
+            v-model="state.birthday"
+            ref="datepicker"
+            placeholder="생년월일"
+          />
+        </div>
       </div>
-      <!-- <div style="width: 60%;" class="d-flex justify-content-around">
-        <span class="birth-drop">
-          <select v-model="state.yyyy" class="birth-select">
-            <option value="">년</option>
-            <option v-for="(item, index) in state.yyyyList" :key="index" :value="item.value">
-              {{ item.text }}
-            </option>
-          </select>
-        </span>
-        <span class="birth-drop">
-          <select v-model="state.mm" class="birth-select">
-            <option value="">월</option>
-            <option v-for="(item, index) in state.mmlist" :key="index" :value="item.value">
-              {{ item.text }}
-            </option>
-          </select>
-        </span>
-        <span class="birth-drop">
-          <select v-model="state.dd" class="birth-select">
-            <option value="">월</option>
-            <option v-for="(item, index) in state.ddlist" :key="index" :value="item.value" >
-              {{ item.text }}
-            </option>
-          </select>
-        </span>
-      </div> -->
-      <br>
-      <!-- <span class="error_next_box" v-if="checkFlag && (!signup.yyyy || !signup.mm || !signup.dd)" >생년월일을 입력하세요</span> -->
       <div class="box my-4 d-flex align-items-center row">
-        <div class="col-2 icon password">
+        <div class="col-2 icon address">
         </div>
         <div class="v-line col-1">
         </div>
-        <input class="col-8" type="text" style="border: 0px; height: 80%;" placeholder="주소" v-model="state.password">
+        <input class="col-8" type="text" id="address" @click="search()" style="border: 0px; height: 80%;" placeholder="주소" v-model="state.address">
       </div>
-      <button class="my-4 accounts-btn">다음으로</button>
-      <div class="d-flex" style="width: 60%;">
-        <span class="me-4 hyperlink">로그인</span>
-        <span class="hyperlink">뒤로 가기</span>
+      <div style="width: 60%; font-size: large; font-weight: bold;" class="d-flex justify-content-end align-items-center">
+        <!-- <span class="col-2" style="text-align: start; padding-left: 4.5%;">성별</span> -->
+        <input class="mx-3" type="radio" name="gender" value="man" @click="changeGender($event)">남
+        <input class="ms-5 mx-3" type="radio" name="gender" value="woman" @click="changeGender($event)">여
       </div>
+      <br>
+      <button class="my-4 accounts-btn" @click="UpdateSignUp">회원가입 완료</button>
       </center>
     </div>
   </div>
 </template>
 
 <script>
-import { reactive, onMounted } from "vue"
+import { reactive } from "vue"
+import { useStore } from "vuex"
+// import { useRouter} from 'vue-router'
 export default {
-  name: "SignupSecond",
+  name: "SignUpSecond",
   setup(){
+    const store = useStore()
+    // const router = useRouter()
     const state = reactive({
-      name: "",
-      phone: "",
-      address: "",
-      birth: "",
-      yyyyList: [],
-      mmlist: [],
-      ddlist: [],
-      yyyy: '',
-      mm: '',
-      dd: '',
+      name: "정재호",
+      phone: "010-1234-1234",
+      birthday: "2022-04-02",
+      datepicker: null,
+      address: "부산 강서구",
+      gender_status: 0,
     })
 
-    onMounted(() => {
-      const nowYear = new Date().getFullYear()
-      for (let i = 0; i < 100; i++){ 
-        let date = nowYear - i;
-        state.yyyyList.push({ value: date, text: date });
+    const yourCustomMethod = function () {
+      if (state.datepicker) {
+        state.datepicker.value.closeMenu()
       }
-      
-      for (let i = 1; i < 13; i++) {
-        state.mmlist.push({ value: i, text: i, });
-      }
+    }
 
-      for ( let i = 1; i < 32; i++) {
-        state.ddlist.push({ value: i, text: i, });
-      }
-    })
+    const search = function () {
+      new window.daum.Postcode({
+        oncomplete: (data) => {
+          var roadAddr = data.roadAddress; // 도로명 주소 변수
+          var extraRoadAddr = ''; // 참고 항목 변수
+          // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+          // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+          if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+              extraRoadAddr += data.bname;
+          }
+          // 건물명이 있고, 공동주택일 경우 추가한다.
+          if(data.buildingName !== '' && data.apartment === 'Y'){
+              extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+          }
+          // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+          if(extraRoadAddr !== ''){
+              extraRoadAddr = ' (' + extraRoadAddr + ')';
+          }
+          // 우편번호와 주소 정보를 해당 필드에 넣는다.
+          document.getElementById('address').value = roadAddr;
+          state.address = roadAddr
+        }
+      }).open({
+        left: (window.screen.width / 3),
+        top: (window.screen.height / 3),
+        popupKey: 'popup1',
+        autoClose: true,
+      });
+    }
 
-    return { state, onMounted }
+    const autoHypen = function () {
+      state.phone = state.phone
+        .replace(/[^0-9]/g, '')
+        .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3").replace(/(-{1,2})$/g, "");
+    }
+
+    const changeGender = function(value) {
+      if (value.target.value==="man") {
+        state.gender_status = 0
+      } else {
+        state.gender_status = 1
+      }
+    }
+
+    const UpdateSignUp = async function () {
+      const payload = {
+        name: state.name,
+        gender: state.gender_status,
+        birthDt: state.birthday.toISOString().substr(0, 10),
+        address: state.address,
+        phone: state.phone
+      }
+      await store.dispatch("root/signupSecond", payload)
+      // await router.push({
+      //   name: "Main"
+      // })
+    }
+
+    return { state, yourCustomMethod, search, autoHypen, changeGender, UpdateSignUp }
   }
   
 }
@@ -135,16 +164,20 @@ export default {
   filter: opacity(0.5);
 }
 
-.email {
-  background-image: url('@/assets/images/Accounts/email.png');
-}
-
-.nickname {
+.name {
   background-image: url('@/assets/images/Accounts/nickname.png');
 }
 
-.password {
-  background-image: url('@/assets/images/Accounts/password.png');
+.phone {
+  background-image: url('@/assets/images/Accounts/phone.png');
+}
+
+.birthday {
+  background-image: url('@/assets/images/Accounts/birthday.png');
+}
+
+.address {
+  background-image: url('@/assets/images/Accounts/address.png');
 }
 
 .v-line{
@@ -155,7 +188,7 @@ export default {
 }
 
 ::placeholder {
-  color: #E0E0E0;
+  color: rgb(180 180 180);
   font-size: large;
   font-weight: 400;
   opacity: 1; /* Firefox */
