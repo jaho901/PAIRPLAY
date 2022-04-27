@@ -2,14 +2,24 @@ import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
   {
+    path: "",
+    name: "Main",
+    component: () => import("../views/Main/Main.vue"),
+  },
+  {
     path: "/signup",
     name: "Signup",
     component: () => import("../views/Accounts/Signup.vue"),
   },
   {
     path: "/signup/next",
-    name: "SignupSecond",
-    component: () => import("../views/Accounts/SignupSecond.vue"),
+    name: "SignUpSecond",
+    component: () => import("../views/Accounts/SignUpSecond.vue"),
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: () => import("../views/Accounts/Login.vue"),
   },
   {
     path: "/place",
