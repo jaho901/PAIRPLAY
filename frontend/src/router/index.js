@@ -21,6 +21,14 @@ const routes = [
     name: "PlaceSearch",
     component: () => import("../views/PlaceSearch/PlaceSearch.vue"),
   },
+
+  {
+    path: "/placedetail/:id",
+    name: "PlaceDetail",
+    component: () => import("../views/PlaceDetail/PlaceDetail.vue"),
+    //props true로 설정하면 데이터를 props로도 받음.
+    props: true,
+  },
 ];
 
 const router = createRouter({
