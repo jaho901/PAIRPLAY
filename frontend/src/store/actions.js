@@ -43,6 +43,7 @@ export async function signup({ state }, payload) {
     });
 }
 
+// Header랑 Body 동시 송출 방법 *******
 export async function signupSecond({ state }, payload) {
   const url = 'members/signup'
   const header = localStorage.getItem("jwt")
