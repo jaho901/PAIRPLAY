@@ -112,7 +112,7 @@ public class MemberController {
         );
     }
 
-    @PutMapping("/signup")
+    @PutMapping("/signup/second")
     @ApiOperation(value = "2차 회원가입", notes = "<strong>유저 추가 정보</strong>를 등록한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "추가 정보 등록에 성공했습니다.", response = BaseResponseBody.class),
