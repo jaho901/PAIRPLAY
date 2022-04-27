@@ -1,9 +1,9 @@
 <template>
-  <div></div>
+  <div>서치리스트</div>
 </template>
 
 <script>
-export default {};
+export default { name: "PlaceSearchList", setup() {} };
 </script>
 
-<style></style>
+<style lang="scss" scoped></style>

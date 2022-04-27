@@ -11,6 +11,11 @@ const routes = [
     name: "Place",
     component: () => import("../views/Place/Place.vue"),
   },
+  {
+    path: "/placesearch",
+    name: "PlaceSearch",
+    component: () => import("../views/PlaceSearch/PlaceSearch.vue"),
+  },
 ];
 
 const router = createRouter({

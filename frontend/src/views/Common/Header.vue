@@ -7,15 +7,13 @@
           <!-- logo link -->
           <router-link to="/" class="logo-link">
             <p class="logo">Pairplay</p>
-            <!-- <img class="logo-dark logo-img" :src="require('@/images/logo-black.png')" alt="logo" /> -->
-            <!-- <img class="logo-light logo-img" :src="require('@/images/logo-white.png')" alt="logo" /> -->
           </router-link>
         </div>
         <!-- .header-logo -->
         <!-- mobile action -->
-        <MobileAction></MobileAction>
+        <!-- <MobileAction></MobileAction> -->
         <!-- heder search -->
-        <HeaderSearch></HeaderSearch>
+        <!-- <HeaderSearch></HeaderSearch> -->
         <!-- Menu -->
         <Menu classname="btn-dark"></Menu>
         <div class="header-overlay"></div>

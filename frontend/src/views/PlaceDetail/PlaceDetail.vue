@@ -8,7 +8,7 @@
 // import {mapState, useStore} from "vuex"
 
 export default {
-  // name: "PlaceDetail",
+  name: "PlaceDetail",
   // setup() {
   // const store = userStore();
   // const route = useRoute();

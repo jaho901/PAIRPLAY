@@ -37,7 +37,12 @@
         <div class="card-body">
           <p class="card-placeRegion">This is a longer</p>
           <p class="card-title fw-bold">Card title</p>
-          <p class="card-text">This is a longer card with supporting text .</p>
+          <p class="card-text">
+            This is a longer card with supporting text .This is a longer card with supporting text .This is a longer card with supporting text .This is a longer card with supporting text .This is a
+            longer card with supporting text . This is a longer card with supporting text .This is a longer card with supporting text .This is a longer card with supporting text .This is a longer card
+            with supporting text . This is a longer card with supporting text .This is a longer card with supporting text .This is a longer card with supporting text . This is a longer card with
+            supporting text .This is a longer card with supporting text .
+          </p>
         </div>
       </div>
     </div>
@@ -67,18 +72,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.catergory-card {
-  // gap: 0px;
-  margin: auto;
-}
 .card {
+  // box-shadow: (0 1px 10px rgba(24, 24, 24, 0.07));
+  // box-shadow: (0 0 8px rgba(24, 24, 24, 0.04));
   flex-grow: 1;
   // margin: 10px 10px;
   padding: 0px;
   // height: 350px;
   border-radius: 10px;
+  height: 400px;
   // padding: 0px !important;
   border: 0px;
+
+  // white-space: nowrap;
 }
 .card-img {
   // width: 100%;
@@ -102,7 +108,7 @@ export default {
 }
 .card-body {
   padding: 10px;
-  max-height: 200px;
+  max-height: 150px;
 }
 .card-placeRegion {
   margin: 0 0 0px 0;
@@ -113,10 +119,21 @@ export default {
 .card-title {
   font-weight: bold;
   font-size: 20px;
+  // 두줄 이상이면 말줄임표
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 .card-text {
-  // margin: 0 0 0px 0;
   font-size: 14px;
+  // 두줄 이상이면 말줄임표
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   // font-weight: 500;
 }
 /* .cards-img {
