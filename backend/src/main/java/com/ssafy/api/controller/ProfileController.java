@@ -33,6 +33,13 @@ public class ProfileController {
         this.passwordEncoder = passwordEncoder;
     }
 
+    // 테스트
+    @GetMapping("/test")
+    @ApiOperation(value = "테스트", notes = "테스트")
+    public void test() {
+        System.out.println("Hello Test");
+    }
+
     // 유저 프로필 조회
     @GetMapping("/{memberId}")
     @ApiOperation(value = "유저 프로필 조회", notes = "전달 받은 <string>Id</string>로 유저 프로필을 조회한다.")
