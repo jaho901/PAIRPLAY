@@ -32,6 +32,8 @@ public class ProfileRes {
     String profileImage;
     @ApiModelProperty(name = "ENABLE")
     boolean enable;
+    @ApiModelProperty(name = "Description")
+    String description;
 
     public static ProfileRes of(Member member) {
         ProfileRes res = new ProfileRes();
@@ -46,6 +48,7 @@ public class ProfileRes {
         res.setPhone(member.getPhone());
         res.setProfileImage(member.getProfileImage());
         res.setEnable(member.isEnable());
+        res.setDescription(member.getDescription());
 
         return res;
     }
