@@ -51,7 +51,7 @@ import { reactive } from "vue"
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 export default {
-  name: "SignUp",
+  name: "Signup",
   setup(){
     const store = useStore()
     const router = useRouter()
@@ -68,7 +68,7 @@ export default {
 
     const moveToNext = async function() {
       await router.push({
-        name: 'SignUpSecond',
+        name: 'SignupSecond',
       })
     }
 

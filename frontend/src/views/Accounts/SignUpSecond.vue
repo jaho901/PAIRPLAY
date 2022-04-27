@@ -77,7 +77,7 @@
 <script>
 import { reactive, onMounted } from "vue"
 export default {
-  name: "SignUpSecond",
+  name: "SignupSecond",
   setup(){
     const state = reactive({
       name: "",
