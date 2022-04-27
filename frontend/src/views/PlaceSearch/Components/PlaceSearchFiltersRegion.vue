@@ -1,60 +1,49 @@
 <template>
-  <div class="dropwdonwTotal">
+  <div>
     <div class="dropdown dropdownsmenus">
-      <button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">Dropdown button</button>
+      <div class="dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">지역</div>
       <ul class="dropdown-menu mt-2" aria-labelledby="dropdownMenuButton">
         <li>
           <a class="dropdown-item d-flex justify-content-between px-4" href="#"><span>부산</span> <span>></span></a>
 
           <ul class="dropdown-menu dropdown-submenu px-2 text-align">
-            <li class="d-flex justify-content-around text-start">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckIndeterminate" />
-                <label class="form-check-label" for="flexCheckIndeterminate"> 중구 </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckIndeterminate" />
-                <label class="form-check-label" for="flexCheckIndeterminate"> 서구 </label>
-              </div>
-              <!-- <a class="dropdown-item" href="#">중구</a>
-              <a class="dropdown-item" href="#">서구</a> -->
+            <li class="d-flex justify-content-around text-start my-2">
+              <a class="dropdown-item ps-4" href="#">중구</a>
+              <a class="dropdown-item" href="#">서구</a>
             </li>
-            <li class="d-flex justify-content-around text-start">
-              <a class="dropdown-item" href="#">동구</a>
+            <!-- <a class="dropdown-item" href="#">중구</a>
+              <a class="dropdown-item" href="#">서구</a> -->
+
+            <li class="d-flex justify-content-around text-start my-2">
+              <a class="dropdown-item ps-4" href="#">동구</a>
               <a class="dropdown-item" href="#">영도구</a>
             </li>
-
-            <li class="d-flex justify-content-around text-start">
-              <a class="dropdown-item" href="#">진구</a>
+            <li class="d-flex justify-content-around text-start my-2">
+              <a class="dropdown-item ps-4" href="#">진구</a>
               <a class="dropdown-item" href="#">동래구</a>
             </li>
-            <li class="d-flex justify-content-around text-start">
-              <a class="dropdown-item" href="#">남구</a>
-              <a class="dropdown-item" href="#">북구구</a>
+            <li class="d-flex justify-content-around text-start my-2">
+              <a class="dropdown-item ps-4" href="#">남구</a>
+              <a class="dropdown-item" href="#">북구</a>
             </li>
-            <li class="d-flex justify-content-around text-start">
-              <a class="dropdown-item" href="#">해운대구</a>
+            <li class="d-flex justify-content-around text-start my-2">
+              <a class="dropdown-item ps-4" href="#">사상구</a>
               <a class="dropdown-item" href="#">사하구</a>
             </li>
 
-            <li class="d-flex justify-content-around text-start">
-              <a class="dropdown-item" href="#">금정구</a>
+            <li class="d-flex justify-content-around text-start my-2">
+              <a class="dropdown-item ps-4" href="#">금정구</a>
               <a class="dropdown-item" href="#">강서구</a>
             </li>
-            <li class="d-flex justify-content-around text-start">
-              <a class="dropdown-item" href="#">연제구</a>
-              <a class="dropdown-item" href="#">연제구</a>
-            </li>
-            <li class="d-flex justify-content-around text-start">
+            <li class="d-flex justify-content-around text-start my-2">
+              <a class="dropdown-item ps-4" href="#">연제구</a>
               <a class="dropdown-item" href="#">수영구</a>
-              <a class="dropdown-item" href="#">사상구</a>
             </li>
-            <li class="d-flex"><a class="dropdown-item" href="#">기장군</a></li>
-            <li><hr class="dropdown-divider" /></li>
-            <div>
-              <button>아아</button>
-              <button>아아</button>
-            </div>
+            <li class="d-flex justify-content-around text-start my-2">
+              <a class="dropdown-item ps-4" href="#">기장군</a>
+              <a class="dropdown-item" href="#">해운대구</a>
+            </li>
+            <li class="d-flex"></li>
           </ul>
         </li>
         <li>
@@ -96,7 +85,7 @@
 // import {mapState, useStore} from "vuex"
 
 export default {
-  name: "PlaceDetail",
+  name: "PlaceSearchFiltersRegion",
   // setup() {
   // const store = userStore();
   // const route = useRoute();
@@ -105,28 +94,35 @@ export default {
 </script>
 
 <style>
-.dropwdonwTotal {
-  width: 450px;
-  height: 550px;
+.btnPlace {
+  margin: 10px 20px 10px 20px;
+  background: #ffff;
+  border-radius: 30px;
+  /* box-shadow: (0 1px 10px rgba(24, 24, 24, 0.04)); */
+  box-shadow: (0 0 8px rgba(24, 24, 24, 0.04));
+  border: 1px solid rgba(1, 1, 1, 0.1);
+  font-size: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
-
 .dropdown-menu li {
   position: relative;
 }
 .dropdown-menu {
-  height: 400px;
+  height: 350px;
   display: none;
-  position: absolute;
+  position: relative;
   left: 100%;
-
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
 }
 .dropdown-submenu {
   display: none;
   position: absolute;
   left: 100%;
-  top: -30%;
+  top: -10px;
+  width: 250px;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
   border-top-right-radius: 10px;
@@ -137,7 +133,15 @@ export default {
   left: auto;
   margin: 50px;
 }
+.dropdown-menu > li:hover {
+  display: block;
+  border-right: 1px solid rgba(1, 1, 1, 0.1);
+}
 .dropdown-menu > li:hover > .dropdown-submenu {
   display: block;
+  border-left: 1px solid rgba(1, 1, 1, 0.1);
+}
+.dropdown-item {
+  /* font-size: 14px; */
 }
 </style>
