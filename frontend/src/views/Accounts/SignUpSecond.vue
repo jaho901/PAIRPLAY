@@ -65,12 +65,12 @@ export default {
     const store = useStore()
     // const router = useRouter()
     const state = reactive({
-      name: "정재호",
-      phone: "010-1234-1234",
-      birthday: "2022-04-02",
+      name: "",
+      phone: "",
+      birthday: "",
       datepicker: null,
-      address: "부산 강서구",
-      gender_status: 0,
+      address: "",
+      gender_status: null,
     })
 
     const yourCustomMethod = function () {
