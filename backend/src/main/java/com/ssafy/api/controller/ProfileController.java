@@ -1,5 +1,6 @@
 package com.ssafy.api.controller;
 
+import com.ssafy.api.request.ProfilePasswordPostReq;
 import com.ssafy.api.request.ProfilePutReq;
 import com.ssafy.api.response.BaseResponseBody;
 import com.ssafy.api.response.ProfileRes;
@@ -34,8 +35,11 @@ public class ProfileController {
     }
 
     // 테스트
-    @GetMapping("/test")
+    @GetMapping("")
     @ApiOperation(value = "테스트", notes = "테스트")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Success"),
+    })
     public void test() {
         System.out.println("Hello Test");
     }
@@ -55,20 +59,43 @@ public class ProfileController {
         return ResponseEntity.status(500).body(null);
     }
 
-    // 이미지 저장 방식에 따라 PutMapping의 데이터 받는 방식이 변경될 것
+    // Profile Update
     @PutMapping("")
     @ApiOperation(value = "유저 프로필 수정", notes = "<string>JWT토큰</string>의 ID에 해당하는 회원 정보를 수정한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Success", response = ProfileRes.class),
     })
-    public ResponseEntity<? extends BaseResponseBody> updateProfile(@ModelAttribute ProfilePutReq profilePutReq, MultipartHttpServletRequest request) {
-        // 순환 참조 문제 해결 때문에 컨트롤러에서 암호화해서 넣기
-        String password = profilePutReq.getPassword();
-        profilePutReq.setPassword( passwordEncoder.encode(password) );
-
-        profileService.updateMemberProfile(profilePutReq, request);
+    public ResponseEntity<? extends BaseResponseBody> updateProfile(@RequestBody ProfilePutReq profilePutReq) {
+        profileService.updateMemberProfile(profilePutReq);
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
+    
+    // Profile Image Update
+    @PutMapping("/profileImage")
+    @ApiOperation(value = "유저 프로필사진 수정", notes = "<string>JWT토큰</string>의 ID에 해당하는 회원 프로필 사진을 수정한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Success", response = ProfileRes.class),
+    })
+    public ResponseEntity<? extends BaseResponseBody> updateProfileImage(MultipartHttpServletRequest request) {
+        profileService.updateMemberProfileImage(request);
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+    }
+
+    // Password Update
+    @PostMapping("")
+    @ApiOperation(value = "유저 비밀번호 수정", notes = "<string>JWT토큰</string>의 ID에 해당하는 회원 비밀번호를 수정한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Success", response = ProfileRes.class),
+    })
+    public ResponseEntity<? extends BaseResponseBody> updatePassword(@RequestBody ProfilePasswordPostReq profilePasswordPostReq) {
+        // 순환 참조 문제 해결 때문에 컨트롤러에서 암호화해서 넣기
+        String password = profilePasswordPostReq.getPassword();
+        profilePasswordPostReq.setPassword( passwordEncoder.encode(password) );
+
+        profileService.updateMemberPassword(profilePasswordPostReq);
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+    }
+    
     
     // 회원 탈퇴
     @DeleteMapping("")

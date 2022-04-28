@@ -1,5 +1,6 @@
 package com.ssafy.api.service;
 
+import com.ssafy.api.request.ProfilePasswordPostReq;
 import com.ssafy.api.request.ProfilePutReq;
 import com.ssafy.common.util.JwtTokenUtil;
 import com.ssafy.domain.entity.Member;
@@ -23,20 +24,23 @@ public class ProfileService {
 //        return memberRepository.findById(memberId).orElse(null);
 //    }
 
-    public void updateMemberProfile(ProfilePutReq profilePutReq, MultipartHttpServletRequest request) {
+    public void updateMemberProfile(ProfilePutReq profilePutReq) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long memberId = Long.parseLong(authentication.getName());
 
         Member member = memberRepository.findById(memberId).orElse(null);
         member.profileUpdate(profilePutReq);
 
-        if (request != null) {
-            // 프로필 이미지 저장
-        }
-
         memberRepository.save(member);
     }
 
+    public void updateMemberProfileImage(MultipartHttpServletRequest request) {
+
+    }
+
+    public void updateMemberPassword(ProfilePasswordPostReq profilePasswordPostReq) {
+
+    }
 
     public void withdrawMember() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
