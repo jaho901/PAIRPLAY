@@ -2,6 +2,7 @@ package com.ssafy.api.service;
 
 import com.ssafy.api.request.ProfilePasswordPostReq;
 import com.ssafy.api.request.ProfilePutReq;
+import com.ssafy.common.handler.CustomException;
 import com.ssafy.common.util.JwtTokenUtil;
 import com.ssafy.domain.entity.Member;
 import com.ssafy.domain.repository.MemberRepository;
@@ -9,6 +10,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import static com.ssafy.common.statuscode.ProfileCode.FAIL_MEMBER_NOT_FOUND;
 
 @Service("profileService")
 public class ProfileService {
@@ -31,10 +34,9 @@ public class ProfileService {
 
         Member member = memberRepository.findById(memberId).orElse(null);
 
-        // ProfilePutReq에서 null인 값은 수정하지 않는다
-        // 그러기 위해서 ProfilePutReq에서 null인 값들을 모두 member의 값으로 update 해준다
-        // 나중에 member.profileUpdate 를 수정해서 password 부분을 빼주어야 할 것
-        // 대신에, profileImage에 대한 함수나 Password 변경에 대한 함수를 추가해주어야 할 것
+        if (member == null)
+            throw new CustomException(FAIL_MEMBER_NOT_FOUND);
+
         if (profilePutReq.getNickname() == null) profilePutReq.setNickname(member.getNickname());
         if (profilePutReq.getName() == null) profilePutReq.setName(member.getName());
         if (profilePutReq.getGender() == -1) profilePutReq.setGender(member.getGender());
@@ -61,8 +63,11 @@ public class ProfileService {
         Long memberId = Long.parseLong(authentication.getName());
 
         Member member = memberRepository.findById(memberId).orElse(null);
-        member.passwordUpdate(profilePasswordPostReq.getPassword());
 
+        if (member == null)
+            throw new CustomException(FAIL_MEMBER_NOT_FOUND);
+
+        member.passwordUpdate(profilePasswordPostReq.getPassword());
         memberRepository.save(member);
     }
 
@@ -72,8 +77,11 @@ public class ProfileService {
         Long memberId = Long.parseLong(authentication.getName());
 
         Member member = memberRepository.findById(memberId).orElse(null);
-        member.memberEnableUpdate(false);
 
+        if (member == null)
+            throw new CustomException(FAIL_MEMBER_NOT_FOUND);
+
+        member.memberEnableUpdate(false);
         memberRepository.save(member);
     }
 
