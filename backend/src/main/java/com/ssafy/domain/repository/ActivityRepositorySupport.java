@@ -24,6 +24,7 @@ public class ActivityRepositorySupport {
         QueryResults<Activity> activities = jpaQueryFactory
                 .select(qActivity)
                 .from(qActivity)
+                .where(qActivity.isEnd.isFalse())
                 .orderBy(qActivity.id.desc())
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
@@ -33,6 +34,6 @@ public class ActivityRepositorySupport {
         return new PageImpl<Activity>(activities.getResults(), pageable, activities.getTotal());
 
     }
-
+ 
 
 }
