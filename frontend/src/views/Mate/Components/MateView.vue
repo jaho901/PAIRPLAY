@@ -1,88 +1,87 @@
 <template>
   <div class="container">
-    <!-- <div class="row"> -->
-      <a class="card" href="#">
-        <h3>This is option 1</h3>
-        <p class="small">Card description with lots of great facts and interesting details.</p>
-        
-        <div class="go-corner" href="#">
-          <div class="go-arrow">
-            →
-          </div>
+    <p class="total-cards col-12">총 00 건의 검색결과</p>
+    <a class="card" href="#">
+      <h3>This is option 1</h3>
+      <p class="small">Card description with lots of great facts and interesting details.</p>
+      
+      <div class="go-corner" href="#">
+        <div class="go-arrow">
+          →
         </div>
-      </a>
-      <a class="card" href="#">
-        <h3>This is option 2</h3>
-        <p class="small">Card description with lots of great facts and interesting details.</p>
-        
-        <div class="go-corner" href="#">
-          <div class="go-arrow">
-            →
-          </div>
+      </div>
+    </a>
+    <a class="card" href="#">
+      <h3>This is option 2</h3>
+      <p class="small">Card description with lots of great facts and interesting details.</p>
+      
+      <div class="go-corner" href="#">
+        <div class="go-arrow">
+          →
         </div>
-      </a>
-      <a class="card" href="#">
-        <h3>This is option 3</h3>
-        <p class="small">Card description with lots of great facts and interesting details.</p>
-        
-        <div class="go-corner" href="#">
-          <div class="go-arrow">
-            →
-          </div>
+      </div>
+    </a>
+    <a class="card" href="#">
+      <h3>This is option 3</h3>
+      <p class="small">Card description with lots of great facts and interesting details.</p>
+      
+      <div class="go-corner" href="#">
+        <div class="go-arrow">
+          →
         </div>
-      </a>
-      <a class="card" href="#">
-        <h3>This is option 4</h3>
-        <p class="small">Card description with lots of great facts and interesting details.</p>
-        
-        <div class="go-corner" href="#">
-          <div class="go-arrow">
-            →
-          </div>
+      </div>
+    </a>
+    <a class="card" href="#">
+      <h3>This is option 4</h3>
+      <p class="small">Card description with lots of great facts and interesting details.</p>
+      
+      <div class="go-corner" href="#">
+        <div class="go-arrow">
+          →
         </div>
-      </a>
-      <a class="card" href="#">
-        <h3>This is option 5</h3>
-        <p class="small">Card description with lots of great facts and interesting details.</p>
-        
-        <div class="go-corner" href="#">
-          <div class="go-arrow">
-            →
-          </div>
+      </div>
+    </a>
+    <a class="card" href="#">
+      <h3>This is option 5</h3>
+      <p class="small">Card description with lots of great facts and interesting details.</p>
+      
+      <div class="go-corner" href="#">
+        <div class="go-arrow">
+          →
         </div>
-      </a>
-      <a class="card" href="#">
-        <h3>This is option 6</h3>
-        <p class="small">Card description with lots of great facts and interesting details.</p>
-        
-        <div class="go-corner" href="#">
-          <div class="go-arrow">
-            →
-          </div>
+      </div>
+    </a>
+    <a class="card" href="#">
+      <h3>This is option 6</h3>
+      <p class="small">Card description with lots of great facts and interesting details.</p>
+      
+      <div class="go-corner" href="#">
+        <div class="go-arrow">
+          →
         </div>
-      </a>
-      <a class="card" href="#">
-        <h3>This is option 7</h3>
-        <p class="small">Card description with lots of great facts and interesting details.</p>
-        
-        <div class="go-corner" href="#">
-          <div class="go-arrow">
-            →
-          </div>
+      </div>
+    </a>
+    <a class="card" href="#">
+      <h3>This is option 7</h3>
+      <p class="small">Card description with lots of great facts and interesting details.</p>
+      
+      <div class="go-corner" href="#">
+        <div class="go-arrow">
+          →
         </div>
-      </a>
-      <a class="card" href="#">
-        <h3>This is option 8</h3>
-        <p class="small">Card description with lots of great facts and interesting details.</p>
-        
-        <div class="go-corner" href="#">
-          <div class="go-arrow">
-            →
-          </div>
+      </div>
+    </a>
+    <a class="card" href="#">
+      <h3>This is option 8</h3>
+      <p class="small">Card description with lots of great facts and interesting details.</p>
+      
+      <div class="go-corner" href="#">
+        <div class="go-arrow">
+          →
         </div>
-      </a>
-    </div>
-  <!-- </div> -->
+      </div>
+    </a>
+  </div>
 </template>
 
 <script>
@@ -197,5 +196,11 @@ export default {
     &:hover:before {
       transform: scale(2.15);
     }
+  }
+
+  .total-cards {
+    text-align: right;
+    margin-top: 1rem;
+    margin-right: 8rem;
   }
 </style>
