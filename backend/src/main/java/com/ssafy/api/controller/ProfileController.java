@@ -3,10 +3,12 @@ package com.ssafy.api.controller;
 import com.ssafy.api.request.ProfilePasswordPostReq;
 import com.ssafy.api.request.ProfilePutReq;
 import com.ssafy.api.response.BaseResponseBody;
+import com.ssafy.api.response.CalendarActivityRes;
 import com.ssafy.api.response.ProfileRes;
 import com.ssafy.api.service.MemberService;
 import com.ssafy.api.service.ProfileService;
 import com.ssafy.common.handler.CustomException;
+import com.ssafy.domain.entity.Activity;
 import com.ssafy.domain.entity.Member;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -16,6 +18,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.ssafy.common.statuscode.CommonCode.EMPTY_REQUEST_VALUE;
 import static com.ssafy.common.statuscode.ProfileCode.*;
@@ -136,6 +141,37 @@ public class ProfileController {
                 )
         );
     }
+
+
+    // 달력 조회
+    // 일정한 기간 중에서, 내가 참여한 모든 Activity에 대한 정보를 불러오는 것
+    // Mate 테이블에 먼저 조회를 해서 내가 참여한 Activity list를 구한다
+    // 구해진 Activity list를 사용해서 meet_dt 범위가 우리가 미리 정해둔 달력에 표현되는 일정 범위안의 Activity를 조회
+    @GetMapping("/calendar")
+    @ApiOperation(value = "달력 조회", notes = "<string>JWT토큰</string>의 ID를 사용하여 <string>일정기간</string> 내의 활동 목록을 조회한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "달력 조회에 성공했습니다.", response = ProfileRes.class),
+    })
+    public ResponseEntity<CalendarActivityRes> searchCalendar() {
+        List<Activity> list = profileService.searchCalendar();
+
+        return ResponseEntity.status(200).body(
+                CalendarActivityRes.of(
+                        SUCCESS_SEARCH_CALENDAR.getCode(),
+                        SUCCESS_SEARCH_CALENDAR.getMessage(),
+                        list
+                )
+        );
+    }
+
+
+
+
+
+
+
+
+
 
     // 내가 만든 Activity라는 것
     // Activity에서 memberId로 search

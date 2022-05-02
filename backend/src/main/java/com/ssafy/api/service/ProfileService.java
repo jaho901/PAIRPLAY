@@ -4,12 +4,16 @@ import com.ssafy.api.request.ProfilePasswordPostReq;
 import com.ssafy.api.request.ProfilePutReq;
 import com.ssafy.common.handler.CustomException;
 import com.ssafy.common.util.JwtTokenUtil;
+import com.ssafy.domain.entity.Activity;
 import com.ssafy.domain.entity.Member;
+import com.ssafy.domain.repository.ActivityRepository;
 import com.ssafy.domain.repository.MemberRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import java.util.List;
 
 import static com.ssafy.common.statuscode.ProfileCode.FAIL_MEMBER_NOT_FOUND;
 
@@ -17,9 +21,11 @@ import static com.ssafy.common.statuscode.ProfileCode.FAIL_MEMBER_NOT_FOUND;
 public class ProfileService {
 
     private final MemberRepository memberRepository;
+    private final ActivityRepository activityRepository;
 
-    public ProfileService(MemberRepository memberRepository) {
+    public ProfileService(MemberRepository memberRepository, ActivityRepository activityRepository) {
         this.memberRepository = memberRepository;
+        this.activityRepository = activityRepository;
     }
 
 //    public Member getMemberProfile(Long memberId) {
@@ -85,5 +91,15 @@ public class ProfileService {
         memberRepository.save(member);
     }
 
+    public List<Activity> searchCalendar() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long memberId = Long.parseLong(authentication.getName());
+
+        // memberId와 날짜를 사용해서 Activity를 조회
+        // repo -> List<Activity> findByIdAndMeetDtBetween(LocalDateTime 지금-기간, LocalDateTime 지금);
+        List<Activity> list = activityRepository.findAll();
+
+        return list;
+    }
 
 }
