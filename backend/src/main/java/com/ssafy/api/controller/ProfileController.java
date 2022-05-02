@@ -1,19 +1,19 @@
 package com.ssafy.api.controller;
 
+import com.ssafy.api.request.CalendarDateReq;
 import com.ssafy.api.request.ProfilePasswordPostReq;
 import com.ssafy.api.request.ProfilePutReq;
 import com.ssafy.api.response.BaseResponseBody;
 import com.ssafy.api.response.CalendarActivityRes;
+import com.ssafy.api.response.CalendarDetailRes;
 import com.ssafy.api.response.ProfileRes;
 import com.ssafy.api.service.MemberService;
 import com.ssafy.api.service.ProfileService;
 import com.ssafy.common.handler.CustomException;
 import com.ssafy.domain.entity.Activity;
+import com.ssafy.domain.entity.Mate;
 import com.ssafy.domain.entity.Member;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -152,7 +152,7 @@ public class ProfileController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "달력 조회에 성공했습니다.", response = ProfileRes.class),
     })
-    public ResponseEntity<CalendarActivityRes> searchCalendar() {
+    public ResponseEntity<? extends CalendarActivityRes> searchCalendar() {
         List<Activity> list = profileService.searchCalendar();
 
         return ResponseEntity.status(200).body(
@@ -164,8 +164,42 @@ public class ProfileController {
         );
     }
 
+    // 개인 활동 조회
+    // 달력 중에서 날짜 하나를 선택해서 해당 날짜에 내가 참여한 Activity를 불러온다
+    // Activity정보와 해당 Activity에 참여한 mate에 대한 유저 아이디, 유저 프로필사진이 필요하다
+    // 날짜 정보를 받아서, 해당 날짜에 있는 Activity를 보여줘야하는건가?
+    // Activity List를 받아서, 해당 Activity에 대한 정보를 보여줘야 하는건가?
+    // Date를 보내주기로 되어있다
+    // Date를 사용해서 Activity를 새롭게 Search하고, 각 Activity에 대해서 mate를 찾고, 해당 mate 중에
+    // 본인이 아닌 사람에 대해서(?), 아니면 본인도 포함해서
+    // mate list를 같이 보내준다
+    // mate를 긁어오면 그 안에 있는 member나 Activity가 같이 긁혀올 것 -> Activity에 대한건 상관없을듯, member를 주는 것도 좋다
+    // 하지만, 정보를 적당히 가공해서 of 함수를 만들어서 보낼 수 있을 것
+    @PostMapping("/calendar/activity")
+    @ApiOperation(value = "개인활동 조회", notes = "<string>JWT토큰</string>의 ID를 사용하여 <string>특정 날자</string>의 활동 목록을 조회한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "개인활동 조회에 성공했습니다.", response = ProfileRes.class),
+    })
+    public ResponseEntity<? extends CalendarDetailRes> searchCalendarDetail(@RequestBody @ApiParam(value = "날짜", required = true)CalendarDateReq calendarDateReq) {
+        List<Activity> activityList = profileService.searchCalendarDetail(calendarDateReq.getActivityDate());
+        List<Mate> mateList = new ArrayList<>();
 
+        // 하나의 mateList에 여러 Activity의 모든 Mate를 넣는다
+        // 구분을 위해서 각 Mate에 Activity Id를 추가적으로 달아주었음
+        activityList.forEach(activity -> {
+            List<Mate> list = profileService.searchActivityMate(activity.getId());
+            mateList.addAll(list);
+        });
 
+        return ResponseEntity.status(200).body(
+                CalendarDetailRes.of(
+                        SUCCESS_SEARCH_CALENDAR_DATE.getCode(),
+                        SUCCESS_SEARCH_CALENDAR_DATE.getMessage(),
+                        activityList,
+                        mateList
+                )
+        );
+    }
 
 
 

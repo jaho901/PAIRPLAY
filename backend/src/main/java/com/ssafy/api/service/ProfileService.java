@@ -5,6 +5,7 @@ import com.ssafy.api.request.ProfilePutReq;
 import com.ssafy.common.handler.CustomException;
 import com.ssafy.common.util.JwtTokenUtil;
 import com.ssafy.domain.entity.Activity;
+import com.ssafy.domain.entity.Mate;
 import com.ssafy.domain.entity.Member;
 import com.ssafy.domain.repository.ActivityRepository;
 import com.ssafy.domain.repository.MemberRepository;
@@ -13,6 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.ssafy.common.statuscode.ProfileCode.FAIL_MEMBER_NOT_FOUND;
@@ -91,15 +94,38 @@ public class ProfileService {
         memberRepository.save(member);
     }
 
+    // 달력 조회
     public List<Activity> searchCalendar() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long memberId = Long.parseLong(authentication.getName());
 
-        // memberId와 날짜를 사용해서 Activity를 조회
+        // memberId와 날짜 범위를 사용해서 Activity를 조회
         // repo -> List<Activity> findByIdAndMeetDtBetween(LocalDateTime 지금-기간, LocalDateTime 지금);
         List<Activity> list = activityRepository.findAll();
 
         return list;
     }
+
+    // 해당 날짜에 참여한 모든 Activity 조회
+    public List<Activity> searchCalendarDetail(LocalDate date) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long memberId = Long.parseLong(authentication.getName());
+
+        // memberId와 정확한 Date를 사용하여 Activity를 조회
+        // repo -> List<Activity> findByIdAndMeetDt
+        List<Activity> list = activityRepository.findAll();
+
+        return list;
+    }
+
+    // 해당 Activity에 참여한 모든 Mate 조회
+    public List<Mate> searchActivityMate(Long ActivityId) {
+        // repo -> List<Mate> findById
+        List<Mate> list = new ArrayList<>();
+
+        return list;
+    }
+    
+    // Activity와 Mate의 Repo를 추가/수정하여 DB에 접근할 수 있을 것
 
 }
