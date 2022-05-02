@@ -1,5 +1,6 @@
 <template>
   <div>
+    hi
     <mate-filter></mate-filter>
     <mate-view></mate-view>
   </div>
@@ -9,8 +10,8 @@
 import MateFilter from './Components/MateFilter.vue'
 import MateView from './Components/MateView.vue'
 export default {
-  name: "Mate",
   components: { MateFilter, MateView },
+  name: "Mate",
   setup() {
 
   }
