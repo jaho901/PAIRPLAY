@@ -14,6 +14,8 @@ import com.ssafy.common.util.PasswordUtil;
 import com.ssafy.domain.entity.Member;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -148,6 +150,9 @@ public class MemberController {
         Member member = memberService.getMemberByEmail(loginInfo.getEmail());
         if(member == null)
             throw new CustomException(FAIL_INVALID_EMAIL);
+
+        if( !member.isEnable() ) // 탈퇴 시
+            throw new CustomException(FAIL_MEMBER_NOT_FOUND);
 
         if ( ! passwordEncoder.matches(loginInfo.getPassword(), member.getPassword()))
             throw new CustomException(FAIL_INVALID_PASSWORD);
