@@ -1,11 +1,14 @@
 <template>
   <div>
     <!-- 헤더 -->
-    <Header></Header>
+    <div style="max-width: 1255px; margin: auto">
+      <Header></Header>
+    </div>
+    <hr style="margin-top: 0px; margin-bottom: 0px; color: #b7b7b7" />
     <div class="PlaceBackgroundImage">
       <div class="PlaceBackgroundImageCover">
         <div class="PlaceBackground-Content ms-5 ps-5">
-          <p class="ps-5 ms-4">
+          <p class="PlaceTitle">
             당신에게 적합한 <br />
             운동장소를 찾아보세요.
           </p>
@@ -31,7 +34,7 @@
       </div>
       <div class="placeRecentView container my-5">
         <div class="category-title ps-3 mt-3 mb-2 d-flex justify-content-between">
-          <div class="fs-5 fw-bold">최근 user 님이 조회한 장소</div>
+          <div class="fs-5 fw-bold">최근 조회 시설</div>
           <p class="fw-bold pe-2 pt-3" style="font-size: 16px">전체보기</p>
         </div>
         <place-recent-view></place-recent-view>
@@ -62,8 +65,9 @@ export default {
 /* width: 100%; */
 /* } */
 .PlaceBackgroundImage {
-  width: 100%;
-  height: 330px;
+  width: 1200px;
+  height: 300px;
+  margin: auto;
   background: black;
   margin-bottom: 5rem;
   /* background-color: rgba(0, 0, 0, 0.4); */
@@ -72,8 +76,9 @@ export default {
 }
 .PlaceBackgroundImageCover {
   position: absolute;
-  width: 100%;
-  height: 330px;
+  margin: auto;
+  width: 1200px;
+  height: 300px;
   background: linear-gradient(30deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%);
   /* background-color: rgba(0, 0, 0, 0.3); */
   z-index: 1;

@@ -4,9 +4,14 @@ export async function signupDuplicateEmail({ commit }, payload) {
   const url = 'members/check/email'
   const body = payload
   await $axios.post(url, body)
-    .then(() => {
-      commit("SIGNUP_DUPLICATE_EMAIL", 1)
-      alert('사용 가능한 이메일입니다.');
+    .then((res) => {
+      if (res.data.code == 200) {
+        commit("SIGNUP_DUPLICATE_EMAIL", 1) 
+        alert('사용 가능한 이메일입니다.');
+      } else {
+        commit("SIGNUP_DUPLICATE_EMAIL", 0)
+        alert('이미 존재하는 이메일입니다.');
+      }
     })
     .catch(() => {
       commit("SIGNUP_DUPLICATE_EMAIL", 0)
@@ -19,9 +24,14 @@ export async function signupDuplicateNickname({ commit }, payload) {
   const url = 'members/check/nickname'
   const body = payload
   await $axios.post(url, body)
-    .then(() => {
-      commit("SIGNUP_DUPLICATE_NICKNAME", 1)
-      alert('사용 가능한 닉네임입니다.');
+    .then((res) => {
+      if (res.data.code == 200) {
+        commit("SIGNUP_DUPLICATE_NICKNAME", 1)
+        alert('사용 가능한 닉네임입니다.');
+      } else {
+        commit("SIGNUP_DUPLICATE_NICKNAME", 0)
+        alert('이미 존재하는 닉네임입니다.');
+      }
     })
     .catch(() => {
       commit("SIGNUP_DUPLICATE_NICKNAME", 0)
@@ -44,35 +54,52 @@ export async function signup({ state }, payload) {
 }
 
 // Header랑 Body 동시 송출 방법 *******
-export async function signupSecond({ state }, payload) {
+export async function signupSecond({ commit }, payload) {
   const url = 'members/signup'
   const header = localStorage.getItem("jwt")
   const body = payload
-  console.log(body)
-  console.log(state)
   await $axios.put(url, body, {
     headers: {
-      Authorization: header,
-    },
+      Authorization: "Bearer " + header,
+      },
     })
     .then((res) => {
-      console.log(res)
-      // dispatch("getUserInfo")
+      commit("USER_INFO", res.data)
+      commit("LOGIN_STATUS", true)
     })
     .catch((err) => {
       console.log(err)
     });
 }
 
-export async function login({ state }, payload) {
+export async function login({ commit }, payload) {
   const url = 'members/signin'
   const body = payload
-  console.log(state)
   await $axios.post(url, body)
     .then((res) => {
-      console.log(res, '성공')
+      localStorage.setItem("jwt", res.data.accessToken)
+      console.log(res)
+      commit("USER_INFO", res.data)
+      commit("LOGIN_STATUS", true)
     })
     .catch((err) => {
+      console.log(err)
+    })
+}
+
+export async function getUserInfo({ commit }, payload) {
+  const memberId = payload.memberId
+  const jwt = payload.jwt
+  const url = `profiles/${memberId}`
+  await $axios.get(url, {
+    headers: {
+      Authorization: "Bearer " + jwt,
+    },
+  })
+    .then((res) => {
+      commit("USER_INFO", res.data)
+    })
+    .catch ((err) => {
       console.log(err)
     })
 }

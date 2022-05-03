@@ -22,6 +22,16 @@ const routes = [
     component: () => import("../views/Accounts/Login.vue"),
   },
   {
+    path: "/oauth/success",
+    name: "OAuthSuccess",
+    component: () => import("../views/Accounts/OAuthSuccess.vue"),
+  },
+  {
+    path: "/oauth/failure",
+    name: "OAuthFailure",
+    component: () => import("../views/Accounts/OAuthFailure.vue"),
+  },
+  {
     path: "/place",
     name: "Place",
     component: () => import("../views/Place/Place.vue"),
@@ -43,6 +53,11 @@ const routes = [
     path: "/mate",
     name: "Mate",
     component: () => import("../views/Mate/Mate.vue"),
+  },
+  {
+    path: "/profile/:memberId",
+    name: "Profile",
+    component: () => import("../views/Profile/Profile.vue"),
   },
 ];
 

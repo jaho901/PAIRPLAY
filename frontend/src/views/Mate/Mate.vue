@@ -1,4 +1,8 @@
 <template>
+  <div style="max-width: 1255px; margin: auto">
+    <Header></Header>
+  </div>
+  <hr style="margin-top: 0px; margin-bottom: 0px; color: #b7b7b7" />
   <div>
     <div style="max-width: 1255px; margin: auto;">
       <Header></Header>
@@ -39,9 +43,9 @@
 </template>
 
 <script>
-import MateFilter from './Components/MateFilter.vue' ;
-import MateView from './Components/MateView.vue' ;
-import Header from '../Common/Header.vue';
+import Header from "../Common/Header.vue";
+import MateFilter from "./Components/MateFilter.vue";
+import MateView from "./Components/MateView.vue";
 export default {
   components: { MateFilter, MateView, Header },
   name: "Mate",
@@ -98,3 +102,6 @@ export default {
     // margin-right: 0;
   }
 </style>
+  components: { Header, MateFilter, MateView },
+  setup() {},
+};
