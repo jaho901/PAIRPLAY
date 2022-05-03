@@ -3,6 +3,7 @@ package com.ssafy.api.controller;
 
 import com.ssafy.api.request.ActivityCategoryReq;
 import com.ssafy.api.request.ActivityPostReq;
+import com.ssafy.api.response.ActivityDetailRes;
 import com.ssafy.api.response.ActivityRes;
 import com.ssafy.api.response.BaseResponseBody;
 import com.ssafy.api.response.ActivityListRes;
@@ -15,8 +16,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.ssafy.common.statuscode.ActivityCode.SUCCESS_MATE_LIST;
-import static com.ssafy.common.statuscode.MemberCode.SUCCESS_RESET_PASSWORD;
+import static com.ssafy.common.statuscode.ActivityCode.*;
 
 
 @Api(value = "메이트 API", tags = {"MATE"})
@@ -37,36 +37,30 @@ public class ActivityController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "Success", response = BaseResponseBody.class),
     })
-    public ResponseEntity<Page<ActivityRes>> getActivityList(@PageableDefault(page = 0, size = 8) Pageable pageable){
+    public ResponseEntity<? extends ActivityListRes> getActivityList(@PageableDefault(page = 0, size = 8) Pageable pageable){
 
         Page<Activity> activities = activityService.getAvtivityList(pageable);
 
 
-        //return ResponseEntity.status(200).body(BaseResponseBody.of(SUCCESS_MATE_LIST.getCode(), SUCCESS_MATE_LIST.getMessage()));
+        return ResponseEntity.status(200).body(ActivityListRes.of(activities, SUCCESS_MATE_LIST.getCode(), SUCCESS_MATE_LIST.getMessage()));
 
-        if(activities != null){
-            return ResponseEntity.status(200).body(ActivityListRes.of(activities));
-        }else {
-            return ResponseEntity.status(200).body(null);
-        }
     }//-> 지역기반 추가 수정 해야함
 
 
 
     //공고 카테고리별 조회
-//    @PostMapping()
-//    @ApiOperation(value = "공고 카테고리별 조회", notes = "공고를 <strong>카테고리별 조회</strong>한다")
-//    @ApiResponses({
-//            @ApiResponse(code = 200, message = "Success", response = BaseResponseBody.class),
-//    })
-//    public ResponseEntity<Page<ActivityRes>> getCategory(@RequestBody @ApiParam(value = "카테고리") ActivityCategoryReq activityCategoryReq, @PageableDefault(page = 0, size = 6) Pageable pageable){
-//
-//
-//        Page<Activity> activities = activityService.getCategoryList(activityCategoryReq, pageable);
-//
-//
-//        return null;
-//    }
+    @PostMapping()
+    @ApiOperation(value = "공고 카테고리 조회", notes = "공고를 <strong>카테고리별로 조회</strong>한다")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Success", response = BaseResponseBody.class),
+    })
+    public ResponseEntity<? extends ActivityListRes> getCategoryList(@RequestBody @ApiParam(value = "카테고리") ActivityCategoryReq activityCategoryReq, @PageableDefault(page = 0, size = 8) Pageable pageable){
+
+
+        Page<Activity> activities = activityService.getCategoryList(activityCategoryReq, pageable);
+
+        return ResponseEntity.status(200).body(ActivityListRes.of(activities, SUCCESS_MATE_LIST.getCode(), SUCCESS_MATE_LIST.getMessage()));
+    }
 
 
     //공고 상세조회
@@ -75,25 +69,21 @@ public class ActivityController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "Success", response = BaseResponseBody.class),
     })
-    public ResponseEntity<ActivityRes> getAvtivityDetail(@PathVariable(name = "activityId") @ApiParam(value="메이트 공고 상세번호", required = true)Long activityId){
+    public ResponseEntity<? extends ActivityDetailRes> getAvtivityDetail(@PathVariable(name = "activityId") @ApiParam(value="메이트 공고 상세번호", required = true)Long activityId){
         Activity activity = activityService.getAvtivityDetail(activityId);
 
-        if(activity != null){
-            return ResponseEntity.status(200).body(ActivityRes.of(activity));
-        }else{
-            return ResponseEntity.status(500).body(null);
-        }
 
+        return ResponseEntity.status(200).body(ActivityDetailRes.of(activity, SUCCESS_GET_DETAIL.getCode(), SUCCESS_GET_DETAIL.getMessage()));
     }
 
 
 
 
     //공고 생성
-    @PostMapping()
+    @PostMapping("/mate")
     @ApiOperation(value = "공고 생성", notes = "공고를 <strong>생성</strong>한다")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Success", response = BaseResponseBody.class),
+            @ApiResponse(code = 200, message = "공고 생성 성공하였습니다.", response = BaseResponseBody.class),
     })
     public ResponseEntity<BaseResponseBody> createActivity(@RequestBody @ApiParam(value = "공고 정보", required = true) ActivityPostReq activityInfo) {
 
@@ -101,25 +91,10 @@ public class ActivityController {
         int statusCode = activityService.createActivity(activityInfo);
 
 
-        return createResponseEntityToStatusCode(statusCode);
+        return ResponseEntity.status(200).body(BaseResponseBody.of(SUCCESS_ACTIVITY_CREATE.getCode(), SUCCESS_ACTIVITY_CREATE.getMessage()));
     }
 //이미지 일단 생략
 
-
-
-
-
-
-    private ResponseEntity<BaseResponseBody> createResponseEntityToStatusCode(int statusCode) {
-        switch (statusCode) {
-            case 200:
-                return ResponseEntity.status(200).body(BaseResponseBody.of(200, "SUCCESS"));
-            case 401:
-                return ResponseEntity.status(401).body(BaseResponseBody.of(401, "ACCESS DENIED"));
-            default:
-                return ResponseEntity.status(500).body(BaseResponseBody.of(500, "FAIL"));
-        }
-    }
 
 
 }

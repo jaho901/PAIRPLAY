@@ -27,7 +27,7 @@ public class ActivityService {
 
         Page<Activity> activities = activityRepositorySupport.findAll(pageable);
 
-        if(activities.isEmpty()) return null;
+        if(activities == null) return null;
 
         return activities;
     }
@@ -37,15 +37,34 @@ public class ActivityService {
 
         Page<Activity> activities = null;
 
-        if(activityCategoryReq.getCategoryId()!=0 && !activityCategoryReq.getLocation().equals("")) {//운동이랑 위치 값 넘어왔을 때
+
+        if(activityCategoryReq.getCategoryId()!=0 && !activityCategoryReq.getLocation().equals("") && !activityCategoryReq.getSearch().equals("")) {  //운동 카테고리랑 위치 값 검색어 넘어왔을 때
+            System.out.println("1");
+            activities = activityRepositorySupport.findByCategorySearch(pageable, activityCategoryReq.getCategoryId(), activityCategoryReq.getLocation(), activityCategoryReq.getSearch());
+
+        }else if(activityCategoryReq.getCategoryId()!=0 && activityCategoryReq.getLocation().equals("") && !activityCategoryReq.getSearch().equals("")){//운동, 검색어 넘어왔을 때
+            System.out.println("2");
+            activities = activityRepositorySupport.findByCategorySearch(pageable, activityCategoryReq.getCategoryId(), activityCategoryReq.getSearch());
+
+        }else if(activityCategoryReq.getCategoryId()==0 && !activityCategoryReq.getLocation().equals("") && !activityCategoryReq.getSearch().equals("")) {//지역, 검색어 넘어왔을 때
+            System.out.println("3");
+            activities = activityRepositorySupport.findByCategorySearch(pageable, activityCategoryReq.getLocation(), activityCategoryReq.getSearch());
+
+        }else if(activityCategoryReq.getCategoryId()!=0 && !activityCategoryReq.getLocation().equals("")) {    //운동 카테고리랑 위치 값 넘어왔을 때
+            System.out.println("4");
             activities = activityRepositorySupport.findByCategory(pageable, activityCategoryReq.getCategoryId(), activityCategoryReq.getLocation());
+
         }else if(activityCategoryReq.getCategoryId()!=0 && activityCategoryReq.getLocation().equals("")){//운동만 넘어왔을 때
+            System.out.println("5");
             activities = activityRepositorySupport.findByCategory(pageable, activityCategoryReq.getCategoryId());
+
         }else if(activityCategoryReq.getCategoryId()==0 && !activityCategoryReq.getLocation().equals("")) {//지역만 넘어왔을 때
+            System.out.println("6");
             activities = activityRepositorySupport.findByCategory(pageable, activityCategoryReq.getLocation());
+
         }
 
-        if(activities.isEmpty()) return null;
+        if(activities == null) return null;
 
         return activities;
     }
@@ -63,6 +82,7 @@ public class ActivityService {
                 .meetDt(activityInfo.getMeetDt())
                 .title(activityInfo.getTitle())
                 .description(activityInfo.getDescription())
+                .isEnd(false)
                 .build();
                 
         if(activity == null) return 500;

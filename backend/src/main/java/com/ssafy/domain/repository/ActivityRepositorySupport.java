@@ -82,4 +82,52 @@ public class ActivityRepositorySupport {
 
         return new PageImpl<Activity>(activities.getResults(), pageable, activities.getTotal());
     }
+
+    public Page<Activity> findByCategorySearch(Pageable pageable, Long categoryId, String location, String search){
+
+
+        QueryResults<Activity> activities = jpaQueryFactory
+                .select(qActivity)
+                .from(qActivity)
+                .where((qActivity.categoryId.eq(categoryId)).and(qActivity.location.eq(location)).or(qActivity.title.like(search)).or(qActivity.description.like(search)))
+                .orderBy(qActivity.id.desc())
+                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())
+                .fetchResults();
+        if(activities == null) return Page.empty();
+
+        return new PageImpl<Activity>(activities.getResults(), pageable, activities.getTotal());
+    }
+
+    public Page<Activity> findByCategorySearch(Pageable pageable, Long categoryId,  String search){
+
+
+        QueryResults<Activity> activities = jpaQueryFactory
+                .select(qActivity)
+                .from(qActivity)
+                .where((qActivity.categoryId.eq(categoryId)).and(qActivity.title.eq(search)).or(qActivity.description.eq(search)))
+                .orderBy(qActivity.id.desc())
+                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())
+                .fetchResults();
+        if(activities == null) return Page.empty();
+
+        return new PageImpl<Activity>(activities.getResults(), pageable, activities.getTotal());
+    }
+
+
+    public Page<Activity> findByCategorySearch(Pageable pageable, String location,  String search){
+
+        QueryResults<Activity> activities = jpaQueryFactory
+                .select(qActivity)
+                .from(qActivity)
+                .where((qActivity.location.eq(location)).and(qActivity.title.eq(search)).or(qActivity.description.eq(search)))
+                .orderBy(qActivity.id.desc())
+                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())
+                .fetchResults();
+        if(activities == null) return Page.empty();
+
+        return new PageImpl<Activity>(activities.getResults(), pageable, activities.getTotal());
+    }
 }
