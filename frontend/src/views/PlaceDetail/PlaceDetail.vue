@@ -9,32 +9,48 @@
         <img v-for="(placeInfoImage, idx) in placeInfos.imgUrl.slice(1)" :key="idx" :src="`${placeInfoImage}`" class="imageOthers col-3" alt="" />
         <!-- <img :src="`${placeInfos.imgUrl[0]}`" alt="" /> -->
       </div>
-      <div class="importantInfos">
+      <div class="importantInfos mt-4">
         <div>
-          <h4 class="fw-bold" style="color: #767676">부산시 연제구</h4>
+          <h4 class="fw-bold" style="color: #767676">{{ placeInfos.position }}</h4>
           <h2 class="fw-bold">{{ placeInfos.title }}</h2>
-          <div class="d-flex align-items-center my-3">
-            <h5 class="fw-bold mx-4">4.8 <i class="bi bi-star-fill mx-1" style="color: #fe8a01"></i></h5>
-            <h5>98개 리뷰</h5>
+          <div class="d-flex align-items-end my-3">
+            <h5 class="fw-bold mx-4">{{ placeInfos.rate }} <i class="bi bi-star-fill mx-1" style="color: #fe8a01"></i></h5>
+            <h5 style="color: #767676">
+              <u>{{ placeInfos.reviewsCount }}개 리뷰</u>
+            </h5>
             <!-- <h4><i class="bi bi-heart-fill me-1" style="color: #ff385c"></i></h4> -->
             <h5><i class="bi bi-heart me-1 ms-4"></i></h5>
-            <h5 class="ms-2">저장</h5>
+            <h5 class="ms-1"><u>저장</u></h5>
           </div>
         </div>
         <div class="placeDetailSportsCategory btnCategory">
           <img src="https://cdn-icons-png.flaticon.com/512/921/921285.png" style="width: 2.5rem" alt="" />
-          <h4 class="ms-4 align-self-center">농구</h4>
+          <h4 class="ms-4 align-self-center">{{ placeInfos.category }}</h4>
         </div>
       </div>
-      <div class="detailInfos d-flex">
-        <div class="detailInfosLeft">
-          <div class="col-5">
-            <p>['매일 10:00~21:00']</p>
-            <p></p>
+      <hr style="margin-top: 1px; margin-bottom: 1px; color: #b7b7b7" />
+      <!-- 상세정보들 -->
+      <div class="detailInfos d-flex justify-content-between mt-4">
+        <div class="detailInfosLeft col-7">
+          <div>
+            <p v-for="(각시간, idx) in placeInfos.이용시간" :key="idx" class="mx-3">{{ 각시간 }}</p>
+            <!-- <p></p> -->
           </div>
           <div>시설 정보</div>
         </div>
-        <div class="detailInfosRight"><place-detail-reservation></place-detail-reservation></div>
+        <div class="detailInfosRight col-5">
+          <h4 class="fw-bold mb-4">예약조회</h4>
+          <place-detail-reservation></place-detail-reservation>
+          <div class="ReservationRealTime">
+            <div style="width: 500px; background: green">아아</div>
+            <div style="width: 500px; background: green">아아</div>
+            <div style="width: 500px; background: green">아아</div>
+          </div>
+          <div class="d-flex justify-content-center mt-3">
+            <div class="btn btn-primary me-3">예약</div>
+            <div class="btn btn-secondary ms-3">취소</div>
+          </div>
+        </div>
       </div>
       <div>
         <!-- <place-detail-maps></place-detail-maps> -->
@@ -159,6 +175,8 @@ export default {
       ],
       facility: "잔디, 바닥, 샤워",
       rate: "3.9",
+      reviewsCount: 98,
+      category: "농구",
       cost: ["1개월 99,000", "2개월 177,000", "3개월 237,000"],
       이용시간: ["평일 17:30~22:00 OPEN", "평일 18:00~19:00 레슨", "평일 19:00~20:00 레슨", "평일 20:30~21:30 (금요일 20:30~22:00)"],
     });
@@ -233,6 +251,7 @@ h5 {
 
 .detailInfos {
   /* border: 1px solid black; */
+  width: 100%;
 }
 .placeDetailSportsCategory {
   display: flex;
@@ -251,7 +270,26 @@ h5 {
 .detailInfosRight {
   /* width: 600px;
   height: 300px; */
-  border: 1px solid black;
+  /* justify-items: center; */
+  /* align-self: center; */
+  /* align-items: center; */
+  padding: 1rem 1rem 1rem 1rem;
+  height: auto;
+  box-shadow: 0 0 8px rgba(24, 24, 24, 0.1);
+  border-radius: 10px;
+  border: 1px solid rgb(0, 0, 0, 0.1);
+  /* border: 1px solid black; */
+}
+.ReservationRealTime {
+  display: flex;
+  height: 80px;
+  /* width: 400px; */
+  margin: auto;
+  overflow: scroll;
+  color: #112031;
+  border: 1px solid #000;
+  overflow: auto;
+  white-space: nowrap;
 }
 .detailInfosRule {
   /* width: 600px;

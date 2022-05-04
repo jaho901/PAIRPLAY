@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Datepicker v-model="date" :enableTimePicker="false" autoApply class="ms-2 datePicker" inline></Datepicker>
+    <Datepicker v-model="date" :enableTimePicker="false" autoApply class="datePicker" inline></Datepicker>
   </div>
 </template>
 
@@ -30,8 +30,10 @@ export default {
 <style lang="scss">
 .datePicker {
   width: 250px;
-  height: 370px;
+  height: 320px;
   box-shadow: 0 0 8px rgba(24, 24, 24, 0.1);
+  margin: 2rem auto 2rem auto;
+
   // border-radius: 500px;
 }
 </style>
