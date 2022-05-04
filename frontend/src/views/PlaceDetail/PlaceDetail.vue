@@ -59,7 +59,9 @@
         <!-- <place-detail-maps></place-detail-maps> -->
       </div>
       <hr class="class-1" style="margin: 2rem 0 2rem 0" />
-      <div>맵</div>
+      <h4 class="pb-4">시설위치</h4>
+
+      <div><PlaceDetailMaps></PlaceDetailMaps></div>
       <hr class="class-1" style="margin: 2rem 0 2rem 0" />
       <h4 class="detailInfosRule">이용규칙</h4>
       <p style="white-space: pre-line; line-height: 2rem">
@@ -173,7 +175,7 @@
 <script>
 import Header from "../Common/Header.vue";
 import Footer from "../Common/Footer.vue";
-// import PlaceDetailMaps from "./Components/PlaceDetailMaps.vue";
+import PlaceDetailMaps from "./Components/PlaceDetailMaps.vue";
 import PlaceDetailReservation from "./Components/PlaceDetailReservation.vue";
 
 import { ref } from "vue";
@@ -182,7 +184,7 @@ import { ref } from "vue";
 
 export default {
   name: "PlaceDetail",
-  components: { Header, Footer, PlaceDetailReservation },
+  components: { Header, Footer, PlaceDetailReservation, PlaceDetailMaps },
 
   setup() {
     const placeInfos = ref({
