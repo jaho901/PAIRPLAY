@@ -52,7 +52,6 @@ public class ActivityService {
 
 
         return activityRepositorySupport.findAll(pageable);
-
     }
 
 
