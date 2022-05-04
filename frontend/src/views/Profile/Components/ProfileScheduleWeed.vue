@@ -7,7 +7,7 @@
     { date: '2021-9-21', count: 6 } -->
   <calendar-heatmap
     :values="state.calenderInfo"
-    :end-date=state.end
+    :end-date="state.end"
     :range-color="[
       '#ebedf0',
       '#dae2ef',
@@ -17,7 +17,10 @@
       '#17459e',
     ]"
     :max="4"
-    style="font-size: x-small;"
+    tooltip-unit="번의 운동기록"
+    style="font-size: x-small; margin-top: 5%;"
+    :round="10"
+    @click="getDateTodo($event)"
   />
 </template>
 
@@ -49,7 +52,11 @@ export default {
       state.end = state.end.toISOString().substr(0, 10)
     })
 
-    return { state }
+    const getDateTodo = function (event) {
+      console.log(event.target.dataset.tippyContent)
+    }
+
+    return { state, onMounted, getDateTodo }
   }
 }
 </script>

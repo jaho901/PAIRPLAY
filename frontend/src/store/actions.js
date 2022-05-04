@@ -146,3 +146,48 @@ export async function profileChangeInfo({ state, dispatch }, payload) {
       console.log(err);
     });
 }
+
+export async function profileChangeImage({ state, dispatch }, payload) {
+  const body = payload;
+  console.log(body);
+  const memberId = state.userInfo.memberId;
+  const url = "profileImage";
+  const header = localStorage.getItem("jwt");
+  await $axios
+    .put(url, body, {
+      headers: {
+        Authorization: "Bearer " + header,
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then(() => {
+      dispatch("getOtherInfo", {
+        memberId: memberId,
+        jwt: header,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+export async function mateArticleList({ commit }) {
+  // const memberId = payload.memberId;
+  const jwt = localStorage.getItem("jwt");
+  const url = `mates`;
+  console.log(commit);
+  await $axios
+    .get(url, {
+      headers: {
+        Authorization: "Bearer " + jwt,
+      },
+    })
+    .then((res) => {
+      console.log(res);
+      commit("MATE_ARTICLE_LIST", res.data);
+      // commit("OTHER_INFO", res.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
