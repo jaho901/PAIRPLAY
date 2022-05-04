@@ -126,13 +126,14 @@ export async function getOtherInfo({ commit }, payload) {
 }
 
 export async function profileChangeInfo({ state, dispatch }, payload) {
-  const body = payload
-  const memberId = state.userInfo.memberId
-  const url = 'profiles'
-  const header = localStorage.getItem('jwt')
-  await $axios.put(url, body, {
-    headers: {
-      Authorization: "Bearer " + header,
+  const body = payload;
+  const memberId = state.userInfo.memberId;
+  const url = `profiles`;
+  const header = localStorage.getItem("jwt");
+  await $axios
+    .put(url, body, {
+      headers: {
+        Authorization: "Bearer " + header,
       },
     })
     .then(() => {
@@ -147,15 +148,16 @@ export async function profileChangeInfo({ state, dispatch }, payload) {
 }
 
 export async function profileChangeImage({ state }, payload) {
-  const body = payload
-  // const memberId = state.userInfo.memberId
-  console.log(state)
-  const url = 'profiles/profileImage'
-  const header = localStorage.getItem('jwt')
-  await $axios.put(url, body, {
-    headers: {
-      Authorization: "Bearer " + header,
-      "Content-Type": ""
+  const body = payload;
+  console.log(state);
+  // const memberId = state.userInfo.memberId;
+  const url = "profiles/profileImage";
+  const header = localStorage.getItem("jwt");
+  await $axios
+    .put(url, body, {
+      headers: {
+        Authorization: "Bearer " + header,
+        "Content-Type": "multipart/form-data",
       },
     })
     .then((res) => {
