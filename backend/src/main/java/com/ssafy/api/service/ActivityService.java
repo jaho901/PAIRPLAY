@@ -41,10 +41,15 @@ public class ActivityService {
 
         Member member = memberRepository.findById(memberId).orElse(null);
 
-        if(member != null){
-            String location = member.getSido() + " " + member.getGugun();
-            return activityRepositorySupport.findAllByLocation(pageable, location);
+        if(member != null) {
+            if (member.getSido() != null || member.getGugun() != null) {
+                String location = member.getSido() + " " + member.getGugun();
+                System.out.println(location);
+                return activityRepositorySupport.findAllByLocation(pageable, location);
+            }
         }
+        System.out.println("3");
+
 
         return activityRepositorySupport.findAll(pageable);
 
