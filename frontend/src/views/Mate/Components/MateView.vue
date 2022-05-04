@@ -2,7 +2,7 @@
   <div class="container">
     <p class="total-cards col-12">총 00 건의 검색결과</p>
     <div>
-      <ul v-for="(card, i) in cards" :key="i">
+      <ul v-for="(card, i) in state.cards" :key="i">
         <li>
           <a class="card" href="#">
             <h3>{{card.title}}</h3>
@@ -15,10 +15,20 @@
 </template>
 
 <script>
+import { onMounted, reactive, computed } from 'vue';
+import { useStore } from 'vuex';
+
 export default {
   name: "MateView",
   setup() {
-    let cards = [];
+    const store = useStore()
+    // let cards = [];
+    const state = reactive({
+      cards: computed(() => store.getters["root/mateArticleList"])
+    })
+    onMounted(() => {
+      store.dispatch("root/mateArticleList")
+    })
     // let expand = false;
     // const refresh = () =>
     // const changedExpand = () => {
@@ -28,7 +38,7 @@ export default {
     //   return;
     // };
 
-    return { cards };
+    return { state, onMounted };
   }
 }
 </script>
