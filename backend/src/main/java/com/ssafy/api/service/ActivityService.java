@@ -41,10 +41,15 @@ public class ActivityService {
 
         Member member = memberRepository.findById(memberId).orElse(null);
 
-        if(member != null){
-            String location = member.getSido() + " " + member.getGugun();
-            return activityRepositorySupport.findAllByLocation(pageable, location);
+        if(member != null) {
+            if (member.getSido() != null || member.getGugun() != null) {
+                String location = member.getSido() + " " + member.getGugun();
+                System.out.println(location);
+                return activityRepositorySupport.findAllByLocation(pageable, location);
+            }
         }
+        System.out.println("3");
+
 
         return activityRepositorySupport.findAll(pageable);
 
@@ -55,10 +60,23 @@ public class ActivityService {
 
         Page<Activity> activities = null;
 
+        String location = null;
+
+        if(activityCategoryReq.getSido().equals("") && activityCategoryReq.getGungu().equals("")){
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Long memberId = Long.parseLong(authentication.getName());
+            Member member = memberRepository.findById(memberId).orElse(null);
+
+            assert member != null;
+            location = member.getSido() + " " + member.getGugun();
+        }
+        System.out.println(location);
+
         /*
          * 운동 카테고리, 위치, 검색어
          */
-        if(activityCategoryReq.getCategoryId()!=0 && !activityCategoryReq.getLocation().equals("") && !activityCategoryReq.getSearch().equals("")) {
+        if(activityCategoryReq.getCategoryId()!=0 && location != null && !activityCategoryReq.getSearch().equals("")) {
+
             activities = activityRepositorySupport.findByCategorySearch(pageable, activityCategoryReq.getCategoryId(), activityCategoryReq.getLocation(), activityCategoryReq.getSearch());
 
         }
