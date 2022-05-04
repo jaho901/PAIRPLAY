@@ -111,8 +111,8 @@ export default {
         const file = event.target.files[0];
         state.otherInfo.profileImage = file;
         let data = new FormData()
-        data.append("profileImage", state.otherInfo.profileImage)
-        await store.dispatch('root/profileChangeInfo', {data})
+        data.append("profileImage", file)
+        await store.dispatch('root/profileChangeImage', data)
       }
     }
 
