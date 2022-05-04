@@ -8,7 +8,11 @@
       <div class="ms-4 profile-image-card">
         <img :src="state.otherInfo.profileImage" alt="" style="width: 100%; height: 100%; border-radius: 50%; border: 1px solid grey;">      
       </div>
-      <div v-if="state.userInfo.memberId == state.otherInfo.memberId" class="edit mt-2" style="margin-right: 15%;" @click="changeImageWrong"></div>
+      <!-- <div v-if="state.userInfo.memberId == state.otherInfo.memberId" class="edit mt-2" style="margin-right: 15%;" for="input-file"></div> -->
+      <label for="input-file" style="cursor: pointer; width: 10%; margin-right: 50px;">
+        <img src="@/assets/images/Profile/Edit.png" alt="" style="width: 25%;">
+      </label>
+      <input @change="changeImgFile" type="file" id="input-file" style="display: none;">
       <div class="me-4 mt-4" style="width: 60%; height: 80%; font-size: x-large;">
         <div class="d-flex justify-content-between" style="width: 100%; height: 100%;">
           <h2><b>Profile</b></h2>
@@ -102,12 +106,22 @@ export default {
       }
     }
 
-    const changeImage = async function () {
-      await store.dispatch("root/profileChangeInfo",{
-        'profileImage': state.otherInfo.profileImage
-      })
-      state.isDescript = false
+    const changeImgFile = async function (event) {
+      if( event.target.files && event.target.files.length > 0 ) {
+        const file = event.target.files[0];
+        state.otherInfo.profileImage = file;
+        let data = new FormData()
+        data.append("profileImage", state.otherInfo.profileImage)
+        await store.dispatch('root/profileChangeInfo', {data})
+      }
     }
+
+    // const changeImage = async function () {
+    //   await store.dispatch("root/profileChangeInfo",{
+    //     'profileImage': state.otherInfo.profileImage
+    //   })
+    //   state.isDescript = false
+    // }
 
     const changeDescription = async function () {
       await store.dispatch("root/profileChangeInfo",{
@@ -140,7 +154,7 @@ export default {
         state.isActiveMat = true
       }
     }
-    return { state, changeDescriptionStatus, changeImage, changeDescription, changeSideComponents }
+    return { state, changeDescriptionStatus, changeImgFile, changeDescription, changeSideComponents }
   }
 }
 </script>

@@ -122,8 +122,9 @@ export async function getOtherInfo({ commit }, payload) {
 
 export async function profileChangeInfo({ state, dispatch }, payload) {
   const body = payload
+  console.log(body)
   const memberId = state.userInfo.memberId
-  const url = `profiles`
+  const url = 'profiles'
   const header = localStorage.getItem('jwt')
   await $axios.put(url, body, {
     headers: {
