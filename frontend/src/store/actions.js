@@ -146,23 +146,24 @@ export async function profileChangeInfo({ state, dispatch }, payload) {
     });
 }
 
-export async function profileChangeImage({ state, dispatch }, payload) {
+export async function profileChangeImage({ state }, payload) {
   const body = payload
-  console.log(body)
-  const memberId = state.userInfo.memberId
-  const url = 'profileImage'
+  // const memberId = state.userInfo.memberId
+  console.log(state)
+  const url = 'profiles/profileImage'
   const header = localStorage.getItem('jwt')
   await $axios.put(url, body, {
     headers: {
       Authorization: "Bearer " + header,
-      "Content-Type": "multipart/form-data"
+      "Content-Type": ""
       },
     })
-    .then(() => {
-      dispatch("getOtherInfo", {
-        memberId: memberId,
-        jwt: header,
-      });
+    .then((res) => {
+      // dispatch("getOtherInfo", {
+      //   memberId: memberId,
+      //   jwt: header,
+      // });
+      console.log(res)
     })
     .catch((err) => {
       console.log(err);
