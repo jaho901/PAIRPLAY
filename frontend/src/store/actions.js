@@ -200,9 +200,10 @@ export async function getPlaceSearchInfo({ commit }, searchFiltersData) {
   await $axios
     .get(url, {
       headers: {
-        Authorization: "Bearer" + jwt,
+        Authorization: "Bearer " + jwt,
       },
       params: {
+        page: 0,
         categoryList: placeSearchKeyword.categoryList,
         endData: placeSearchKeyword.endData,
         gugun: placeSearchKeyword.gugun,
@@ -212,6 +213,7 @@ export async function getPlaceSearchInfo({ commit }, searchFiltersData) {
     })
     .then((res) => {
       commit("Place_Search_Info", res.data);
+      console.log(res.data, "여기는 actions");
     })
     .catch((err) => {
       console.log(err);

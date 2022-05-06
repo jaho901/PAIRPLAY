@@ -43,8 +43,9 @@ import PlaceSearchFilterSportsCategory from "./PlaceSearchFilterSportsCategory.v
 
 export default {
   name: "PlaceSearchFilters",
+  emits: ["searchFiltersData"],
   components: { PlaceSearchFiltersRegion, PlaceSearchFiltersPrice, PlaceSearchFiltersTime, PlaceSearchFilterSportsCategory },
-  setup() {
+  setup(_, { emit }) {
     let searchFiltersData = ref({
       price: "",
       region: { sido: "", gugun: "" },
@@ -78,8 +79,9 @@ export default {
       searchFiltersData.value.time = { startDate: "", endDate: "" };
       searchFiltersData.value.sportsCategory = "";
     };
-    watch(searchFiltersData.value, (res) => {
-      console.log(res);
+    watch(searchFiltersData.value, () => {
+      emit("searchFiltersData", searchFiltersData.value);
+      // console.log(res);
       // console.log(searchFiltersData.value, "searchFiltersData");
     });
     // const refresh = () =>
