@@ -5,10 +5,10 @@
       <!-- Default dropend button -->
       <!-- <div class="input-group serachbar">search</div> -->
       <div class="d-flex align-items-center col-lg-9 filters">
-        <place-search-filters-region></place-search-filters-region>
+        <place-search-filters-region @regionData="selectRegion"></place-search-filters-region>
         <place-search-filters-price></place-search-filters-price>
-        <place-search-filters-time></place-search-filters-time>
-        <place-search-filter-sports-category></place-search-filter-sports-category>
+        <place-search-filters-time @timeData="searchFiltersData.time"></place-search-filters-time>
+        <place-search-filter-sports-category @sportsCategoryData="searchFiltersData.category"></place-search-filter-sports-category>
         <!-- <div class="btn-group">
         <button type="button" class="btn btnPlace dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" :aria-expanded="`${expand}`">Price</button>
         <ul class="dropdown-menu ps-5" style="width: 400px; height: 300px; font-size: 14px">
@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import { ref, watch } from "vue";
 import PlaceSearchFiltersPrice from "./PlaceSearchFiltersPrice.vue";
 import PlaceSearchFiltersRegion from "./PlaceSearchFiltersRegion.vue";
 import PlaceSearchFiltersTime from "./PlaceSearchFiltersTime.vue";
@@ -43,16 +44,35 @@ export default {
   name: "PlaceSearchFilters",
   components: { PlaceSearchFiltersRegion, PlaceSearchFiltersPrice, PlaceSearchFiltersTime, PlaceSearchFilterSportsCategory },
   setup() {
+    const searchFiltersData = ref({
+      price: "",
+      region: { sido: "", gugun: "" },
+      time: "",
+      sportsCategory: "",
+    });
+    const selectRegion = (res) => {
+      // console.log(res, "나옵니까");
+      searchFiltersData.value.region = res;
+    };
+
+    // searchFiltersData.value.region.sido = regionData.sido;
+    // searchFiltersData.value.region.gugun = regionData.gugun;
     // let value = [20, 40];
     // const format = (value) => {
     //   return `${value}원`;
     // };
+    // console.log(searchFiltersData, "아아");
 
+    watch(searchFiltersData.value, () => {
+      // console.log();
+      // console.log(searchFiltersData.value, "searchFiltersData");
+    });
     // const refresh = () =>
-    return {};
+    return { searchFiltersData, selectRegion };
   },
 };
 </script>
+
 <style src="@vueform/slider/themes/default.css"></style>
 
 <style lang="scss" scoped>

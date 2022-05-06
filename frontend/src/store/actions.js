@@ -193,13 +193,21 @@ export async function mateArticleList({ commit }) {
     });
 }
 
-export async function getPlaceSearchInfo({ commit }) {
+export async function getPlaceSearchInfo({ commit }, searchFiltersData) {
   const jwt = localStorage.getItem("jwt");
   const url = `places/search`;
+  const placeSearchKeyword = searchFiltersData;
   await $axios
     .get(url, {
       headers: {
         Authorization: "Bearer" + jwt,
+      },
+      params: {
+        categoryList: placeSearchKeyword.categoryList,
+        endData: placeSearchKeyword.endData,
+        gugun: placeSearchKeyword.gugun,
+        sido: placeSearchKeyword.sido,
+        startData: placeSearchKeyword.startData,
       },
     })
     .then((res) => {

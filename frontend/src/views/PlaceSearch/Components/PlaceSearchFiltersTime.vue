@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Datepicker v-model="date" :enableTimePicker="false" range multiCalendars class="ms-2 datePicker"></Datepicker>
+    <Datepicker v-model="timeData" :enableTimePicker="false" range multiCalendars class="ms-2 datePicker"></Datepicker>
   </div>
 </template>
 
@@ -12,17 +12,18 @@ import "@vuepic/vue-datepicker/dist/main.css";
 export default {
   name: "PlaceSearchFiltersTime",
   components: { Datepicker },
+  // emits: [timeData],
 
   setup() {
-    const date = ref();
+    const timeData = ref({});
     onMounted(() => {
       const startDate = new Date();
       const endDate = new Date(new Date().setDate(startDate.getDate() + 7));
-      date.value = [startDate, endDate];
+      timeData.value = [startDate, endDate];
     });
     // const picked = ref(new Date());
     return {
-      date,
+      timeData,
       // picked,
     };
     // const store = userStore();
