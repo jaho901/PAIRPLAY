@@ -68,7 +68,7 @@ dependencies {
 
 	// ------------------- mongo db -----------------------
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
-//	implementation 'com.querydsl:querydsl-mongodb'
+//	implementation 'com.querydsl:querydsl-mongodb' // 이 설정을 안넣어도 기본 queryDSL 설정이 들어가 있어서 동작함
 
 	//  aws s3
 	implementation("org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE")
