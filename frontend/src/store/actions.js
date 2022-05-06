@@ -148,13 +148,13 @@ export async function profileChangeInfo({ state, dispatch }, payload) {
 }
 
 export async function profileChangeImage({ state }, payload) {
-  const body = payload;
-  console.log(state);
-  // const memberId = state.userInfo.memberId;
+  let formData = new FormData();
+  formData.append("profileImage", payload)
   const url = "profiles/profileImage";
   const header = localStorage.getItem("jwt");
+  console.log(state)
   await $axios
-    .put(url, body, {
+    .post(url, formData, {
       headers: {
         Authorization: "Bearer " + header,
         "Content-Type": "multipart/form-data",

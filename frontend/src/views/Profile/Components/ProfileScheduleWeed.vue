@@ -38,13 +38,14 @@ export default {
       otherInfo: props.otherInfo,
       end: new Date,
       calenderInfo: [
-        { date: '2021-9-21', count: 1 },
-        { date: '2021-9-28', count: 2 },
-        { date: '2021-10-5', count: 3 },
+        { date: '2021-09-21', count: 1 },
+        { date: '2021-09-28', count: 2 },
+        { date: '2021-10-05', count: 3 },
         { date: '2021-10-12', count: 4 },
         { date: '2021-10-19', count: 5 },
         { date: '2021-10-26', count: 6 },
-        { date: '2021-11-2', count: 16 },
+        { date: '2021-11-02', count: 16 },
+        { date: '2022-04-05', count: 4},
       ]
     })
 

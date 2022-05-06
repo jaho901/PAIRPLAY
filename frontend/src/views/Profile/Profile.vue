@@ -108,11 +108,13 @@ export default {
 
     const changeImgFile = async function (event) {
       if( event.target.files && event.target.files.length > 0 ) {
+        console.log(event.target.files, '파일')
         const file = event.target.files[0];
         state.otherInfo.profileImage = file;
-        let data = new FormData()
-        data.append("profileImage", file)
-        await store.dispatch('root/profileChangeImage', data)
+        console.log(state.otherInfo)
+        // let data = new FormData()
+        // data.append("profileImage", file)
+        await store.dispatch('root/profileChangeImage', file)
       }
     }
 
