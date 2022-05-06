@@ -5,4 +5,5 @@ export default {
   userInfo: {},
   otherInfo: {},
   mateArticleList: {},
+  placeSearchInfo: null,
 };

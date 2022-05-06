@@ -25,7 +25,8 @@
 </template>
 
 <script>
-import { reactive } from "vue";
+import { reactive, onMounted } from "vue";
+import { useStore } from "vuex";
 import Header from "../Common/Header.vue";
 import PlaceSearchFilters from "./Components/PlaceSearchFilters.vue";
 import PlaceSearchList from "./Components/PlaceSearchList.vue";
@@ -35,6 +36,11 @@ export default {
 
   components: { Header, PlaceSearchFilters, PlaceSearchList, PlaceSearchMaps },
   setup() {
+    const store = useStore();
+    onMounted(async () => {
+      await store.dispatch("root/getPlaceSearchInfo");
+      alert;
+    });
     const cards = reactive([
       {
         title: "장정구 복싱 체육관",
@@ -80,7 +86,7 @@ export default {
 
     // const store = userStore();
     // const route = useRoute();
-    return { cards };
+    return { cards, onMounted };
   },
 };
 </script>
