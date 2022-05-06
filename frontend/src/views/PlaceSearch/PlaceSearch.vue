@@ -47,13 +47,16 @@ export default {
     });
 
     const getCards = async () => {
-      await store.dispatch("root/getPlaceSearchInfo", searchFiltersData);
-      cards.push(computed(() => store.state.placeSearchInfo));
-    };
-    onMounted(() => {
-      getCards()
+      await store
+        .dispatch("root/getPlaceSearchInfo", searchFiltersData)
         .then((res) => console.log(res, "데이터 나오나 get cards"))
         .catch((err) => console.log(err, "error"));
+      if (store.state.placeSearchInfo) {
+        cards.push(computed(() => store.state.placeSearchInfo));
+      }
+    };
+    onMounted(() => {
+      getCards();
     });
     // const cards = reactive([]);
 
