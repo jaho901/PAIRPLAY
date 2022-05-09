@@ -172,6 +172,29 @@ export async function profileChangeImage({ state }, payload) {
     });
 }
 
+export async function getUserSchedule({ commit }) {
+  const url = `profiles/calendar`
+  const header = localStorage.getItem("jwt");
+  await $axios
+    .get(url, {
+      headers: {
+        Authorization: "Bearer " + header,
+      },
+    })
+    .then((res) => {
+      console.log(res)
+      commit("GET_USER_SCHEDULE", res.data.list)
+    })
+    .catch((err) => {
+      console.log(err)
+  })
+}
+
+export async function getDateTodo({ commit }, payload) {
+  commit("ACTIVITY_PER_DAY", payload["activity"])
+  commit("DATE_PER_DAY", payload["date"])
+}
+
 export async function mateArticleList({ commit }) {
   // const memberId = payload.memberId;
   const jwt = localStorage.getItem("jwt");

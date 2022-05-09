@@ -47,9 +47,9 @@
         </div>
         <div class="container pt-4" style="max-width: 80%; height: 100%; border-left: 1px solid #c8c9ca;">
           <profile-view v-if="state.sideComponents=='Profile'" :otherInfo="state.otherInfo" :userInfo="state.userInfo"></profile-view>
-          <profile-reservation v-else-if="state.sideComponents=='Reservation'"></profile-reservation>
+          <profile-reservation v-else-if="state.sideComponents=='Reservation'" :otherInfo="state.otherInfo" :userInfo="state.userInfo"></profile-reservation>
           <profile-schedule v-else-if="state.sideComponents=='Schedule'" :otherInfo="state.otherInfo" :userInfo="state.userInfo"></profile-schedule>
-          <profile-mate v-else-if="state.sideComponents=='Mate List'"></profile-mate>
+          <profile-mate v-else-if="state.sideComponents=='Mate List'" :otherInfo="state.otherInfo" :userInfo="state.userInfo"></profile-mate>
         </div>
       </div>
     </div>
