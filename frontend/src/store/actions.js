@@ -181,6 +181,8 @@ export async function mateArticleList({ commit }) {
     .get(url, {
       headers: {
         Authorization: "Bearer " + jwt,
+        page: 0,
+        size: 8,
       },
     })
     .then((res) => {

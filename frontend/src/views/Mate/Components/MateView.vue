@@ -2,10 +2,11 @@
   <div class="container">
     <p class="total-cards col-12">총 00 건의 검색결과</p>
     <div>
-      <ul v-for="(card, i) in state.cards" :key="i">
+      <ul v-for="(card, i) in state.cards.list.content" :key="i">
         <li>
           <a class="card" href="#">
             <h3>{{card.title}}</h3>
+            <p class="small">{{card.location}}</p>
             <p class="small">{{card.description}}</p>
           </a>
         </li>
@@ -37,7 +38,7 @@ export default {
     //   console.log(value, "value");
     //   return;
     // };
-
+    console.log(state.cards.list.content, 'aa')
     return { state, onMounted };
   }
 }
