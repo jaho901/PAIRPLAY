@@ -47,7 +47,13 @@ export function OTHER_INFO(state, data) {
 }
 
 export function GET_USER_SCHEDULE(state, data) {
-  state.getUserSchedule = data
+  state.userSchedule = []
+  for (var i in data) {
+    var sub = {}
+    sub['date'] = String(data[i].date[0]) + '-' + String(data[i].date[1]) + '-' + String(data[i].date[2])
+    sub['count'] = data[i].count
+    state.userSchedule.push(sub)
+  }
 }
 
 export function ACTIVITY_PER_DAY(state, data) {

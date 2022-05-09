@@ -4,7 +4,7 @@ export default {
   loginStatus: false,
   userInfo: {},
   otherInfo: {},
-  getUserSchedule: [],
+  userSchedule: [],
   activityPerDay: {},
   datePerDay: "",
   mateArticleList: {},

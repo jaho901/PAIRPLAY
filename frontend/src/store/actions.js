@@ -182,7 +182,7 @@ export async function getUserSchedule({ commit }) {
       },
     })
     .then((res) => {
-      console.log(res)
+      console.log(typeof(res.data.list[0].date[0]))
       commit("GET_USER_SCHEDULE", res.data.list)
     })
     .catch((err) => {
