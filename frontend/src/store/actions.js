@@ -229,6 +229,9 @@ export async function mateArticleList({ commit }, payload) {
       console.log(err);
     });
 }
+export async function change({ commit }, payload) {
+  await commit("CHANGE", payload);
+}
 
 export async function getPlaceSearchInfo({ commit }, searchFiltersData) {
   // console.log(searchFiltersData, "액션 데이터");
