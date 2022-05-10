@@ -143,7 +143,7 @@ export default {
       // if (nowPage.value == undefined) {
       //   nowPage.value = 0;
       // }
-      var activeBtn = document.getElementsByClassName("page-item")[nowPage.value];
+      var activeBtn = document.getElementsByClassName("page-item")[1];
       activeBtn.classList.add("active");
       // if (store.state.root.searchFiltersData.categoryList == []) {
       //   store.state.root.placeSearchInfo.categoryList = store.state.root.selectSportsCategory;
@@ -187,7 +187,7 @@ export default {
   font-size: 16px;
 }
 .pagination {
-  margin: auto;
+  margin: 1rem auto 0rem auto;
   justify-content: center;
 }
 .page-item > .page-link {
