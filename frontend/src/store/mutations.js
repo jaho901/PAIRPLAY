@@ -51,9 +51,15 @@ export function MATE_ARTICLE_LIST(state, data) {
 }
 
 export function Place_Search_Info(state, data) {
+  state.placeSearchInfo = "";
   state.placeSearchInfo = data;
 }
 
 export function SELECT_SPORTS_CATEGORY(state, data) {
+  state.selectSportsCategory = "";
   state.selectSportsCategory = data;
+}
+
+export function SUBMIT_LIKE(state, data) {
+  state.placeLike = data;
 }

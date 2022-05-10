@@ -5,7 +5,7 @@ export default {
   userInfo: {},
   otherInfo: {},
   mateArticleList: {},
-  // placeSearchInfo: null,
-  placeSearchInfo: "",
+  placeSearchInfo: [],
   selectSportsCategory: "",
+  placeLike: "",
 };

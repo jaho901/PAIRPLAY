@@ -23,3 +23,7 @@ export function otherInfo(state) {
 export function mateArticleList(state) {
   return state.mateArticleList;
 }
+
+export function getPlaceInfo(state) {
+  return state.placeSearchInfo;
+}

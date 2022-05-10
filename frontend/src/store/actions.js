@@ -200,6 +200,7 @@ export async function getPlaceSearchInfo({ commit }, searchFiltersData) {
   const size = 20;
   const jwt = localStorage.getItem("jwt");
   const url = `places/search?page=${page}&size=${size}`;
+  console.log(body, "바디");
   await $axios
     .post(url, body, {
       headers: {
@@ -216,5 +217,10 @@ export async function getPlaceSearchInfo({ commit }, searchFiltersData) {
 }
 
 export async function selectSportsCategory({ commit }, categoryList) {
-  commit("SELECT_SPORTS_CATEGORY", categoryList);
+  await commit("SELECT_SPORTS_CATEGORY", categoryList);
 }
+
+// export async function submitLike({ commit }, data) {
+//   await commit("SUMBIT_LIKE", data);
+//   await this.dispatch("getPlaceSearchInfo");
+// }

@@ -80,7 +80,9 @@ export default {
       searchFiltersData.value.time = { startDate: "", endDate: "" };
       searchFiltersData.value.categoryList = "";
     };
-    watch(searchFiltersData.value, () => {
+    watch(searchFiltersData.value, (res) => {
+      console.log(res, "맞나이거");
+      // console.log(searchFiltersData.value, "searchFiltersData.value");
       emit("searchFiltersData", searchFiltersData.value);
       // console.log(res);
       // console.log(searchFiltersData.value, "searchFiltersData");
