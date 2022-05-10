@@ -51,11 +51,11 @@ export default {
       await axios({ method: "put", headers: { Authorization: "Bearer " + localStorage.getItem("jwt") }, url: `${BASE_URL}/places/like/${id}` }).then((res) => {
         console.log(res), "클릭라이크";
       });
-      if (like.value == true) {
-        like.value = false;
-      } else {
-        like.value = true;
-      }
+      // if (like.value == true) {
+      //   like.value = false;
+      // } else {
+      //   like.value = true;
+      // }
       // await getCards();
       // await store.dispatch("root/getPlaceSearchInfo");
     };
