@@ -5,7 +5,7 @@
       <Header></Header>
     </div>
     <!-- <hr style="margin-top: 0px; margin-bottom: 0px; color: #b7b7b7" /> -->
-    <place-search-filters @searchFiltersData="getSearchFiltersData"></place-search-filters>
+    <place-search-filters></place-search-filters>
     <div class="container PlaceSearchContentFrame">
       <div class="placeSearchContent container d-flex justify-content-around align-items-start">
         <div class="mt-4 col">
@@ -55,40 +55,42 @@ export default {
   components: { Header, PlaceSearchFilters, PlaceSearchList, PlaceSearchMaps },
   setup() {
     const store = useStore();
+    // console.log(store.state.root.addPlaceFilters);
     // const route = useRoute();
     let cards = reactive(computed(() => store.state.root.placeSearchInfo.placeList));
     // let cards = reactive(computed(() => store.getters["root/getPlaceInfo"]));
     let totalPages = ref(computed(() => store.state.root.placeSearchInfo.totalPages));
-    let searchFiltersData = ref({
+    let searchFiltersData = reactive(
+      computed(() => store.state.root.addPlaceFilters)
       // categoryList: [route.params.categoryList],
-      categoryList: ref(Object.values(store.state.root.selectSportsCategory)).value,
-      endDate: "",
-      gugun: "",
-      page: 0,
-      sido: "",
-      searchWord: "",
-      startDate: "",
-    });
+      // categoryList: ref(Object.values(store.state.root.selectSportsCategory)).value,
+      // endDate: "",
+      // gugun: "",
+      // page: 0,
+      // sido: "",
+      // searchWord: "",
+      // startDate: "",
+    );
     // console.log(store.state.root.selectSportsCategory, "있냥기");
-    const getSearchFiltersData = async (res) => {
-      // 만약에 선택한 필터가 없다면
-      if (res.categoryList.length == 0) {
-        searchFiltersData.value.categoryList = store.state.root.selectSportsCategory;
-        console.log(searchFiltersData.value.categoryList, "searchFiltersData.value.categoryList");
-        // pass
-      } else {
-        searchFiltersData.value.categoryList = res.categoryList;
-        console.log(res.categoryList, "잉");
-      }
-      searchFiltersData.value.endDate = res.endDate;
-      searchFiltersData.value.gugun = res.region.gugun;
-      searchFiltersData.value.sido = res.region.sido;
-      searchFiltersData.value.startDate = res.startDate;
-      // console.log(searchFiltersData.value, "된겨?");
-      searchFiltersData.value.page = 0;
-      await getCards();
-      // return searchFiltersData.value;
-    };
+    // const getSearchFiltersData = async (res) => {
+    //   // 만약에 선택한 필터가 없다면
+    //   if (res.categoryList.length == 0) {
+    //     searchFiltersData.value.categoryList = store.state.root.selectSportsCategory;
+    //     console.log(searchFiltersData.value.categoryList, "searchFiltersData.value.categoryList");
+    //     // pass
+    //   } else {
+    //     searchFiltersData.value.categoryList = res.categoryList;
+    //     console.log(res.categoryList, "잉");
+    //   }
+    //   searchFiltersData.value.endDate = res.endDate;
+    //   searchFiltersData.value.gugun = res.region.gugun;
+    //   searchFiltersData.value.sido = res.region.sido;
+    //   searchFiltersData.value.startDate = res.startDate;
+    //   // console.log(searchFiltersData.value, "된겨?");
+    //   searchFiltersData.value.page = 0;
+    //   await getCards();
+    //   // return searchFiltersData.value;
+    // };
     const getCards = async () => {
       // console.log(searchFiltersData.value, "요기는요");
       await store.dispatch("root/getPlaceSearchInfo", searchFiltersData.value);
@@ -128,7 +130,7 @@ export default {
 
     // const store = userStore();
     // const route = useRoute();
-    return { cards, store, totalPages, onMounted, getSearchFiltersData, getCards, prevPages, nextPages };
+    return { cards, store, totalPages, onMounted, /*getSearchFiltersData*/ getCards, prevPages, nextPages };
   },
 };
 </script>

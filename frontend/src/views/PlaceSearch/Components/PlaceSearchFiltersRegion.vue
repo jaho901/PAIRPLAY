@@ -81,7 +81,11 @@ export default {
     // const route = useRoute();
     const selectBusanGugun = (res) => {
       regionData.value.sido = "부산";
-      regionData.value.gugun = res.target.value;
+      if (res.target.value == null) {
+        // pass
+      } else {
+        regionData.value.gugun = res.target.value;
+      }
       emit("regionData", regionData.value);
     };
     return { regionData, selectBusanGugun };

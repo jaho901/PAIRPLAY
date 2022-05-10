@@ -10,8 +10,8 @@ export default {
   mateArticleList: {},
   mateArticleListTotalPage: 0,
   changeList: {},
-  // placeSearchInfo: null,
   placeSearchInfo: "",
   selectSportsCategory: "",
   placeLike: "",
+  addPlaceFilters: "",
 };

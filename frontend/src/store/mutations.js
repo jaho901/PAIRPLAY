@@ -85,20 +85,24 @@ export async function MATE_ARTICLE_LIST(state, data) {
   }
 }
 
-export function Place_Search_Info(state, data) {
+export async function PLACE_SEARCH_INFO(state, data) {
   state.placeSearchInfo = "";
   state.placeSearchInfo = data;
 }
 
-export function SELECT_SPORTS_CATEGORY(state, data) {
+export async function SELECT_SPORTS_CATEGORY(state, data) {
   state.selectSportsCategory = "";
   state.selectSportsCategory = data;
 }
 
-export function SUBMIT_LIKE(state, data) {
+export async function SUBMIT_LIKE(state, data) {
   state.placeLike = data;
 }
 export async function CHANGE(state, data) {
   state.changeList = {};
   state.changeList = data;
+}
+export async function ADD_PLACE_FILTERS(state, data) {
+  state.addPlaceFilters = {};
+  state.addPlaceFilters = data;
 }

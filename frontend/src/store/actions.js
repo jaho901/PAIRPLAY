@@ -1,3 +1,4 @@
+import store from "@/common/store";
 import $axios from "axios";
 
 export async function signupDuplicateEmail({ commit }, payload) {
@@ -209,7 +210,7 @@ export async function getPlaceSearchInfo({ commit }, searchFiltersData) {
     })
     .then((res) => {
       console.log(res.data, "여기는 actions");
-      commit("Place_Search_Info", res.data);
+      commit("PLACE_SEARCH_INFO", res.data);
     })
     .catch((err) => {
       console.log(err);
@@ -220,7 +221,9 @@ export async function selectSportsCategory({ commit }, categoryList) {
   await commit("SELECT_SPORTS_CATEGORY", categoryList);
 }
 
-// export async function submitLike({ commit }, data) {
-//   await commit("SUMBIT_LIKE", data);
-//   await this.dispatch("getPlaceSearchInfo");
-// }
+export async function addPlaceFilters({ commit }, data) {
+  await commit("ADD_PLACE_FILTERS", data);
+  await store.dispatch("root/getPlaceSearchInfo", data);
+
+  // await this.dispatch("getPlaceSearchInfo");
+}

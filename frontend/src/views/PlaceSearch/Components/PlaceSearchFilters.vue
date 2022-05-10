@@ -38,24 +38,30 @@ import PlaceSearchFiltersPrice from "./PlaceSearchFiltersPrice.vue";
 import PlaceSearchFiltersRegion from "./PlaceSearchFiltersRegion.vue";
 import PlaceSearchFiltersTime from "./PlaceSearchFiltersTime.vue";
 import PlaceSearchFilterSportsCategory from "./PlaceSearchFilterSportsCategory.vue";
+import { useStore } from "vuex";
 
 // import Slider from "@vueform/slider";
 
 export default {
   name: "PlaceSearchFilters",
-  emits: ["searchFiltersData"],
+  // emits: ["searchFiltersData"],
   components: { PlaceSearchFiltersRegion, PlaceSearchFiltersPrice, PlaceSearchFiltersTime, PlaceSearchFilterSportsCategory },
-  setup(_, { emit }) {
+  setup(/*_, { emit }*/) {
+    const store = useStore();
     let searchFiltersData = ref({
       price: "",
-      region: { sido: "", gugun: "" },
+      sido: "",
+      gugun: "",
       startDate: "",
       endDate: "",
       categoryList: [],
     });
+    // console.log(store.state.root.addPlaceFilters, "store.state.root.addPlaceFilters");
     const selectRegion = (res) => {
+      console.log(res, "지역나오나");
       // console.log(res, "나옵니까");
-      searchFiltersData.value.region = res;
+      searchFiltersData.value.sido = res.sido;
+      searchFiltersData.value.gugun = res.gugun;
     };
     const selectTime = (res) => {
       let startTime = new Date(+res[0] + 3240 * 10000).toISOString().replace("T", " ").replace(/\..*/, "").substring(0, 10);
@@ -76,14 +82,17 @@ export default {
     // console.log(searchFiltersData, "아아");
     const cancelFilters = () => {
       searchFiltersData.value.price = "";
-      searchFiltersData.value.region = { sido: "", gugun: "" };
+      searchFiltersData.value.sido = "";
+      searchFiltersData.value.gugun = "";
       searchFiltersData.value.time = { startDate: "", endDate: "" };
       searchFiltersData.value.categoryList = "";
     };
-    watch(searchFiltersData.value, (res) => {
+    watch(searchFiltersData.value, async (res) => {
       console.log(res, "맞나이거");
       // console.log(searchFiltersData.value, "searchFiltersData.value");
-      emit("searchFiltersData", searchFiltersData.value);
+      // emit("searchFiltersData", searchFiltersData.value);
+      await store.dispatch("root/addPlaceFilters", searchFiltersData.value);
+
       // console.log(res);
       // console.log(searchFiltersData.value, "searchFiltersData");
     });

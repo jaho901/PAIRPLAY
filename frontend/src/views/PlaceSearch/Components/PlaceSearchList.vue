@@ -9,14 +9,16 @@
           <div class="card-body text-start d-flex flex-column justify-content-between text-start">
             <div class="d-flex justify-content-between">
               <p class="card-region">{{ card.address }}</p>
-              <div @click="clickLike(card.id)"><i class="bi bi-heart pe-3"></i></div>
+              <div v-if="`${card.like}` == `true`" @click="clickLike(card.id)"><i class="bi bi-heart-fill pe-3"></i></div>
+              <div v-else @click="clickLike(card.id)"><i class="bi bi-heart pe-3"></i></div>
             </div>
             <div>
               <p class="card-title mb-2 me-4">{{ card.name }}</p>
               <p class="card-facility mt-4 mb-5">{{ card.hashtags }}</p>
             </div>
             <div class="d-flex justify-content-between">
-              <p class="card-rate fw-bold"><i class="bi bi-star-fill me-1" style="color: #fe8a01"></i> {{ card.rate }} {{ like }}</p>
+              <p class="card-rate fw-bold"><i class="bi bi-star-fill me-1" style="color: #fe8a01"></i> {{ card.score }}</p>
+
               <!-- <p class="card-cost pe-3 fw-bold">{{ card.menu }}</p> -->
             </div>
             <!-- <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> -->
@@ -29,18 +31,18 @@
 
 <script>
 import { ref } from "vue";
-// import { useStore } from "vuex";
+import { useStore } from "vuex";
 
 const BASE_URL = "https://pairplay.site/api/v1/";
 import axios from "axios";
 export default {
   name: "PlaceSearchList",
-  emits: ["clickLike"],
+  // emits: ["clickLike"],
   props: ["card", "cardId"],
   setup(props) {
     // console.log(props.card, "props.card");
     // console.log(props.cardId, "props.cardId");
-    // const store = useStore();
+    const store = useStore();
     // const placeSearchData = ref(props);
     const like = ref(props.card.like);
     // let like = ref(props.card[props.cardId].like);
@@ -48,16 +50,15 @@ export default {
     // console.log(placeSearchData.value.card, "placeSearchData");
     const clickLike = async (id) => {
       // console.log(id, "id는?");
-      await axios({ method: "put", headers: { Authorization: "Bearer " + localStorage.getItem("jwt") }, url: `${BASE_URL}/places/like/${id}` }).then((res) => {
-        console.log(res), "클릭라이크";
-      });
+      await axios({ method: "put", headers: { Authorization: "Bearer " + localStorage.getItem("jwt") }, url: `${BASE_URL}/places/like/${id}` });
       // if (like.value == true) {
       //   like.value = false;
       // } else {
       //   like.value = true;
       // }
       // await getCards();
-      // await store.dispatch("root/getPlaceSearchInfo");
+      // console.log(store.state.root.addPlaceFilters, "store.state.root.addPlaceFilters");
+      await store.dispatch("root/getPlaceSearchInfo", store.state.root.addPlaceFilters);
     };
     return {
       // placeSearchData,
