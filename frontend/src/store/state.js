@@ -8,6 +8,8 @@ export default {
   activityPerDay: {},
   datePerDay: "",
   mateArticleList: {},
+  mateArticleListTotalPage: 0,
+  changeList: {},
   // placeSearchInfo: null,
   placeSearchInfo: [
     {

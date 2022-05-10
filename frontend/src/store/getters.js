@@ -35,3 +35,11 @@ export function datePerDay(state) {
 export function mateArticleList(state) {
   return state.mateArticleList;
 }
+
+export function mateArticleListTotalPage(state) {
+  return state.mateArticleListTotalPage;
+}
+
+export function changeList(state) {
+  return state.changeList
+}
