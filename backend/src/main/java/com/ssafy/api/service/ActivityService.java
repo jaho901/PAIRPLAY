@@ -67,23 +67,22 @@ public class ActivityService {
         assert member != null;
         sido = member.getSido();
         gugun = member.getGugun();
-        System.out.println("sss" + sido + " " + gugun);
+
         if(!activityCategoryReq.getSido().equals("") || !activityCategoryReq.getGungu().equals("")){
 
             sido = activityCategoryReq.getSido();
             gugun = activityCategoryReq.getGungu();
-            System.out.println("dddd" + sido + " " + gugun);
         }
-        System.out.println("?" + sido + " " + gugun);
+
         location = sido + " " + gugun;
 
-        System.out.println("????" + location);
+
 
         /*
          * 운동 카테고리, 검색어
          */
         if(activityCategoryReq.getCategoryId()!=0 && !activityCategoryReq.getSearch().equals("")){
-            System.out.println("1" + location);
+
             activities = activityRepositorySupport.findByCategorySearch(pageable, location, activityCategoryReq.getCategoryId(), activityCategoryReq.getSearch());
 
         }
@@ -92,7 +91,7 @@ public class ActivityService {
          * 운동 카테고리
          */
         else if(activityCategoryReq.getCategoryId()!=0){
-            System.out.println("2"+ location);
+
             activities = activityRepositorySupport.findByCategory(pageable, location, activityCategoryReq.getCategoryId());
 
         }
@@ -101,14 +100,14 @@ public class ActivityService {
          * 검색어
          */
         else if(!activityCategoryReq.getSearch().equals("")) {
-            System.out.println("3"+ location);
+
             activities = activityRepositorySupport.findByCategorySearch(pageable, location, activityCategoryReq.getSearch());
         }
         /*
          * 지역만 검색
          */
         else{
-            System.out.println("4"+ location);
+
             activities = activityRepositorySupport.findByCategorySearch(pageable, location);
         }
 
