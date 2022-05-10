@@ -39,6 +39,10 @@ export function mateArticleList(state) {
 export function getPlaceInfo(state) {
   return state.placeSearchInfo;
 }
+export function matePage(state) {
+  return state.matePage;
+}
+
 export function mateArticleListTotalPage(state) {
   return state.mateArticleListTotalPage;
 }
