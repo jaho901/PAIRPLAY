@@ -1,14 +1,15 @@
 package com.ssafy.api.controller;
 
 
+import com.querydsl.core.Tuple;
 import com.ssafy.api.request.ActivityCategoryReq;
 import com.ssafy.api.request.ActivityPostReq;
 import com.ssafy.api.request.ActivityRegisterReq;
-import com.ssafy.api.response.ActivityDetailRes;
-import com.ssafy.api.response.BaseResponseBody;
-import com.ssafy.api.response.ActivityListRes;
+import com.ssafy.api.response.*;
 import com.ssafy.api.service.ActivityService;
+import com.ssafy.api.service.MateService;
 import com.ssafy.domain.entity.Activity;
+import com.ssafy.domain.entity.Mate;
 import io.swagger.annotations.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,9 +26,11 @@ import static com.ssafy.common.statuscode.ActivityCode.*;
 public class ActivityController {
 
     private final ActivityService activityService;
+    private final MateService mateService;
 
-    public ActivityController(ActivityService activityService) {
+    public ActivityController(ActivityService activityService, MateService mateService) {
         this.activityService = activityService;
+        this.mateService = mateService;
     }
 
 
@@ -105,9 +108,9 @@ public class ActivityController {
      * 공고 신청
      */
     @PostMapping("/register")
-    @ApiOperation(value = "공고 신청", notes = "공고를 <strong>신청</strong>한다")
+    @ApiOperation(value = "메이트 신청", notes = "메이트를 <strong>신청</strong>한다")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "공고 신청 성공하였습니다.", response = BaseResponseBody.class),
+            @ApiResponse(code = 200, message = "메이트 신청 성공하였습니다.", response = BaseResponseBody.class),
     })
     public ResponseEntity<BaseResponseBody> registeActivity(@RequestBody @ApiParam(value = "공고 정보", required = true) ActivityRegisterReq req) {
 
@@ -117,7 +120,38 @@ public class ActivityController {
     }
 
 
+//    /**
+//     * 메이트 신청 수신
+//     */
+//    @GetMapping("/register/{activityId}")
+//    @ApiOperation(value = "메이트 신청 목록조회", notes = "공고 <strong>신청 목록 조회</strong>한다")
+//    @ApiResponses({
+//            @ApiResponse(code = 200, message = "공고 신청 목록 조회 성공했습니다..", response = BaseResponseBody.class),
+//    })
+//    public ResponseEntity<? extends MateListRes> getRegisterList(@PathVariable(name = "activityId") @ApiParam(value="메이트 공고 아이디", required = true)Long activityId, @PageableDefault(page = 0, size = 8) Pageable pageable){
+//        Page<Mate> mate = mateService.getRegisterList(activityId, pageable);
+//
+//
+//        return ResponseEntity.status(200).body(MateListRes.of(mate, SUCCESS_GET_DETAIL.getCode(), SUCCESS_GET_DETAIL.getMessage()));
+//
+//    }
+//
+//    /**
+//     * 메이트 신청 발신
+//     */
+//    @GetMapping("/register")
+//    @ApiOperation(value = "메이트 발신 내역 조회", notes = "메이트 <strong> 발신 내역 조회</strong>한다")
+//    @ApiResponses({
+//            @ApiResponse(code = 200, message = "공고 발신 목록 조회 성공했습니다..", response = BaseResponseBody.class),
+//    })
+//    public ResponseEntity<? extends MateSendListRes> getSendRegisterList(@PageableDefault(page = 0, size = 8) Pageable pageable){
+//        Page<Tuple> mate = mateService.getSendRegisterList(pageable);
+//
+//
+//        return ResponseEntity.status(200).body(MateSendListRes.of(mate, SUCCESS_GET_DETAIL.getCode(), SUCCESS_GET_DETAIL.getMessage()));
+//
+//    }
 
 
 
-}
+    }

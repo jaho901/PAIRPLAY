@@ -48,8 +48,6 @@ public class ActivityService {
                 return activityRepositorySupport.findAllByLocation(pageable, location);
             }
         }
-        System.out.println("3");
-
 
         return activityRepositorySupport.findAll(pageable);
 
@@ -69,20 +67,23 @@ public class ActivityService {
         assert member != null;
         sido = member.getSido();
         gugun = member.getGugun();
+        System.out.println("sss" + sido + " " + gugun);
+        if(!activityCategoryReq.getSido().equals("") || !activityCategoryReq.getGungu().equals("")){
 
-        if(activityCategoryReq.getSido() != null || activityCategoryReq.getGungu() != null){
             sido = activityCategoryReq.getSido();
             gugun = activityCategoryReq.getGungu();
+            System.out.println("dddd" + sido + " " + gugun);
         }
-
+        System.out.println("?" + sido + " " + gugun);
         location = sido + " " + gugun;
 
-        System.out.println(location);
+        System.out.println("????" + location);
 
         /*
          * 운동 카테고리, 검색어
          */
         if(activityCategoryReq.getCategoryId()!=0 && !activityCategoryReq.getSearch().equals("")){
+            System.out.println("1" + location);
             activities = activityRepositorySupport.findByCategorySearch(pageable, location, activityCategoryReq.getCategoryId(), activityCategoryReq.getSearch());
 
         }
@@ -91,6 +92,7 @@ public class ActivityService {
          * 운동 카테고리
          */
         else if(activityCategoryReq.getCategoryId()!=0){
+            System.out.println("2"+ location);
             activities = activityRepositorySupport.findByCategory(pageable, location, activityCategoryReq.getCategoryId());
 
         }
@@ -99,12 +101,14 @@ public class ActivityService {
          * 검색어
          */
         else if(!activityCategoryReq.getSearch().equals("")) {
+            System.out.println("3"+ location);
             activities = activityRepositorySupport.findByCategorySearch(pageable, location, activityCategoryReq.getSearch());
         }
         /*
          * 지역만 검색
          */
         else{
+            System.out.println("4"+ location);
             activities = activityRepositorySupport.findByCategorySearch(pageable, location);
         }
 
@@ -150,13 +154,13 @@ public class ActivityService {
         Long memberId = Long.parseLong(authentication.getName());
 
         Member member = memberRepository.findById(memberId).orElse(null);
-
+        Activity activity = activityRepository.findById(req.getActivityId()).orElse(null);
         if(req.getActivityId() == null || member == null){
             throw new CustomException(EMPTY_REQUEST_VALUE);
         }
 
         Mate mate = Mate.builder()
-                .activityId(req.getActivityId())
+                .activityId(activity)
                 .memberId(member)
                 .build();
 
