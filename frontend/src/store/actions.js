@@ -1,3 +1,4 @@
+import store from "@/common/store";
 import $axios from "axios";
 
 export async function signupDuplicateEmail({ commit }, payload) {
@@ -197,10 +198,10 @@ export async function getPlaceSearchInfo({ commit }, searchFiltersData) {
   // console.log(searchFiltersData, "액션 데이터");
   const page = searchFiltersData.page;
   const body = searchFiltersData;
-  console.log(body, page, "여기한번보소");
-  // const size = 20;
+  const size = 20;
   const jwt = localStorage.getItem("jwt");
-  const url = `places/search?page=${page}`;
+  const url = `places/search?page=${page}&size=${size}`;
+  console.log(body, "바디");
   await $axios
     .post(url, body, {
       headers: {
@@ -209,7 +210,7 @@ export async function getPlaceSearchInfo({ commit }, searchFiltersData) {
     })
     .then((res) => {
       console.log(res.data, "여기는 actions");
-      commit("Place_Search_Info", res.data);
+      commit("PLACE_SEARCH_INFO", res.data);
     })
     .catch((err) => {
       console.log(err);
@@ -217,7 +218,12 @@ export async function getPlaceSearchInfo({ commit }, searchFiltersData) {
 }
 
 export async function selectSportsCategory({ commit }, categoryList) {
-  commit("SELECT_SPORTS_CATEGORY", categoryList);
+  await commit("SELECT_SPORTS_CATEGORY", categoryList);
+}
 
-  // console.log(searchFiltersData, "액션 데이터");
+export async function addPlaceFilters({ commit }, data) {
+  await commit("ADD_PLACE_FILTERS", data);
+  await store.dispatch("root/getPlaceSearchInfo", data);
+
+  // await this.dispatch("getPlaceSearchInfo");
 }

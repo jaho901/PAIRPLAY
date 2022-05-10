@@ -3,21 +3,23 @@
     <div class="card my-4">
       <div class="row card-frame">
         <div class="col-6">
-          <img :src="`${card.imgUrl}`" class="img-fluid placeSearchListCardImage rounded" alt="..." />
+          <img :src="`${card.img[0]}`" class="img-fluid placeSearchListCardImage rounded" alt="..." />
         </div>
         <div class="col d-flex flex-row align-items-start">
           <div class="card-body text-start d-flex flex-column justify-content-between text-start">
             <div class="d-flex justify-content-between">
-              <p class="card-region">{{ card.position }}</p>
-              <i class="bi bi-heart pe-3"></i>
+              <p class="card-region">{{ card.address }}</p>
+              <div v-if="`${card.like}` == `true`" @click="clickLike(card.id)"><i class="bi bi-heart-fill pe-3"></i></div>
+              <div v-else @click="clickLike(card.id)"><i class="bi bi-heart pe-3"></i></div>
             </div>
             <div>
-              <p class="card-title mb-2 me-4">{{ card.title }}</p>
-              <p class="card-facility mt-4 mb-5">{{ card.facility }}</p>
+              <p class="card-title mb-2 me-4">{{ card.name }}</p>
+              <p class="card-facility mt-4 mb-5">{{ card.hashtags }}</p>
             </div>
             <div class="d-flex justify-content-between">
-              <p class="card-rate fw-bold"><i class="bi bi-star-fill me-1" style="color: #fe8a01"></i> {{ card.rate }}</p>
-              <p class="card-cost pe-3 fw-bold">{{ card.cost }}</p>
+              <p class="card-rate fw-bold"><i class="bi bi-star-fill me-1" style="color: #fe8a01"></i> {{ card.score }}</p>
+
+              <!-- <p class="card-cost pe-3 fw-bold">{{ card.menu }}</p> -->
             </div>
             <!-- <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> -->
           </div>
@@ -29,14 +31,40 @@
 
 <script>
 import { ref } from "vue";
+import { useStore } from "vuex";
 
+const BASE_URL = "https://pairplay.site/api/v1/";
+import axios from "axios";
 export default {
   name: "PlaceSearchList",
-  props: ["card"],
+  // emits: ["clickLike"],
+  props: ["card", "cardId"],
   setup(props) {
-    const placeSearchData = ref(props.detailData);
+    // console.log(props.card, "props.card");
+    // console.log(props.cardId, "props.cardId");
+    const store = useStore();
+    // const placeSearchData = ref(props);
+    const like = ref(props.card.like);
+    // let like = ref(props.card[props.cardId].like);
+    // console.log(card.id);
+    // console.log(placeSearchData.value.card, "placeSearchData");
+    const clickLike = async (id) => {
+      // console.log(id, "id는?");
+      await axios({ method: "put", headers: { Authorization: "Bearer " + localStorage.getItem("jwt") }, url: `${BASE_URL}/places/like/${id}` });
+      // if (like.value == true) {
+      //   like.value = false;
+      // } else {
+      //   like.value = true;
+      // }
+      // await getCards();
+      // console.log(store.state.root.addPlaceFilters, "store.state.root.addPlaceFilters");
+      await store.dispatch("root/getPlaceSearchInfo", store.state.root.addPlaceFilters);
+    };
     return {
-      placeSearchData,
+      // placeSearchData,
+      clickLike,
+      // getCards,
+      like,
     };
   },
 };
@@ -58,6 +86,8 @@ export default {
 }
 .placeSearchListCardImage {
   height: 100%;
+  max-height: 250px;
+  width: 100%;
   border-radius: 10px;
   align-self: center;
   object-fit: cover;
@@ -117,5 +147,8 @@ export default {
   font-weight: 500;
   color: #767676;
   font-size: 14px;
+}
+.bi-haert {
+  // z-index: 1;
 }
 </style>

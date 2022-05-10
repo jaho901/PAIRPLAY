@@ -73,7 +73,7 @@ import { ref } from "vue";
 // import {mapState, useStore} from "vuex"
 
 export default {
-  name: "PlaceSearchFiltersRegion",
+  name: "MateFiltersRegion",
   emits: ["regionData"],
   setup(props, { emit }) {
     const regionData = ref({ sido: "", gugun: "" });
@@ -81,11 +81,7 @@ export default {
     // const route = useRoute();
     const selectBusanGugun = (res) => {
       regionData.value.sido = "부산";
-      if (res.target.value == null) {
-        // pass
-      } else {
-        regionData.value.gugun = res.target.value;
-      }
+      regionData.value.gugun = res.target.value;
       emit("regionData", regionData.value);
     };
     return { regionData, selectBusanGugun };

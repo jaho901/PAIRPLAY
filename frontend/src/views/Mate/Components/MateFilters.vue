@@ -4,11 +4,10 @@
       <!--  -->
       <!-- Default dropend button -->
       <!-- <div class="input-group serachbar">search</div> -->
-      <div class="d-flex align-items-center col-lg-9 filters">
-        <place-search-filters-region @regionData="selectRegion"></place-search-filters-region>
-        <place-search-filters-price></place-search-filters-price>
-        <place-search-filters-time @timeData="selectTime"></place-search-filters-time>
-        <place-search-filter-sports-category @sportsCategoryData="selectSportsCategory"></place-search-filter-sports-category>
+      <div class="d-flex align-items-center col-lg-8 filters">
+        <mate-filters-region @regionData="selectRegion"></mate-filters-region>
+        <mate-filters-time @timeData="selectTime"></mate-filters-time>
+        <mate-filters-sports-category @sportsCategoryData="selectSportsCategory"></mate-filters-sports-category>
         <div class="btn btn-Cancel btn-secondary" type="button" @click="cancelFilters">초기화</div>
         <!-- <div class="btn-group">
         <button type="button" class="btn btnPlace dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" :aria-expanded="`${expand}`">Price</button>
@@ -22,7 +21,7 @@
       </div> -->
         <!-- 지역 -->
       </div>
-      <div class="col-lg-2">
+      <div class="col-lg-4">
         <div class="input-group flex-nowrap">
           <!-- <span class="input-group-text" id="addon-wrapping">@</span> -->
           <input type="text" class="form-control serachbar" placeholder="&#xf52a; search" aria-label="Username" aria-describedby="addon-wrapping" />
@@ -34,34 +33,27 @@
 
 <script>
 import { ref, watch } from "vue";
-import PlaceSearchFiltersPrice from "./PlaceSearchFiltersPrice.vue";
-import PlaceSearchFiltersRegion from "./PlaceSearchFiltersRegion.vue";
-import PlaceSearchFiltersTime from "./PlaceSearchFiltersTime.vue";
-import PlaceSearchFilterSportsCategory from "./PlaceSearchFilterSportsCategory.vue";
-import { useStore } from "vuex";
+import MateFiltersRegion from "./MateFiltersRegion.vue";
+import MateFiltersTime from "./MateFiltersTime.vue";
+import MateFiltersSportsCategory from "./MateFiltersSportsCategory.vue";
 
 // import Slider from "@vueform/slider";
 
 export default {
-  name: "PlaceSearchFilters",
-  // emits: ["searchFiltersData"],
-  components: { PlaceSearchFiltersRegion, PlaceSearchFiltersPrice, PlaceSearchFiltersTime, PlaceSearchFilterSportsCategory },
-  setup(/*_, { emit }*/) {
-    const store = useStore();
+  name: "MateFilters",
+  emits: ["searchFiltersData"],
+  components: { MateFiltersRegion, MateFiltersTime, MateFiltersSportsCategory },
+  setup(_, { emit }) {
     let searchFiltersData = ref({
       price: "",
-      sido: "",
-      gugun: "",
+      region: { sido: "", gugun: "" },
       startDate: "",
       endDate: "",
       categoryList: [],
     });
-    // console.log(store.state.root.addPlaceFilters, "store.state.root.addPlaceFilters");
     const selectRegion = (res) => {
-      console.log(res, "지역나오나");
       // console.log(res, "나옵니까");
-      searchFiltersData.value.sido = res.sido;
-      searchFiltersData.value.gugun = res.gugun;
+      searchFiltersData.value.region = res;
     };
     const selectTime = (res) => {
       let startTime = new Date(+res[0] + 3240 * 10000).toISOString().replace("T", " ").replace(/\..*/, "").substring(0, 10);
@@ -82,17 +74,12 @@ export default {
     // console.log(searchFiltersData, "아아");
     const cancelFilters = () => {
       searchFiltersData.value.price = "";
-      searchFiltersData.value.sido = "";
-      searchFiltersData.value.gugun = "";
+      searchFiltersData.value.region = { sido: "", gugun: "" };
       searchFiltersData.value.time = { startDate: "", endDate: "" };
       searchFiltersData.value.categoryList = "";
     };
-    watch(searchFiltersData.value, async (res) => {
-      console.log(res, "맞나이거");
-      // console.log(searchFiltersData.value, "searchFiltersData.value");
-      // emit("searchFiltersData", searchFiltersData.value);
-      await store.dispatch("root/addPlaceFilters", searchFiltersData.value);
-
+    watch(searchFiltersData.value, () => {
+      emit("searchFiltersData", searchFiltersData.value);
       // console.log(res);
       // console.log(searchFiltersData.value, "searchFiltersData");
     });
