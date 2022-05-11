@@ -61,7 +61,6 @@ export default {
     // console.log(store.state.root.addPlaceFilters);
     // const route = useRoute();
     let cards = reactive(computed(() => store.state.root.placeSearchInfo.placeList));
-    // let cards = reactive(computed(() => store.getters["root/getPlaceInfo"]));
     let totalPages = ref(computed(() => store.state.root.placeSearchInfo.totalPages));
     let totalElements = ref(computed(() => store.state.root.placeSearchInfo.totalElements));
     let nowPage = ref(computed(() => searchFiltersData.value["page"]));
@@ -139,8 +138,9 @@ export default {
       await store.dispatch("root/getPlaceSearchInfo", searchFiltersData.value);
     };
     onMounted(async () => {
+      // await getCards();
       nowPage.value = computed(() => store.state.root.placeSearchInfo.page);
-
+      // console.log(cards, "카드들");
       // nowPage = computed(() => store.state.root.placeSearchInfo.page);
       // console.log(store.state.root.placeSearchInfo.page, "지금페이지");
 

@@ -3,7 +3,7 @@
     <div class="card my-4">
       <div class="row card-frame">
         <div class="col-6">
-          <img :src="`${card.img[0]}`" class="img-fluid placeSearchListCardImage rounded" alt="..." />
+          <img :src="`${card.img[0]}`" @click="moveToPlaceDetail(card.id)" class="img-fluid placeSearchListCardImage rounded" alt="..." />
         </div>
         <div class="col d-flex flex-row align-items-start">
           <div class="card-body text-start d-flex flex-column justify-content-between text-start">
@@ -35,14 +35,16 @@
 <script>
 // import { ref } from "vue";
 import { useStore } from "vuex";
-
-const BASE_URL = "https://pairplay.site/api/v1/";
+import { useRouter } from "vue-router";
 import axios from "axios";
+const BASE_URL = "https://pairplay.site/api/v1/";
+
 export default {
   name: "PlaceSearchList",
   // emits: ["clickLike"],
   props: ["card", "cardId"],
   setup() {
+    const router = useRouter();
     // console.log(props.card, "props.card");
     // console.log(props.cardId, "props.cardId");
     const store = useStore();
@@ -56,9 +58,19 @@ export default {
       await axios({ method: "put", headers: { Authorization: "Bearer " + localStorage.getItem("jwt") }, url: `${BASE_URL}/places/like/${id}` });
       await store.dispatch("root/getPlaceSearchInfo", store.state.root.addPlaceFilters);
     };
+    const moveToPlaceDetail = (res) => {
+      console.log(res, "여기디테일어디");
+      router.push({
+        name: "PlaceDetail",
+        params: {
+          id: res,
+        },
+      });
+    };
     return {
       // placeSearchData,
       clickLike,
+      moveToPlaceDetail,
       // getCards,
       // like,
     };

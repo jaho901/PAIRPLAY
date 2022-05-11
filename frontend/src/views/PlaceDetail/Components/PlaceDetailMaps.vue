@@ -1,6 +1,6 @@
 <template>
   <div>
-    <naver-maps class="naverMaps" :mapOptions="mapOptions" style="width: 100%; height: 400px" :initLayers="initLayers" @onLoad="onLoadMap($event)" @click="checkPosition">
+    <naver-maps class="naverMaps" :mapOptions="mapOptions" style="width: 100%; height: 70vh" :initLayers="initLayers" @onLoad="onLoadMap($event)" @click="checkPosition">
       <naver-marker :latitude="markers.latitude" :longitude="markers.longitude" @click="onMarkerClicked" @onLoad="onLoadMarker($markerObject)"></naver-marker>
     </naver-maps>
   </div>
@@ -12,20 +12,22 @@ import { NaverMaps, NaverMarker } from "vue3-naver-maps";
 
 export default {
   name: "PlaceDetailMaps",
+  props: ["latitude", "longitude"],
   components: { NaverMaps, NaverMarker },
-  setup() {
-    const markers = [
-      { latitude: 36, longitude: 127 },
+  setup(props) {
+    const markers = ref({
+      latitude: props.latitude,
+      longitude: props.longitude,
       // { latitude: 36.5759477, longitude: 128.5056462 },
-    ];
+    });
     const state = reactive({});
     const positionYX = ref({});
     const map = ref();
     const marker = ref();
     const mapOptions = reactive({
       // 요부분이 맨 첫 리스트의경도 위도 일듯
-      latitude: 36,
-      longitude: 127,
+      latitude: props.latitude,
+      longitude: props.longitude,
       zoom: 16,
       zoomControl: true,
       zoomControlOptions: { position: "TOP_RIGHT" },
