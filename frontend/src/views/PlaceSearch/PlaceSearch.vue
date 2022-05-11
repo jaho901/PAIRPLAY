@@ -5,45 +5,45 @@
       <Header></Header>
     </div>
     <!-- <hr style="margin-top: 0px; margin-bottom: 0px; color: #b7b7b7" /> -->
-    <place-search-filters @searchFiltersData="getSearchFiltersData"></place-search-filters>
+    <place-search-filters></place-search-filters>
     <div class="container PlaceSearchContentFrame">
       <div class="placeSearchContent container d-flex justify-content-around align-items-start">
         <div class="mt-4 col">
-          <div class="placeSearchTitle mb-3 ps-2">부산 금정구 운동시설</div>
+          <div class="placeSearchTitle mb-3 ps-2">부산 {{}} 운동시설</div>
           <div class="py-2">
             <div class="placeSearchList">
-              <place-search-list v-for="card in cards" :key="card.idx" :card="card" class="placeSearchList me-3 col"> </place-search-list>
+              <place-search-list v-for="(card, idx) in cards" :key="idx" :card="card" :cardId="card.id" class="placeSearchList me-3 col"> </place-search-list>
+              <!-- 페이지네이션 시작 -->
+              <nav aria-label="Search results pages" class="paginationFrame">
+                <ul class="pagination">
+                  <li class="page-item-left" @click="prevPages">
+                    <a class="page-link" style="font-family: bootstrap-icons"> &#xF284; </a>
+                  </li>
+                  <!-- aria-current="page" -->
+                  <li v-for="(page, idx) in totalPages" @click="changePage($event)" :key="idx" class="page-item">
+                    <a class="page-link">{{ idx + 1 }}</a>
+                  </li>
+                  <!-- <li class="page-item"> -->
+                  <!-- <a class="page-link" href="#">{{ nowpage }}</a> -->
+                  <!-- </li> -->
+                  <li class="page-item-right" @click="nextPages">
+                    <a class="page-link" style="font-family: bootstrap-icons">&#xF285;</a>
+                  </li>
+                </ul>
+              </nav>
+              <!-- 페이지네이션 끝 -->
             </div>
           </div>
         </div>
         <place-search-maps class="col placeSearchMaps"></place-search-maps>
       </div>
     </div>
-    <!-- 페이지네이션 시작 -->
-    <nav aria-label="Search results pages">
-      <ul class="pagination">
-        <li class="page-item">
-          <a class="page-link" style="font-family: bootstrap-icons"> &#xF284; </a>
-        </li>
-        <!-- aria-current="page" -->
-        <li v-for="idx in totalPages" :key="idx" class="page-item">
-          <a class="page-link" href="#">{{ idx }}</a>
-        </li>
-        <li class="page-item active">
-          <a class="page-link" href="#">10</a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" style="font-family: bootstrap-icons" href="#">&#xF285;</a>
-        </li>
-      </ul>
-    </nav>
-    <!-- 페이지네이션 끝 -->
     <footer>푸터</footer>
   </div>
 </template>
 
 <script>
-import { onMounted, ref, reactive, computed, watch } from "vue";
+import { onMounted, ref, reactive, computed } from "vue";
 import { useStore } from "vuex";
 // import { useRoute } from "vue-router";
 import Header from "../Common/Header.vue";
@@ -55,71 +55,102 @@ export default {
   components: { Header, PlaceSearchFilters, PlaceSearchList, PlaceSearchMaps },
   setup() {
     const store = useStore();
+    // console.log(store.state.root.addPlaceFilters);
     // const route = useRoute();
-    let cards = reactive({});
-    let totalPages = ref();
-    let searchFiltersData = ref({
+    let cards = reactive(computed(() => store.state.root.placeSearchInfo.placeList));
+    // let cards = reactive(computed(() => store.getters["root/getPlaceInfo"]));
+    let totalPages = ref(computed(() => store.state.root.placeSearchInfo.totalPages));
+    let nowPage = ref(computed(() => searchFiltersData.value["page"]));
+    let searchFiltersData = reactive(
+      computed(() => store.state.root.addPlaceFilters)
       // categoryList: [route.params.categoryList],
-      categoryList: [store.state.root.selectSportsCategory],
-      endDate: "",
-      gugun: "",
-      page: 0,
-      sido: "",
-      searchWord: "",
-      startDate: "",
-    });
-    // console.log(store.state.root.selectSportsCategory, "있냥기");
-    const getSearchFiltersData = async (res) => {
-      if (res.categoryList.length == 0) {
-        searchFiltersData.value.categoryList = store.state.root.selectSportsCategory;
-        // pass
-      } else {
-        searchFiltersData.value.categoryList = res.categoryList;
-      }
-      searchFiltersData.value.endDate = res.endDate;
-      searchFiltersData.value.gugun = res.region.gugun;
-      searchFiltersData.value.sido = res.region.sido;
-      searchFiltersData.value.startDate = res.startDate;
-      // console.log(searchFiltersData.value, "된겨?");
-      await getCards();
-    };
+      // categoryList: ref(Object.values(store.state.root.selectSportsCategory)).value,
+      // endDate: "",
+      // gugun: "",
+      // page: 0,
+      // sido: "",
+      // searchWord: "",
+      // startDate: "",
+    );
     const getCards = async () => {
-      // console.log(searchFiltersData.value, "요기는요");
-      await store.dispatch("root/getPlaceSearchInfo", searchFiltersData.value).then((res) => console.log(res));
-      // console.log(tempdata, "tempdata");
+      await store.dispatch("root/getPlaceSearchInfo", searchFiltersData.value);
       if (store.state.root.placeSearchInfo) {
         totalPages = store.state.root.placeSearchInfo.totalPages;
-        cards.value = computed(() => store.state.root.placeSearchInfo.placeList);
       }
     };
+    const prevPages = async () => {
+      for (var i = 0; i < totalPages.value; i++) {
+        var Btn = document.getElementsByClassName("page-item")[searchFiltersData.value["page"]];
+        Btn.classList.remove("active");
+      }
+      if (searchFiltersData.value["page"] == 0) {
+        searchFiltersData.value["page"] = 0;
+        var activeBtn = document.getElementsByClassName("page-item")[searchFiltersData.value["page"]];
+      } else {
+        searchFiltersData.value["page"] -= 1;
+        activeBtn = document.getElementsByClassName("page-item")[searchFiltersData.value["page"]];
+      }
 
-    // onMounted(
-    // async () => {
-    //   //   await getCards();
-    //   // }
-    //   //   // async () => {
-    //   //   // console.log("시작");
-    //   //   // await getSearchFiltersData();
-    //   //   // }
-    // );
-    watch(searchFiltersData.value, async () => {
+      activeBtn.classList.add("active");
+      searchFiltersData.value["page"];
+      await store.dispatch("root/getPlaceSearchInfo", searchFiltersData.value);
+      console.log(nowPage.value);
+    };
+    const nextPages = async () => {
+      for (var i = 0; i < totalPages.value; i++) {
+        var Btn = document.getElementsByClassName("page-item")[i];
+        Btn.classList.remove("active");
+        activeBtn = document.getElementsByClassName("page-item")[searchFiltersData.value["page"]];
+      }
+      if (searchFiltersData.value["page"] == totalPages.value - 1) {
+        searchFiltersData.value["page"] == totalPages.value - 1;
+        var activeBtn = document.getElementsByClassName("page-item")[searchFiltersData.value["page"]];
+      } else {
+        searchFiltersData.value["page"] += 1;
+        activeBtn = document.getElementsByClassName("page-item")[searchFiltersData.value["page"]];
+      }
+
+      activeBtn.classList.add("active");
+      searchFiltersData.value["page"];
+      await store.dispatch("root/getPlaceSearchInfo", searchFiltersData.value);
+      console.log(nowPage.value);
+    };
+    const changePage = async (event) => {
+      console.log(event.target.textContent);
+      if (Number(event.target.textContent) <= 1) {
+        var activeBtn = document.getElementsByClassName("page-item")[0];
+      } else if (Number(event.target.textContent) >= totalPages.value) {
+        activeBtn = document.getElementsByClassName("page-item")[Number(event.target.textContent) - 1];
+      } else {
+        activeBtn = document.getElementsByClassName("page-item")[Number(event.target.textContent) - 1];
+      }
+      for (var i = 0; i < totalPages.value; i++) {
+        var Btn = document.getElementsByClassName("page-item")[i];
+        Btn.classList.remove("active");
+      }
+      // console.log(Number(event.target.textContent));
+      activeBtn.classList.add("active");
+      searchFiltersData.value["page"] = Number(event.target.textContent) - 1;
+      await store.dispatch("root/getPlaceSearchInfo", searchFiltersData.value);
+    };
+    onMounted(async () => {
+      nowPage.value = computed(() => store.state.root.placeSearchInfo.page);
+
+      // nowPage = computed(() => store.state.root.placeSearchInfo.page);
+      // console.log(store.state.root.placeSearchInfo.page, "지금페이지");
+
+      // if (nowPage.value == undefined) {
+      //   nowPage.value = 0;
+      // }
+      var activeBtn = document.getElementsByClassName("page-item")[0];
+      activeBtn.classList.add("active");
+      // if (store.state.root.searchFiltersData.categoryList == []) {
+      //   store.state.root.placeSearchInfo.categoryList = store.state.root.selectSportsCategory;
+      // }
       // await getCards();
-      // searchFiltersData.value =
-      // await getSearchFiltersData();
-      //   console.log(searchFiltersData.value, "!!!!!!!!!!");
-      //   await getCards()
-      //     .then(() => {
-      //       // console.log(res, "!!!!!!!!!!!!!!!!!!!!!!");
-      //     })
-      //     .catch((err) => {
-      //       console.log(err);
-      //     });
     });
-    // const cards = reactive([]);
 
-    // const store = userStore();
-    // const route = useRoute();
-    return { cards, store, totalPages, onMounted, getSearchFiltersData, getCards };
+    return { cards, store, totalPages, nowPage, onMounted, changePage, /*getSearchFiltersData*/ getCards, prevPages, nextPages };
   },
 };
 </script>
@@ -154,8 +185,11 @@ export default {
 .placeSearchTitle {
   font-size: 16px;
 }
+.paginationFrame {
+  max-width: 70%;
+  margin: 1rem auto 0rem auto;
+}
 .pagination {
-  margin: auto;
   justify-content: center;
 }
 .page-item > .page-link {
@@ -165,12 +199,33 @@ export default {
   font-weight: bold;
   border: #fafafa;
   border-radius: 50%;
-
+  cursor: pointer;
   box-shadow: (0 0 8px rgba(24, 24, 24, 0.05));
   margin: 0rem 0.5rem 0rem 0.5rem;
   // border: 1px solid rgba(1, 1, 1, 0.1);
 }
-
+.page-item-left > .page-link {
+  background: white;
+  color: black;
+  line-height: 2rem;
+  font-weight: bold;
+  border: #fafafa;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: (0 0 8px rgba(24, 24, 24, 0.05));
+  margin: 0rem 0.5rem 0rem 0.5rem;
+}
+.page-item-right > .page-link {
+  background: white;
+  color: black;
+  line-height: 2rem;
+  font-weight: bold;
+  border: #fafafa;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: (0 0 8px rgba(24, 24, 24, 0.05));
+  margin: 0rem 0.5rem 0rem 0.5rem;
+}
 .active > .page-link {
   background: black;
   color: white;

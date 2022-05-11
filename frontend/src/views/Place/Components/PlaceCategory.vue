@@ -81,22 +81,24 @@
 <script>
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import { ref } from "vue";
 
 export default {
   name: "PlaceCategory",
   setup() {
     const router = useRouter();
     const store = useStore();
-    let categoryList = [];
+    let categoryList = ref({});
     // const store = userStore();
     // const route = useRoute();
     const selecCategory = async (res) => {
+      // console.log(res.target.innerText, "텍스트 변화전");
       var text = res.target.innerText;
       text = text.replace(/\s/gi, "");
-      categoryList = [text];
-      // console.log(categoryList, "text");
-      await store.dispatch("root/selectSportsCategory", categoryList);
-      router.push({ name: "PlaceSearch" });
+      categoryList.value = [text];
+      // console.log(categoryList, "텍스트 변화후");
+      await store.dispatch("root/selectSportsCategory", categoryList.value);
+      await router.push({ name: "PlaceSearch" });
     };
     return {
       categoryList,
@@ -125,6 +127,7 @@ export default {
   border-radius: 10px;
   object-fit: cover;
 }
+
 .card-img-cover {
   position: absolute;
   top: 0%;
@@ -135,7 +138,12 @@ export default {
 
   // background-color: rgba(0, 0, 0, 0.3);
   background: linear-gradient(20deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%);
-
+  &:hover {
+    box-shadow: 1px solid black;
+    // border: 1px solid black;
+    // border-radius: 4px;
+    border-radius: 10px;
+  }
   // z-index: 1;
   // color: white;
 }

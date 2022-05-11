@@ -1,3 +1,4 @@
+import store from "@/common/store";
 import $axios from "axios";
 
 export async function signupDuplicateEmail({ commit }, payload) {
@@ -148,13 +149,13 @@ export async function profileChangeInfo({ state, dispatch }, payload) {
 }
 
 export async function profileChangeImage({ state }, payload) {
-  let formData = new FormData();
-  formData.append("profileImage", payload)
+  const body = payload;
+  console.log(state);
+  // const memberId = state.userInfo.memberId;
   const url = "profiles/profileImage";
   const header = localStorage.getItem("jwt");
-  console.log(state)
   await $axios
-    .post(url, formData, {
+    .put(url, body, {
       headers: {
         Authorization: "Bearer " + header,
         "Content-Type": "multipart/form-data",
@@ -186,8 +187,8 @@ export async function profileUserSchedule({ commit }) {
       commit("PROFILE_USER_SCHEDULE", res.data.list)
     })
     .catch((err) => {
-      console.log(err)
-  })
+      console.log(err);
+    });
 }
 
 export async function profileDateTodo({ commit }, payload) {
@@ -197,7 +198,7 @@ export async function profileDateTodo({ commit }, payload) {
   await $axios
     .post(url, body, {
       headers: {
-        Authorization: "Bearer " + jwt
+        Authorization: "Bearer " + jwt,
       },
     })
     .then((res) => {
@@ -248,8 +249,8 @@ export async function profileMateListTo({ commit }, payload) {
 }
 
 export async function mateArticleList({ commit }, payload) {
-  const page = payload["page"]
-  const size = payload["size"]
+  const page = payload["page"];
+  const size = payload["size"];
   const jwt = localStorage.getItem("jwt");
   const url = `mates?page=${page}&size=${size}`;
   await $axios
@@ -260,21 +261,27 @@ export async function mateArticleList({ commit }, payload) {
     })
     .then((res) => {
       commit("MATE_ARTICLE_LIST", res.data.list);
-      commit("MATE_ARTICLE_PAGE", page)
+      commit("MATE_ARTICLE_PAGE", page);
     })
     .catch((err) => {
       console.log(err);
     });
 }
-
 export async function change({ commit }, payload) {
-  await commit("CHANGE", payload)
+  await commit("CHANGE", payload);
 }
 
 export async function getPlaceSearchInfo({ commit }, searchFiltersData) {
-  // console.log(searchFiltersData, "액션 데이터");
   const page = searchFiltersData.page;
-  const body = searchFiltersData;
+  // console.log(page, "페이지");
+  let body = searchFiltersData;
+  // console.log(body, "바디");
+
+  if (body.categoryList.length === 0) {
+    body.categoryList = [store.state.root.selectSportsCategory];
+  } else {
+    body = searchFiltersData;
+  }
   const size = 20;
   const jwt = localStorage.getItem("jwt");
   const url = `places/search?page=${page}&size=${size}`;
@@ -285,8 +292,8 @@ export async function getPlaceSearchInfo({ commit }, searchFiltersData) {
       },
     })
     .then((res) => {
-      console.log(res.data, "여기는 actions");
-      commit("Place_Search_Info", res.data);
+      commit("PLACE_SEARCH_INFO", res.data);
+      commit("CHANGE_POSITION", res.data);
     })
     .catch((err) => {
       console.log(err);
@@ -294,5 +301,15 @@ export async function getPlaceSearchInfo({ commit }, searchFiltersData) {
 }
 
 export async function selectSportsCategory({ commit }, categoryList) {
-  commit("SELECT_SPORTS_CATEGORY", categoryList);
+  const selectSportsCategory = Object.values(categoryList)[0];
+  await commit("SELECT_SPORTS_CATEGORY", selectSportsCategory);
+}
+
+export async function addPlaceFilters({ commit }, data) {
+  await commit("ADD_PLACE_FILTERS", data);
+  await store.dispatch("root/getPlaceSearchInfo", data);
+}
+
+export async function changePosition({ commit }, data) {
+  await commit("CHANGE_POSITION", data);
 }

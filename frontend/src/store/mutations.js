@@ -103,20 +103,46 @@ export async function MATE_ARTICLE_LIST(state, data) {
     sub['createdDate'] = String(data.content[i]['createdDate'][0]) + '-' + String(data.content[i]['createdDate'][1]) + '-' + String(data.content[i]['createdDate'][2])
     sub['timeDiff'] = Math.floor(diff / (1000*60*60*24))
     // console.log(new Date(k.getTimezoneOffset() * 60000).toISOString())
-      // String(data[i].date[0]) + '-' + String(data[i].date[1]) + '-' + String(data[i].date[2])
-    state.mateArticleList.push(sub)
+    // String(data[i].date[0]) + '-' + String(data[i].date[1]) + '-' + String(data[i].date[2])
+    state.mateArticleList.push(sub);
   }
 }
 
-export function Place_Search_Info(state, data) {
+export async function PLACE_SEARCH_INFO(state, data) {
+  state.placeSearchInfo = "";
   state.placeSearchInfo = data;
+  console.log(data, "데이터입니다");
 }
 
-export function SELECT_SPORTS_CATEGORY(state, data) {
+export async function SELECT_SPORTS_CATEGORY(state, data) {
+  state.selectSportsCategory = "";
   state.selectSportsCategory = data;
 }
 
+export async function SUBMIT_LIKE(state, data) {
+  state.placeLike = data;
+}
 export async function CHANGE(state, data) {
-  state.changeList = {}
-  state.changeList = data
+  state.changeList = {};
+  state.changeList = data;
+}
+export async function ADD_PLACE_FILTERS(state, data) {
+  state.addPlaceFilters = {};
+  state.addPlaceFilters = data;
+}
+
+export async function CHANGE_POSITION(state, data) {
+  state.mapPosition = [];
+  let longitude;
+  let latitude;
+  console.log(data);
+  const markers = [];
+  for (let i = 0; i < data.placeList.length; i++) {
+    longitude = data.placeList[i].longitude;
+    latitude = data.placeList[i].latitude;
+    // console.log(tempLat);
+    let tempList = { longitude, latitude };
+    markers.push(tempList);
+  }
+  state.mapPosition = markers;
 }
