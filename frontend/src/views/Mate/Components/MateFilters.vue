@@ -1,29 +1,15 @@
 <template>
   <div class="placeSearchFiltersTotalFrame">
     <div class="placeSearchFilters d-flex justify-content-between align-items-center">
-      <!--  -->
-      <!-- Default dropend button -->
-      <!-- <div class="input-group serachbar">search</div> -->
       <div class="d-flex align-items-center col-lg-8 filters">
         <mate-filters-region @regionData="selectRegion"></mate-filters-region>
         <mate-filters-time @timeData="selectTime"></mate-filters-time>
         <mate-filters-sports-category @sportsCategoryData="selectSportsCategory"></mate-filters-sports-category>
         <div class="btn btn-Cancel btn-secondary" type="button" @click="cancelFilters">초기화</div>
-        <!-- <div class="btn-group">
-        <button type="button" class="btn btnPlace dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" :aria-expanded="`${expand}`">Price</button>
-        <ul class="dropdown-menu ps-5" style="width: 400px; height: 300px; font-size: 14px">
-          <Slider v-model="value" type="input" :format="format" />
-          <div class="d-flex justify-content-around">
-            <button type="button" class="btn btn-dark mb-2" @click="changedExpand">적용</button>
-            <button type="button" class="btn btn-outline-secondary mb-2">취소</button>
-          </div>
-        </ul>
-      </div> -->
         <!-- 지역 -->
       </div>
       <div class="col-lg-4">
         <div class="input-group flex-nowrap">
-          <!-- <span class="input-group-text" id="addon-wrapping">@</span> -->
           <input type="text" class="form-control serachbar" placeholder="&#xf52a; search" aria-label="Username" aria-describedby="addon-wrapping" />
         </div>
       </div>
@@ -32,18 +18,26 @@
 </template>
 
 <script>
-import { ref, watch } from "vue";
+import { ref, watch, computed, reactive } from "vue";
 import MateFiltersRegion from "./MateFiltersRegion.vue";
 import MateFiltersTime from "./MateFiltersTime.vue";
 import MateFiltersSportsCategory from "./MateFiltersSportsCategory.vue";
 
 // import Slider from "@vueform/slider";
-
+import { useStore } from 'vuex'
 export default {
   name: "MateFilters",
   emits: ["searchFiltersData"],
-  components: { MateFiltersRegion, MateFiltersTime, MateFiltersSportsCategory },
+  components: { 
+    MateFiltersRegion, 
+    MateFiltersTime, 
+    MateFiltersSportsCategory
+  },
   setup(_, { emit }) {
+    const store = useStore()
+    const state = reactive({
+      totalPages: computed(() => store.getters["root/mateArticleListTotalPage"])
+    })
     let searchFiltersData = ref({
       price: "",
       region: { sido: "", gugun: "" },
@@ -65,19 +59,21 @@ export default {
       // console.log(res);
       searchFiltersData.value.categoryList = res;
     };
-    // searchFiltersData.value.region.sido = regionData.sido;
-    // searchFiltersData.value.region.gugun = regionData.gugun;
-    // let value = [20, 40];
-    // const format = (value) => {
-    //   return `${value}원`;
-    // };
-    // console.log(searchFiltersData, "아아");
-    const cancelFilters = () => {
-      searchFiltersData.value.price = "";
-      searchFiltersData.value.region = { sido: "", gugun: "" };
-      searchFiltersData.value.time = { startDate: "", endDate: "" };
-      searchFiltersData.value.categoryList = "";
+    
+    const cancelFilters = async function () {
+      await store.dispatch("root/mateArticleList", {
+        "page": 0,
+        "size": 8,
+      })
+      for (var i=0; i < state.totalPages; i++) {
+        var Btn = document.getElementsByClassName("page-item")[i]
+        Btn.classList.remove("active")
+      }
+      var activeBtn = document.getElementsByClassName("page-item")[0]
+      activeBtn.classList.add("active")
     };
+
+
     watch(searchFiltersData.value, () => {
       emit("searchFiltersData", searchFiltersData.value);
       // console.log(res);

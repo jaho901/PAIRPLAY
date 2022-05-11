@@ -1,14 +1,18 @@
 <template>
-  <div class="container">
-    <p class="total-cards col-12">총 00 건의 검색결과</p>
+  <div>
+    <p class="total-cards col-12">총 {{ state.totalElements }} 건의 검색결과</p>
     <div class="d-flex row" style="width: 100%;">
       <div
         v-for="(card, i) in state.cards" :key="i"
-        class="col-3 my-4"
+        class="col-3 mt-4 mb-5"
       >
-        <a class="card d-flex justify-content-between" href="#" style="flex-direction: column;">
+        <a class="card d-flex justify-content-between" style="flex-direction: column;">
+        <!-- Modal -->    
           <div class="mx-4 mt-4">
-            <h3>{{ card.title }}</h3>
+            <div class="d-flex justify-content-between">
+              <span class="title">{{ card.title }}</span>
+              <button class="detail" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" @click="changeMateDetail(i)">자세히</button>
+            </div>
             <div class="d-flex justify-content-between align-items-center pt-4">
               <div>
                 <div class="small mb-2">{{ card.location }}</div>
@@ -35,6 +39,52 @@
             <div class="hearth"/>
           </label> -->
         </a>
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border: none;">
+              <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel"><b>자세한 정보</b></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <br>
+                <div class="row my-3">
+                  <div class="col-1"></div>
+                  <div class="col-3 modal-text" style="padding-bottom: 4%; border-bottom: double; border-color: rgb(226 226 226);">공고 제목</div>
+                  <div class="col-7" style="border-bottom: double; border-color: rgb(226 226 226);">{{ mateDetail.title }}</div>
+                </div>
+                <div class="row my-3">
+                  <div class="col-1"></div>
+                  <div class="col-3 modal-text" style="padding-bottom: 4%; border-bottom: 1px solid rgb(226 226 226);">운동 종류</div>
+                  <div class="col-7" style="border-bottom: 1px solid rgb(226 226 226);">{{ state.category[mateDetail.categoryId] }}</div>
+                </div>
+                <div class="row my-3">
+                  <div class="col-1"></div>
+                  <div class="col-3 modal-text" style="padding-bottom: 4%; border-bottom: 1px solid rgb(226 226 226);">장소</div>
+                  <div class="col-7" style="border-bottom: 1px solid rgb(226 226 226);">{{ mateDetail.location }}</div>
+                </div>
+                <div class="row my-3">
+                  <div class="col-1"></div>
+                  <div class="col-3 modal-text" style="padding-bottom: 4%; border-bottom: 1px solid rgb(226 226 226);">등록일</div>
+                  <div class="col-7" style="border-bottom: 1px solid rgb(226 226 226);">{{ mateDetail.createdDate }}</div>
+                </div>
+                <div class="row my-3">
+                  <div class="col-1"></div>
+                  <div class="col-3 modal-text" style="padding-bottom: 4%; border-bottom: 1px solid rgb(226 226 226);">설명</div>
+                  <div class="col-7" style="border-bottom: 1px solid rgb(226 226 226);">{{ mateDetail.description }}</div>
+                </div>
+                <div class="row mt-5">
+                  <div class="col-1"></div>
+                  <button class="col-3 mate-apply">신청하기</button>
+                </div>
+                <br>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">확인</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -60,7 +110,7 @@
 </template>
 
 <script>
-import { reactive, computed, onMounted } from 'vue';
+import { reactive, computed, onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
 
 export default {
@@ -77,9 +127,14 @@ export default {
         9: "헬스", 10:	"필라테스", 11:	"격투기", 12:	"수영"
       },
       totalPages: computed(() => store.getters["root/mateArticleListTotalPage"]),
-      page: 1,
+      totalElements: computed(() => store.getters["root/mateArticleListTotalElements"]),
+      // page: computed(() => store.getters["root/matePage"]),
       size: 8,
+      page: computed(() => store.getters["root/mateArticlePage"])
     })
+
+    const mateDetail = ref({});
+
     onMounted(async () => {
       await store.dispatch("root/mateArticleList", {
         "page": 0,
@@ -89,6 +144,11 @@ export default {
       activeBtn.classList.add("active")
     })
 
+    const changeMateDetail = async function (idx) {
+      mateDetail.value = state.cards[idx]
+      console.log(mateDetail.value)
+    }
+
     const changePage = async function (event) {
       for (var i=0; i < state.totalPages; i++) {
         var Btn = document.getElementsByClassName("page-item")[i]
@@ -96,22 +156,13 @@ export default {
       }
       var activeBtn = document.getElementsByClassName("page-item")[Number(event.target.textContent)-1]
       activeBtn.classList.add("active")
-      state.page = Number(event.target.textContent)-1
       await store.dispatch("root/mateArticleList", {
-        "page": state.page,
+        "page": Number(event.target.textContent)-1,
         "size": 8,
       })
     }
-    // let expand = false;
-    // const refresh = () =>
-    // const changedExpand = () => {
-    //   expand = !expand;
-    //   console.log(expand, "expand");
-    //   console.log(value, "value");
-    //   return;
-    // };
 
-    return { state, onMounted, changePage };
+    return { state, mateDetail, onMounted, changeMateDetail, changePage };
   }
 }
 </script>
@@ -143,7 +194,7 @@ body {
   // justify-content: left; 
 }
 
-h3 {
+.title {
   color: #262626;
   font-size: large;
   line-height: 24px;
@@ -205,12 +256,27 @@ span {
     overflow: hidden;
     border: 1px solid #f2f8f9;
 
+    .detail {
+      background-color: #626161;
+      color: white;
+      font-size: small;
+      border-radius: 5px;
+      border: none;
+    }
+
     &:hover {
       transition: all 0.2s ease-out;
       box-shadow: 0px 4px 8px rgba(38, 38, 38, 0.2);
       top: -4px;
       border: 1px solid #cccccc;
       background-color: white;
+
+      .detail {
+        font-size: medium;
+        font-weight: bold;
+        padding-top: 1%;
+        padding-bottom: 1%;
+      }
     }
 
     // &:before {
@@ -306,6 +372,7 @@ input:checked + .hearth {
   border-radius: 50%;
   box-shadow: (0 0 8px rgba(24, 24, 24, 0.05));
   margin: 0rem 0.5rem 0rem 0.5rem;
+  cursor: pointer;
 }
 
 .page-item-right > .page-link {
@@ -318,6 +385,7 @@ input:checked + .hearth {
   border-radius: 50%;
   box-shadow: (0 0 8px rgba(24, 24, 24, 0.05));
   margin: 0rem 0.5rem 0rem 0.5rem;
+  cursor: pointer;
 }
 
 .page-item > .page-link {
@@ -331,6 +399,7 @@ input:checked + .hearth {
   border-radius: 50%;
   box-shadow: (0 0 8px rgba(24, 24, 24, 0.05));
   margin: 0rem 0.5rem 0rem 0.5rem;
+  cursor: pointer;
   // border: 1px solid rgba(1, 1, 1, 0.1);
 }
 
@@ -343,5 +412,20 @@ input:checked + .hearth {
   border-radius: 50%;
   box-shadow: (0 0 8px rgba(24, 24, 24, 0.05));
   margin: 0rem 0.5rem 0rem 0.5rem;
+}
+
+.modal-text {
+  font-weight: bold;
+}
+
+.mate-apply {
+  background: #626161;
+  border: none;
+  border-radius: 5px;
+  font-size: large;
+  font-weight: bold;
+  color: white;
+  padding-top: 2%;
+  padding-bottom: 2%;
 }
 </style>
