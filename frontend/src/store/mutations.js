@@ -93,7 +93,6 @@ export async function MATE_ARTICLE_LIST(state, data) {
 export async function PLACE_SEARCH_INFO(state, data) {
   state.placeSearchInfo = "";
   state.placeSearchInfo = data;
-  console.log(data, "데이터입니다");
 }
 
 export async function SELECT_SPORTS_CATEGORY(state, data) {

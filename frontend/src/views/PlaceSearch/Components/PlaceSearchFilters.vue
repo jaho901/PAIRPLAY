@@ -39,6 +39,7 @@ import PlaceSearchFiltersRegion from "./PlaceSearchFiltersRegion.vue";
 import PlaceSearchFiltersTime from "./PlaceSearchFiltersTime.vue";
 import PlaceSearchFilterSportsCategory from "./PlaceSearchFilterSportsCategory.vue";
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 
 // import Slider from "@vueform/slider";
 
@@ -48,6 +49,7 @@ export default {
   components: { PlaceSearchFiltersRegion, PlaceSearchFiltersPrice, PlaceSearchFiltersTime, PlaceSearchFilterSportsCategory },
   setup(/*_, { emit }*/) {
     const store = useStore();
+    const router = useRouter();
     let searchFiltersData = ref({
       price: "",
       sido: "",
@@ -94,6 +96,7 @@ export default {
       searchFiltersData.value.endDate = "";
       searchFiltersData.value.categoryList = [];
       searchFiltersData.value.page = 0;
+      router.go(0);
     };
     watch(searchFiltersData.value, async () => {
       // console.log(res, "맞나이거");

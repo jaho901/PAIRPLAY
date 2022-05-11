@@ -8,12 +8,14 @@
         <div class="col d-flex flex-row align-items-start">
           <div class="card-body text-start d-flex flex-column justify-content-between text-start">
             <div class="d-flex justify-content-between">
-              <p class="card-region">{{ card.address }}</p>
-              <div v-if="`${card.like}` == `true`" @click="clickLike(card.id)"><i class="bi bi-heart-fill pe-3" style="color: #e01760"></i></div>
-              <div v-else @click="clickLike(card.id)"><i class="bi bi-heart pe-3"></i></div>
+              <p class="card-region me-5">{{ card.address }}</p>
+              <div class="heartBox d-flex justify-content-center align-items-center" v-if="`${card.like}` == `true`" @click="clickLike(card.id)">
+                <i class="bi bi-heart-fill" style="color: #e01760"></i>
+              </div>
+              <div v-else @click="clickLike(card.id)"><i class="bi bi-heart"></i></div>
             </div>
             <div>
-              <p class="card-title mb-2 me-5">{{ card.name }}</p>
+              <p class="card-title mb-2 me-4">{{ card.name }}</p>
               <div class="mt-4 mb-5 card-bizhour">
                 <p v-for="(bizhour, idx) in card.bizhour" :key="idx">{{ bizhour }}</p>
               </div>
@@ -85,10 +87,12 @@ export default {
   border-radius: 10px;
   align-self: center;
   object-fit: cover;
+  cursor: pointer;
 }
 .card-body {
   // margin: 0px;
   padding: 5px 12px 0px 10px;
+  cursor: pointer;
 }
 .card-region {
   font-weight: bold;
@@ -116,6 +120,7 @@ export default {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   word-break: break-all;
+  cursor: pointer;
 }
 .card-text {
   // margin: 0 0 0px 0;
@@ -126,6 +131,7 @@ export default {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  cursor: pointer;
 }
 .card-cost {
   font-size: 18px;
@@ -162,7 +168,28 @@ export default {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
-.bi-haert {
+// .heartBox {
+//   // box-shadow: 1px 1px 1px 1px rgba(0.5, 0, 0.5, 0.5);
+//   // margin: 0rem auto 0rem auto;
+//   width: 2rem;
+//   height: 2rem;
+//   border-radius: 30%;
+//   &:hover {
+//     // box-shadow: 4px 4px 6px 0 rgba(255, 255, 255, 0.5), -4px -4px 6px 0 rgba(116, 125, 136, 0.5), inset -4px -4px 6px 0 rgba(255, 255, 255, 0.2), inset 4px 4px 6px 0 rgba(0, 0, 0, 0.4);
+//     box-shadow: 0.5px 0.5px 0.5px 0.5px rgba(0.3, 0.3, 0.3, 0.3);
+//   }
+// }
+
+.bi-heart {
   // z-index: 1;
+  cursor: pointer;
+  // &:hover {
+  //   border: 1px solid black;
+  //   border-radius: 10px;
+  // }
+}
+
+.bi-heart-fill {
+  cursor: pointer;
 }
 </style>

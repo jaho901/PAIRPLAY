@@ -31,11 +31,13 @@ export default {
     const mapOptions = reactive({
       // 요부분이 맨 첫 리스트의경도 위도 일듯
       longitude: computed(() => {
+        let temps;
         if (store.state.root.placeSearchInfo.placeList) {
-          return store.state.root.placeSearchInfo.placeList[0].longitude;
+          temps = store.state.root.placeSearchInfo.placeList[0].longitude;
         } else {
-          return 6;
+          temps = 6;
         }
+        return temps;
       }),
       latitude: computed(() => {
         if (store.state.root.placeSearchInfo.placeList) {

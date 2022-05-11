@@ -222,6 +222,13 @@ export async function mateArticleList({ commit }, payload) {
       },
     })
     .then(async (res) => {
+      console.log(res.data.list, "있음?");
+      if (res.data.list.length == 0) {
+        alert("해당결과가 없습니다.");
+      } else {
+        await commit("MATE_ARTICLE_LIST", res.data.list);
+        await commit("MATE_ARTICLE_PAGE", page);
+      }
       await commit("MATE_ARTICLE_LIST", res.data.list);
       await commit("MATE_ARTICLE_PAGE", page);
     })
@@ -254,6 +261,7 @@ export async function getPlaceSearchInfo({ commit }, searchFiltersData) {
       },
     })
     .then((res) => {
+      console.log(res);
       commit("PLACE_SEARCH_INFO", res.data);
       commit("CHANGE_POSITION", res.data);
     })
