@@ -28,7 +28,7 @@ export default {
     })
 
     onMounted (() => {
-      store.dispatch("root/getUserSchedule")
+      store.dispatch("root/profileUserSchedule")
     })
 
     return { state, onMounted }

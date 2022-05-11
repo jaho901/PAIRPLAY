@@ -84,7 +84,7 @@ export default {
     const state = reactive({
       userInfo: computed(() => store.getters["root/userInfo"]),
       otherInfo: computed(() => store.getters["root/otherInfo"]),
-      sideComponents: "Schedule",
+      sideComponents: "Mate List",
       isDescript: false,
       isActivePro: true,
       isActiveRes: false,
@@ -95,7 +95,7 @@ export default {
     onMounted(async () => {
       const proMemberId = router.currentRoute.value.params['memberId']
       const jwt = localStorage.getItem('jwt')
-      store.dispatch("root/getOtherInfo", {'memberId': proMemberId, 'jwt': jwt})
+      await store.dispatch("root/profileOtherInfo", {'memberId': proMemberId, 'jwt': jwt})
     })
 
     const changeDescriptionStatus = function () {
@@ -117,13 +117,6 @@ export default {
         await store.dispatch('root/profileChangeImage', file)
       }
     }
-
-    // const changeImage = async function () {
-    //   await store.dispatch("root/profileChangeInfo",{
-    //     'profileImage': state.otherInfo.profileImage
-    //   })
-    //   state.isDescript = false
-    // }
 
     const changeDescription = async function () {
       await store.dispatch("root/profileChangeInfo",{
@@ -156,7 +149,7 @@ export default {
         state.isActiveMat = true
       }
     }
-    return { state, changeDescriptionStatus, changeImgFile, changeDescription, changeSideComponents }
+    return { state, onMounted, changeDescriptionStatus, changeImgFile, changeDescription, changeSideComponents }
   }
 }
 </script>
