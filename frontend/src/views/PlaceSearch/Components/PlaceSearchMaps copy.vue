@@ -1,14 +1,14 @@
 <template>
   <div>
     <naver-maps class="naverMaps" :mapOptions="mapOptions" style="width: 100%; height: 70vh" :initLayers="initLayers" @onLoad="onLoadMap($event)" @click="checkPosition">
-      <naver-marker v-for="mark in markers" :key="mark.id" :latitude="mark.tempLat" :longitude="mark.tempLong" @click="onMarkerClicked" @onLoad="onLoadMarker($markerObject)"></naver-marker>
+      <naver-marker v-for="marker in markers" :key="marker.id" :latitude="marker.latitude" :longitude="marker.longitude" @click="onMarkerClicked" @onLoad="onLoadMarker($markerObject)"></naver-marker>
       <!-- <naver-marker :latitude="markers.latitude" :longitude="markers.longitude" @click="onMarkerClicked" @onLoad="onLoadMarker($markerObject)"></naver-marker> -->
     </naver-maps>
   </div>
 </template>
 
 <script>
-import { ref, reactive, watch, computed, onMounted } from "vue";
+import { ref, reactive, computed } from "vue";
 import { useStore } from "vuex";
 
 import { NaverMaps, NaverMarker } from "vue3-naver-maps";
@@ -18,9 +18,10 @@ export default {
   components: { NaverMaps, NaverMarker },
   setup() {
     const store = useStore();
-    const markers = ref([]);
-    // longitude: computed(() => store.state.root.placeSearchInfo.placeList[0].longitude),
-    // latitude: computed(() => store.state.root.placeSearchInfo.placeList[0].latitude),
+    const markers = reactive({
+      longitude: computed(() => store.state.root.placeSearchInfo.placeList[0].longitude),
+      latitude: computed(() => store.state.root.placeSearchInfo.placeList[0].latitude),
+    });
     // const markers = reactive();
     // watch(markers, () => console.log(markers.value));
     // { latitude: 36, longitude: 127 },
@@ -39,24 +40,6 @@ export default {
     });
     const initLayers = ["BACKGROUND", "BACKGROUND_DETAIL", "POI_KOREAN", "TRANSIT", "ENGLISH"];
     // const LatLng = new window.naver.maps.LatLng(37, 127);
-    const changeMarkers = () => {
-      markers.value = [];
-      var tempLong;
-      var tempLat;
-      for (let i = 0; i < store.state.root.placeSearchInfo.placeList.length; i++) {
-        tempLong = store.state.root.placeSearchInfo.placeList[i].longitude;
-        tempLat = store.state.root.placeSearchInfo.placeList[i].latitude;
-        // console.log(tempLat);
-        markers.value.push({ tempLong, tempLat });
-      }
-      console.log(markers.value);
-    };
-    watch(store.state.root.placeSearchInfo.placeList, () => {
-      changeMarkers();
-    });
-    onMounted(async () => {
-      changeMarkers();
-    });
 
     const onLoadMap = (mapObject) => {
       map.value = mapObject; // map에 반환된 객체 저장
@@ -83,12 +66,10 @@ export default {
       initLayers,
       positionYX,
       markers,
-      onMounted,
       onLoadMap,
       onLoadMarker,
       onMarkerClicked,
       checkPosition,
-      changeMarkers,
     };
   },
 };
