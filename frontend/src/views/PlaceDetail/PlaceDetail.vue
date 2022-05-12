@@ -5,7 +5,7 @@
     </div>
     <div class="container">
       <div class="imageBox">
-        <img class="imageFrist col-6" v-if="placeInfos.img[0]" :src="`${placeInfos.img[0]}`" alt="" />
+        <img class="imageFrist col-6" v-if="placeInfos.img" :src="`${placeInfos.img[0]}`" alt="" />
         <img v-for="(placeInfoImage, idx) in placeInfos.img.slice(1)" :key="idx" :src="`${placeInfoImage}`" class="imageOthers col-3" alt="" />
         <!-- <img :src="`${placeInfos.img[0]}`" alt="" /> -->
       </div>
@@ -13,19 +13,22 @@
         <div>
           <h4 style="color: #767676">{{ placeInfos.address }}</h4>
           <h2>{{ placeInfos.name }}</h2>
-          <div class="d-flex align-items-end mt-3">
-            <h5 class="mx-4 fw-bold">{{ placeInfos.score }} <i class="bi bi-star-fill mx-1" style="color: #fe8a01"></i></h5>
-            <h5 style="color: #767676">
+          <div class="d-flex align-items-end">
+            <h5 class="ms-4 me-2 mt-2 fw-bold p-2">{{ placeInfos.score }} <i class="bi bi-star-fill mx-1" style="color: #fe8a01"></i></h5>
+            <h5 style="color: #767676" class="p-2">
               <u>{{ placeInfos.reviewCnt }}개 리뷰</u>
             </h5>
             <!-- <h4><i class="bi bi-heart-fill me-1" style="color: #ff385c"></i></h4> -->
-            <div v-if="`${placeInfos.like}` == `true`" @click="clickLike">
-              <h5><i class="bi bi-heart-fill me-1 ms-4" style="color: #e01760"></i></h5>
+            <div class="saveBox ms-2 p-2">
+              <div v-if="`${placeInfos.like}` == `true`" @click="clickLike" class="d-flex">
+                <h5><i class="bi bi-heart-fill me-1" style="color: #e01760"></i></h5>
+                <h5 class="ms-1 fw-bold"><u>저장</u></h5>
+              </div>
+              <div v-else @click="clickLike" class="d-flex">
+                <h5><i class="bi bi-heart me-1"></i></h5>
+                <h5 class="ms-1 fw-bold"><u>저장</u></h5>
+              </div>
             </div>
-            <div v-else @click="clickLike">
-              <h5><i class="bi bi-heart me-1 ms-4"></i></h5>
-            </div>
-            <h5 class="ms-1 fw-bold"><u>저장</u></h5>
           </div>
         </div>
         <div class="placeDetailSportsCategory btnCategory">
@@ -64,7 +67,7 @@
       <hr class="class-1" style="margin: 2rem 0 2rem 0" />
       <h4 class="pb-4">시설위치</h4>
 
-      <div><PlaceDetailMaps :longitude="placeInfos.longitude" :latitude="placeInfos.latitude"></PlaceDetailMaps></div>
+      <div><PlaceDetailMaps :placeInfos="placeInfos" :longitude="placeInfos.longitude" :latitude="placeInfos.latitude"></PlaceDetailMaps></div>
       <hr class="class-1" style="margin: 2rem 0 2rem 0" />
       <h4 class="detailInfosRule">이용규칙</h4>
       <p style="white-space: pre-line; line-height: 2rem">
@@ -228,6 +231,17 @@ h5 {
 
 .detailInfos {
   width: 100%;
+}
+.saveBox {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  margin: 0 0 0 2rem;
+}
+.saveBox:hover {
+  box-shadow: 0 0 8px rgba(24, 24, 24, 0.1);
+  border-radius: 10px;
+  cursor: pointer;
 }
 .placeDetailSportsCategory {
   display: flex;
