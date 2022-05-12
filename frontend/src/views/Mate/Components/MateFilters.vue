@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { ref, watch } from "vue";
+import { ref, watch, computed, reactive } from "vue";
 import MateFiltersRegion from "./MateFiltersRegion.vue";
 import MateFiltersTime from "./MateFiltersTime.vue";
 import MateFiltersSportsCategory from "./MateFiltersSportsCategory.vue";
@@ -35,6 +35,9 @@ export default {
   },
   setup(_, { emit }) {
     const store = useStore()
+    const state = reactive({
+      totalPages: computed(() => store.getters["root/mateArticleListTotalPage"])
+    })
     let searchFiltersData = ref({
       price: "",
       region: { sido: "", gugun: "" },
@@ -56,19 +59,21 @@ export default {
       // console.log(res);
       searchFiltersData.value.categoryList = res;
     };
-    // searchFiltersData.value.region.sido = regionData.sido;
-    // searchFiltersData.value.region.gugun = regionData.gugun;
-    // let value = [20, 40];
-    // const format = (value) => {
-    //   return `${value}원`;
-    // };
-    // console.log(searchFiltersData, "아아");
+    
     const cancelFilters = async function () {
       await store.dispatch("root/mateArticleList", {
         "page": 0,
         "size": 8,
       })
+      for (var i=0; i < state.totalPages; i++) {
+        var Btn = document.getElementsByClassName("page-item")[i]
+        Btn.classList.remove("active")
+      }
+      var activeBtn = document.getElementsByClassName("page-item")[0]
+      activeBtn.classList.add("active")
     };
+
+
     watch(searchFiltersData.value, () => {
       emit("searchFiltersData", searchFiltersData.value);
       // console.log(res);

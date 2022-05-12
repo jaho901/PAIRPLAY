@@ -108,7 +108,7 @@ export async function getUserInfo({ commit }, payload) {
     });
 }
 
-export async function getOtherInfo({ commit }, payload) {
+export async function profileOtherInfo({ commit }, payload) {
   const memberId = payload.memberId;
   const jwt = payload.jwt;
   const url = `profiles/${memberId}`;
@@ -173,8 +173,8 @@ export async function profileChangeImage({ state }, payload) {
     });
 }
 
-export async function getUserSchedule({ commit }) {
-  const url = `profiles/calendar`;
+export async function profileUserSchedule({ commit }) {
+  const url = `profiles/calendar`
   const header = localStorage.getItem("jwt");
   await $axios
     .get(url, {
@@ -183,18 +183,18 @@ export async function getUserSchedule({ commit }) {
       },
     })
     .then((res) => {
-      console.log(typeof res.data.list[0].date[0]);
-      commit("GET_USER_SCHEDULE", res.data.list);
+      console.log(typeof(res.data.list[0].date[0]))
+      commit("PROFILE_USER_SCHEDULE", res.data.list)
     })
     .catch((err) => {
       console.log(err);
     });
 }
 
-export async function getDateTodo({ commit }, payload) {
-  const url = `profiles/calendar/activity`;
-  const jwt = localStorage.getItem("jwt");
-  const body = payload;
+export async function profileDateTodo({ commit }, payload) {
+  const url = `profiles/calendar/activity`
+  const jwt = localStorage.getItem("jwt")
+  const body = payload
   await $axios
     .post(url, body, {
       headers: {
@@ -202,12 +202,50 @@ export async function getDateTodo({ commit }, payload) {
       },
     })
     .then((res) => {
-      commit("ACTIVITY_PER_DAY", res.data.calendarDetailActivityResList);
-      commit("DATE_PER_DAY", body.date);
+      commit("PROFILE_ACTIVITY_PER_DAY", res.data.calendarDetailActivityResList)
+      commit("PROFILE_DATE_PER_DAY", body.date)
     })
     .catch((err) => {
-      console.log(err);
-    });
+      console.log(err)
+  }) 
+}
+
+export async function profileMateListFrom({ commit }, payload) {
+  const page = payload["body"]
+  const size = payload["size"]
+  const url = `profiles/mates/received?page=${page}&size=${size}`
+  const jwt = localStorage.getItem("jwt");
+  await $axios
+    .get(url, {
+      headers: {
+        Authorization: "Bearer " + jwt
+      }
+    })
+    .then((res) => {
+      commit("PROFILE_MATE_LIST_FROM", res.data)
+    })
+    .catch((err) => {
+      console.log(err)
+  })
+}
+
+export async function profileMateListTo({ commit }, payload) {
+  const page = payload["body"]
+  const size = payload["size"]
+  const url = `profiles/mates/send?page=${page}&size=${size}`
+  const jwt = localStorage.getItem("jwt");
+  await $axios
+    .get(url, {
+      headers: {
+        Authorization: "Bearer " + jwt
+      }
+    })
+    .then((res) => {
+      commit("PROFILE_MATE_LIST_TO", res.data)
+    })
+    .catch((err) => {
+      console.log(err)
+  })
 }
 
 export async function mateArticleList({ commit }, payload) {

@@ -39,7 +39,7 @@ export default {
       userInfo: props.userInfo,
       otherInfo: props.otherInfo,
       end: new Date,
-      userSchedule: computed(() => store.getters["root/userSchedule"]),
+      userSchedule: computed(() => store.getters["root/profileUserSchedule"]),
       monthInfo: {
         "Jan": "01", "Feb": "02", "Mar": "03",
         "Apr": "04", "May": "05", "Jun": "06",
@@ -63,7 +63,7 @@ export default {
       let payload = {
         'date': date,
       }
-      await store.dispatch("root/getDateTodo", payload)
+      await store.dispatch("root/profileDateTodo", payload)
     }
 
     return { state, onMounted, getDateTodo }
