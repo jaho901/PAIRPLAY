@@ -8,21 +8,21 @@
         <div class="col d-flex flex-row align-items-start">
           <div class="card-body text-start d-flex flex-column justify-content-between text-start">
             <div class="d-flex justify-content-between">
-              <p class="card-region me-5">{{ card.address }}</p>
+              <p class="card-region me-5" @click="moveToPlaceDetail(card.id)">{{ card.address }}</p>
               <div class="heartBox d-flex justify-content-center align-items-center" v-if="`${card.like}` == `true`" @click="clickLike(card.id)">
                 <i class="bi bi-heart-fill" style="color: #e01760"></i>
               </div>
               <div v-else @click="clickLike(card.id)"><i class="bi bi-heart"></i></div>
             </div>
-            <div>
+            <div @click="moveToPlaceDetail(card.id)">
               <p class="card-title mb-2 me-4">{{ card.name }}</p>
               <div class="mt-4 mb-5 card-bizhour">
                 <p v-for="(bizhour, idx) in card.bizhour" :key="idx">{{ bizhour }}</p>
               </div>
             </div>
-            <div class="d-flex justify-content-start">
+            <div class="d-flex justify-content-start" @click="moveToPlaceDetail(card.id)">
               <p class="card-rate fw-bold">{{ card.score }} <i class="bi bi-star-fill me-1" style="color: #fe8a01"></i></p>
-              <p class="card-reviews d-flex align-items-center ms-2 pe-3">({{ card.reviewCnt }} reviews)</p>
+              <p class="card-reviews d-flex align-items-center ms-2 pe-3" @click="moveToPlaceDetail(card.id)">({{ card.reviewCnt }} reviews)</p>
             </div>
             <!-- <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> -->
           </div>
@@ -104,7 +104,6 @@ export default {
 .card-body {
   // margin: 0px;
   padding: 5px 12px 0px 10px;
-  cursor: pointer;
 }
 .card-region {
   font-weight: bold;
@@ -113,10 +112,10 @@ export default {
   padding-bottom: 0px;
   margin-bottom: 0px;
   overflow: hidden;
-
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
+  cursor: pointer;
 }
 .card-title {
   padding-top: 0px;
@@ -152,6 +151,7 @@ export default {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  cursor: pointer;
 }
 .card-bizhour {
   font-weight: 500;
@@ -163,6 +163,7 @@ export default {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  cursor: pointer;
 }
 .card-rate {
   font-size: 18px;
@@ -171,6 +172,7 @@ export default {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  cursor: pointer;
 }
 .card-reviews {
   font-size: 16px;
@@ -179,6 +181,7 @@ export default {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  cursor: pointer;
 }
 // .heartBox {
 //   // box-shadow: 1px 1px 1px 1px rgba(0.5, 0, 0.5, 0.5);
@@ -193,7 +196,7 @@ export default {
 // }
 
 .bi-heart {
-  // z-index: 1;
+  z-index: 1;
   cursor: pointer;
   // &:hover {
   //   border: 1px solid black;
@@ -203,5 +206,6 @@ export default {
 
 .bi-heart-fill {
   cursor: pointer;
+  z-index: 1;
 }
 </style>
