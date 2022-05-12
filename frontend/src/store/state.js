@@ -16,4 +16,5 @@ export default {
   placeLike: "",
   addPlaceFilters: "",
   mapPosition: [],
+  placeDetailInfo: "",
 };

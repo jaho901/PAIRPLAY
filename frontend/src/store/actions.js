@@ -221,9 +221,16 @@ export async function mateArticleList({ commit }, payload) {
         Authorization: "Bearer " + jwt,
       },
     })
-    .then((res) => {
-      commit("MATE_ARTICLE_LIST", res.data.list);
-      commit("MATE_ARTICLE_PAGE", page);
+    .then(async (res) => {
+      console.log(res.data.list, "있음?");
+      if (res.data.list.length == 0) {
+        alert("해당결과가 없습니다.");
+      } else {
+        await commit("MATE_ARTICLE_LIST", res.data.list);
+        await commit("MATE_ARTICLE_PAGE", page);
+      }
+      // await commit("MATE_ARTICLE_LIST", res.data.list);
+      // await commit("MATE_ARTICLE_PAGE", page);
     })
     .catch((err) => {
       console.log(err);
@@ -240,6 +247,7 @@ export async function getPlaceSearchInfo({ commit }, searchFiltersData) {
   // console.log(body, "바디");
 
   if (body.categoryList.length === 0) {
+    // console.log("안되나");
     body.categoryList = [store.state.root.selectSportsCategory];
   } else {
     body = searchFiltersData;
@@ -254,6 +262,7 @@ export async function getPlaceSearchInfo({ commit }, searchFiltersData) {
       },
     })
     .then((res) => {
+      console.log(res);
       commit("PLACE_SEARCH_INFO", res.data);
       commit("CHANGE_POSITION", res.data);
     })
@@ -272,6 +281,22 @@ export async function addPlaceFilters({ commit }, data) {
   await store.dispatch("root/getPlaceSearchInfo", data);
 }
 
-export async function changePosition({ commit }, data) {
-  await commit("CHANGE_POSITION", data);
+export async function getPlaceDetailInfo({ commit }, id) {
+  // console.log(page, "페이지");
+  // console.log(id, "id");
+  const jwt = localStorage.getItem("jwt");
+  const url = `places/${id}`;
+  await $axios
+    .get(url, {
+      headers: {
+        Authorization: "Bearer " + jwt,
+      },
+    })
+    .then((res) => {
+      console.log(res.data);
+      commit("PLACE_DETAIL_INFO", res.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }

@@ -9,7 +9,10 @@
     <div class="container PlaceSearchContentFrame">
       <div class="placeSearchContent container d-flex justify-content-around align-items-start">
         <div class="mt-4 col">
-          <div class="placeSearchTitle mb-3 ps-2">부산 {{}} 운동시설</div>
+          <div v-if="cards" class="placeSearchTitle mb-3 ps-2">
+            <strong>{{ cards[0].address.split(" ")[0] }} {{ cards[0].address.split(" ")[1] }}</strong
+            >에 위치한 <strong>{{ totalElements }}개</strong>의 시설
+          </div>
           <div class="py-2">
             <div class="placeSearchList">
               <place-search-list v-for="(card, idx) in cards" :key="idx" :card="card" :cardId="card.id" class="placeSearchList me-3 col"> </place-search-list>
@@ -58,8 +61,8 @@ export default {
     // console.log(store.state.root.addPlaceFilters);
     // const route = useRoute();
     let cards = reactive(computed(() => store.state.root.placeSearchInfo.placeList));
-    // let cards = reactive(computed(() => store.getters["root/getPlaceInfo"]));
     let totalPages = ref(computed(() => store.state.root.placeSearchInfo.totalPages));
+    let totalElements = ref(computed(() => store.state.root.placeSearchInfo.totalElements));
     let nowPage = ref(computed(() => searchFiltersData.value["page"]));
     let searchFiltersData = reactive(
       computed(() => store.state.root.addPlaceFilters)
@@ -72,6 +75,7 @@ export default {
       // searchWord: "",
       // startDate: "",
     );
+
     const getCards = async () => {
       await store.dispatch("root/getPlaceSearchInfo", searchFiltersData.value);
       if (store.state.root.placeSearchInfo) {
@@ -134,23 +138,26 @@ export default {
       await store.dispatch("root/getPlaceSearchInfo", searchFiltersData.value);
     };
     onMounted(async () => {
+      // await getCards();
       nowPage.value = computed(() => store.state.root.placeSearchInfo.page);
-
+      // console.log(cards, "카드들");
       // nowPage = computed(() => store.state.root.placeSearchInfo.page);
       // console.log(store.state.root.placeSearchInfo.page, "지금페이지");
 
       // if (nowPage.value == undefined) {
       //   nowPage.value = 0;
       // }
-      var activeBtn = document.getElementsByClassName("page-item")[0];
-      activeBtn.classList.add("active");
+      if (document.getElementsByClassName("page-item").length > 0) {
+        var activeBtn = document.getElementsByClassName("page-item")[0];
+        activeBtn.classList.add("active");
+      }
       // if (store.state.root.searchFiltersData.categoryList == []) {
       //   store.state.root.placeSearchInfo.categoryList = store.state.root.selectSportsCategory;
       // }
       // await getCards();
     });
 
-    return { cards, store, totalPages, nowPage, onMounted, changePage, /*getSearchFiltersData*/ getCards, prevPages, nextPages };
+    return { cards, store, totalPages, totalElements, nowPage, onMounted, changePage, /*getSearchFiltersData*/ getCards, prevPages, nextPages };
   },
 };
 </script>
@@ -183,7 +190,7 @@ export default {
   max-width: 1400px;
 }
 .placeSearchTitle {
-  font-size: 16px;
+  font-size: 15px;
 }
 .paginationFrame {
   max-width: 70%;

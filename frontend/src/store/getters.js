@@ -36,9 +36,6 @@ export function mateArticleList(state) {
   return state.mateArticleList;
 }
 
-export function getPlaceInfo(state) {
-  return state.placeSearchInfo;
-}
 export function matePage(state) {
   return state.matePage;
 }
