@@ -4,111 +4,60 @@
       <b>내가 받은 메이트 목록</b>
       <hr>
     </h2>
-    <div 
-      v-for="(data, idx) in state.profileMateListFrom" :key=idx
-      class="container card my-5 d-flex row"
-    >
-      <div class="col-2 profile-image">
-        <img :src="data.profileImage" alt="" style="width: 100%;">
-      </div>
-      <div class="col-8 mt-4 mb-2">
-        <h4 class="mb-3"><b>{{ data.nickname }}의 {{ data.title }} ( {{ data.location }} )</b></h4>
-        <p>{{ data.description }}</p>
-        <p style="font-size: large;" class="mt-5"><b>종목 : {{ state.category[data.categoryId] }}</b></p>
-      </div>
-      <div class="col-2 my-4 d-flex justify-content-around" style="flex-direction: column;">
-        <button class="btn-mate accept">
-          신청
-        </button>
-        <button class="btn-mate reject">
-          거절
-        </button>
-      </div>
-    </div>
+    <profile-mate-from></profile-mate-from>
     <br><br>
     <h2>
       <b>내가 보낸 메이트 목록</b>
       <hr>
     </h2>
-    <div 
-      v-for="(data, idx) in state.profileMateListTo" :key=idx
-      class="container card my-5 d-flex row"
-    >
-      <div class="col-2 profile-image">
-        <img :src="data.profileImage" alt="" style="width: 100%;">
-      </div>
-      <div class="col-8 mt-4 mb-2">
-        <h4 class="mb-3"><b>{{ data.title }} ( {{ data.location }} )</b></h4>
-        <p>신청자 : {{ data.nickname }} <button class="ms-3 profile-btn" @click="moveToProfile(data.memberId)">확인하기</button></p>
-        <p style="font-size: large;" class="mt-5"><b>종목 : {{ state.category[data.categoryId] }}</b></p>
-      </div>
-      <div class="col-2 my-4 d-flex justify-content-around" style="flex-direction: column;">
-        <button class="btn-mate accept">
-          신청 취소
-        </button>
-      </div>
-    </div>
+    <profile-mate-to></profile-mate-to>
+    <br><br>
   </div>
 </template>
 
 <script>
-import { reactive, computed, onMounted } from 'vue'
+import ProfileMateFrom from './ProfileMateFrom.vue'
+import ProfileMateTo from './ProfileMateTo.vue'
+import { reactive, onMounted } from 'vue'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
 export default {
   name: "ProfileMate",
+  components: {
+    ProfileMateFrom,
+    ProfileMateTo,
+  },
   props: {
     userInfo: Object,
     otherInfo: Object,
   },
   setup(props) {
     const store = useStore()
-    const router = useRouter()
     const state = reactive({
       userInfo: props.userInfo,
       otherInfo: props.otherInfo,
-      profileMateListFrom: computed(() => store.getters["root/profileMateListFrom"]),
-      profileMateListTo: computed(() => store.getters["root/profileMateListTo"]),
-      profileMateListFromTotalPage: computed(() => store.getters["root/profileMateListFromTotalPage"]),
-      profileMateListToTotalPage: computed(() => store.getters["root/profileMateListToTotalPage"]),
-      pageFrom: 1,
-      pageTo: 1,
-      size: 3,
-      category: {
-        1: "축구", 2: "풋살", 3: "농구", 4: "야구",
-        5: "볼링", 6: "골프", 7: "테니스", 8: "배드민턴",
-        9: "헬스", 10:	"필라테스", 11:	"격투기", 12:	"수영"
-      },
     })
 
     onMounted(async () => {
       const bodyFrom = {
-        'page': state.pageFrom-1,
-        'size': state.size,
+        'page': 0,
+        'size': 3,
       }
       const bodyTo = {
-        'page': state.pageTo-1,
-        'size': state.size,
+        'page': 0,
+        'size': 3,
       }
       await store.dispatch("root/profileMateListFrom", bodyFrom)
       await store.dispatch("root/profileMateListTo", bodyTo)
     })
 
-    const moveToProfile = function (id) {
-      router.push({
-        name: "ProfileTemp",
-        query: {
-          memberId: id,
-        }
-      })
-    }
+    
 
-    return { state, onMounted, moveToProfile }
+    return { state, onMounted }
   }
 }
 </script>
 
-<style>
+<style scoped style="scss">
 .card {
   border-radius: 10pt;
   box-shadow: 2px 2px 1px 1px rgba(0,0,0,0.5);
@@ -141,6 +90,66 @@ export default {
   padding-top: 5px;
   padding-bottom: 5px;
   font-weight: bold;
+}
+
+/* pagination */
+
+
+.pagination {
+  margin: auto;
+  justify-content: center;
+}
+
+.page-item-left > .page-link {
+  background: white;
+  color: black;
+  width: 45px;
+  line-height: 2rem;
+  font-weight: bold;
+  border: #fafafa;
+  border-radius: 50%;
+  box-shadow: (0 0 8px rgba(24, 24, 24, 0.05));
+  margin: 0rem 0.5rem 0rem 0.5rem;
+  cursor: pointer;
+}
+
+.page-item-right > .page-link {
+  background: white;
+  color: black;
+  width: 45px;
+  line-height: 2rem;
+  font-weight: bold;
+  border: #fafafa;
+  border-radius: 50%;
+  box-shadow: (0 0 8px rgba(24, 24, 24, 0.05));
+  margin: 0rem 0.5rem 0rem 0.5rem;
+  cursor: pointer;
+}
+
+.page-item > .page-link {
+  background: white;
+  color: black;
+  width: 45px;
+  text-align: center;
+  line-height: 2rem;
+  font-weight: bold;
+  border: #fafafa;
+  border-radius: 50%;
+  box-shadow: (0 0 8px rgba(24, 24, 24, 0.05));
+  margin: 0rem 0.5rem 0rem 0.5rem;
+  cursor: pointer;
+  /* border: 1px solid rgba(1, 1, 1, 0.1); */
+}
+
+.active > .page-link {
+  background: black;
+  color: white;
+  line-height: 2rem;
+  font-weight: bold;
+  border: #fafafa;
+  border-radius: 50%;
+  box-shadow: (0 0 8px rgba(24, 24, 24, 0.05));
+  margin: 0rem 0.5rem 0rem 0.5rem;
 }
 
 </style>

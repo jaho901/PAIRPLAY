@@ -11,6 +11,7 @@ export default {
   profileMateListFrom: [],
   profileMateListToTotalPage: 0,
   profileMateListTo: [],
+  profileReservationList: [],
   mateArticleList: {},
   mateArticleListTotalPage: 0,
   mateArticleListTotalElements: 0,

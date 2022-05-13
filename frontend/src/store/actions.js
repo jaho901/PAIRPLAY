@@ -211,7 +211,7 @@ export async function profileDateTodo({ commit }, payload) {
 }
 
 export async function profileMateListFrom({ commit }, payload) {
-  const page = payload["body"]
+  const page = payload["page"]
   const size = payload["size"]
   const url = `profiles/mates/received?page=${page}&size=${size}`
   const jwt = localStorage.getItem("jwt");
@@ -229,8 +229,51 @@ export async function profileMateListFrom({ commit }, payload) {
   })
 }
 
+export async function profileMateFromAccept({ dispatch }, payload) {
+  const url = 'profiles/mates/accept'
+  const body = { "id": payload['id'] }
+  const page = payload['page']
+  const jwt = localStorage.getItem("jwt")
+  await $axios
+    .put(url, body, {
+      headers: {
+        Authorization: "Bearer " + jwt
+      }
+    })
+    .then((res) => {
+      console.log(res)
+      dispatch("profileMateListFrom", {
+        'page': page, 'size': 3
+      })
+    })
+    .catch((err) => {
+      console.log(err)
+  })
+}
+
+export async function profileMateFromReject({ dispatch }, payload) {
+  const id = payload['id']
+  const url = `profiles/mates/reject/${id}`
+  const jwt = localStorage.getItem("jwt")
+  await $axios
+    .delete(url, {
+      headers: {
+        Authorization: "Bearer " + jwt
+      }
+    })
+    .then((res) => {
+      console.log(res)
+      dispatch("profileMateListFrom", {
+        'page': payload['page'], 'size': 3
+      })
+    })
+    .catch((err) => {
+      console.log(err)
+  })
+}
+
 export async function profileMateListTo({ commit }, payload) {
-  const page = payload["body"]
+  const page = payload["page"]
   const size = payload["size"]
   const url = `profiles/mates/send?page=${page}&size=${size}`
   const jwt = localStorage.getItem("jwt");
@@ -242,6 +285,103 @@ export async function profileMateListTo({ commit }, payload) {
     })
     .then((res) => {
       commit("PROFILE_MATE_LIST_TO", res.data)
+    })
+    .catch((err) => {
+      console.log(err)
+  })
+}
+
+export async function profileReservationList({ commit }) {
+  const url = `profiles/places`
+  const jwt = localStorage.getItem("jwt")
+  await $axios
+    .get(url, {
+      headers: {
+        Authorization: "Bearer " + jwt
+      }
+    })
+    .then((res) => {
+      commit("PROFILE_RESERVATION_LIST", res.data)
+    })
+    .catch((err) => {
+      console.log(err)
+  })
+}
+
+export async function profileReservationDoingList({ commit }) {
+  const url = `profiles/places/reservation`
+  const jwt = localStorage.getItem("jwt")
+  await $axios
+    .get(url, {
+      headers: {
+        Authorization: "Bearer " + jwt
+      }
+    })
+    .then((res) => {
+      commit("PROFILE_RESERVATION_LIST", res.data)
+    })
+    .catch((err) => {
+      console.log(err)
+  })
+}
+
+export async function profileReservationDoneList({ commit }) {
+  const url = `profiles/places/used`
+  const jwt = localStorage.getItem("jwt")
+  await $axios
+    .get(url, {
+      headers: {
+        Authorization: "Bearer " + jwt
+      }
+    })
+    .then((res) => {
+      commit("PROFILE_RESERVATION_LIST", res.data)
+    })
+    .catch((err) => {
+      console.log(err)
+  })
+}
+
+export async function profileCancelPlaceReservation({ dispatch }, payload) {
+  const url = `places/reservation`
+  const body = payload
+  console.log(body)
+  console.log(typeof(body["reservationId"]))
+  const jwt = localStorage.getItem("jwt")
+  await $axios
+    .delete(url, {
+      data: {
+        'reservationId': body['reservationId']
+      }
+    }, {
+      headers: {
+        Authorization: "Bearer " + jwt
+      }
+    })
+    .then((res) => {
+      console.log(res)
+      dispatch("profileReservationList")
+    })
+    .catch((err) => {
+      console.log(err)
+  })
+}
+
+export async function profileMateToCancle({ dispatch }, payload) {
+  const id = payload['id']
+  const url = `profiles/mates/cancel/${id}`
+  const jwt = localStorage.getItem("jwt")
+  await $axios
+    .delete(url, {
+      headers: {
+        Authorization: "Bearer " + jwt
+      }
+    })
+    .then((res) => {
+      console.log(res)
+      dispatch("profileMateListTo", {
+        'page': payload['page'], 'size': 3
+      })
     })
     .catch((err) => {
       console.log(err)

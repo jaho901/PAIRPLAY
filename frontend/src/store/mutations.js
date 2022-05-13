@@ -73,10 +73,15 @@ export function PROFILE_MATE_LIST_FROM(state, data) {
 }
 
 export function PROFILE_MATE_LIST_TO(state, data) {
-  state.profileMateListFromTotalPage = 0
+  state.profileMateListToTotalPage = 0
   state.profileMateListToTotalPage = data.totalPages
   state.profileMateListTo = []
   state.profileMateListTo = data.list
+}
+
+export function PROFILE_RESERVATION_LIST(state, data) {
+  console.log(data)
+  state.profileReservationList = data.list
 }
 
 export function MATE_ARTICLE_PAGE(state, data) {

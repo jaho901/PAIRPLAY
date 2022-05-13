@@ -36,6 +36,9 @@
             <span class="side" :class="{ 'is-active': state.isActivePro }" @click="changeSideComponents($event)">Profile</span>
           </div>
           <div class="py-4">
+            <span class="side" :class="{ 'is-active': state.isActiveLik }" @click="changeSideComponents($event)">Like</span>
+          </div>
+          <div class="py-4">
             <span class="side" :class="{ 'is-active': state.isActiveRes }" @click="changeSideComponents($event)">Reservation</span>
           </div>
           <div class="py-4">
@@ -47,6 +50,7 @@
         </div>
         <div class="container pt-4" style="max-width: 80%; height: 100%; border-left: 1px solid #c8c9ca;">
           <profile-view v-if="state.sideComponents=='Profile'" :otherInfo="state.otherInfo" :userInfo="state.userInfo"></profile-view>
+          <profile-like v-else-if="state.sideComponents=='Like'" :otherInfo="state.otherInfo" :userInfo="state.userInfo"></profile-like>
           <profile-reservation v-else-if="state.sideComponents=='Reservation'" :otherInfo="state.otherInfo" :userInfo="state.userInfo"></profile-reservation>
           <profile-schedule v-else-if="state.sideComponents=='Schedule'" :otherInfo="state.otherInfo" :userInfo="state.userInfo"></profile-schedule>
           <profile-mate v-else-if="state.sideComponents=='Mate List'" :otherInfo="state.otherInfo" :userInfo="state.userInfo"></profile-mate>
@@ -64,6 +68,7 @@ import { useRouter } from 'vue-router'
 import Header from "../Common/Header.vue";
 import Footer from "../Common/Footer.vue";
 import ProfileView from './Components/ProfileView.vue';
+import ProfileLike from './Components/ProfileLike.vue'
 import ProfileReservation from './Components/ProfileReservation.vue';
 import ProfileSchedule from './Components/ProfileSchedule.vue';
 import ProfileMate from './Components/ProfileMate.vue';
@@ -74,6 +79,7 @@ export default {
     Header,
     Footer,
     ProfileView,
+    ProfileLike,
     ProfileReservation,
     ProfileSchedule,
     ProfileMate
@@ -84,10 +90,11 @@ export default {
     const state = reactive({
       userInfo: computed(() => store.getters["root/userInfo"]),
       otherInfo: computed(() => store.getters["root/otherInfo"]),
-      sideComponents: "Mate List",
+      sideComponents: "Reservation",
       isDescript: false,
-      isActivePro: true,
-      isActiveRes: false,
+      isActivePro: false,
+      isActiveLik: false,
+      isActiveRes: true,
       isActiveSch: false,
       isActiveMat: false,
     })
@@ -129,21 +136,31 @@ export default {
       state.sideComponents = event.target.textContent
       if (state.sideComponents == "Profile") {
         state.isActivePro = true
+        state.isActiveLik = false
+        state.isActiveRes = false
+        state.isActiveSch = false
+        state.isActiveMat = false
+      } else if (state.sideComponents == "Like") {
+        state.isActivePro = false
+        state.isActiveLik = true
         state.isActiveRes = false
         state.isActiveSch = false
         state.isActiveMat = false
       } else if (state.sideComponents == "Reservation") {
         state.isActivePro = false
+        state.isActiveLik = false
         state.isActiveRes = true
         state.isActiveSch = false
         state.isActiveMat = false
       } else if (state.sideComponents == "Schedule") {
         state.isActivePro = false
+        state.isActiveLik = false
         state.isActiveRes = false
         state.isActiveSch = true
         state.isActiveMat = false
       } else {
         state.isActivePro = false
+        state.isActiveLik = false
         state.isActiveRes = false
         state.isActiveSch = false
         state.isActiveMat = true
