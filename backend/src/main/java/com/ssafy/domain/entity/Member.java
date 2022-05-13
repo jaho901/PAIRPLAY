@@ -53,6 +53,8 @@ public class Member extends BaseEntity {
     @Builder.Default
     private List<Mate> mateList = new LinkedList<>();
 
+
+
     // 패스워드 랜덤 비밀번호로 초기화
     public void resetPassword(String password) {
         this.password = password;
