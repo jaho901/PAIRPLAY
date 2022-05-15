@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Getter
 @Setter
@@ -31,7 +34,21 @@ public class ActivityDetailRes extends BaseResponseBody{
     @ApiModelProperty(name = "위치 주소")
     String location;
 
+    @ApiModelProperty(name = "이미지 목록")
+    List<String> multipartFile;
+
     public static ActivityDetailRes of(Activity activity, Integer statusCode, String message) {
+
+
+        List<String> imageList = new ArrayList<>();
+
+        assert activity != null;
+        if(!activity.getMateImage().equals("")){
+            String image = activity.getMateImage();
+            String[] arr = image.split(" ");
+
+            imageList.addAll(Arrays.asList(arr));
+        }
 
         ActivityDetailRes res = new ActivityDetailRes();
 
@@ -41,7 +58,7 @@ public class ActivityDetailRes extends BaseResponseBody{
         res.setTitle(activity.getTitle());
         res.setDescription(activity.getDescription());
         res.setLocation(activity.getLocation());
-
+        res.setMultipartFile(imageList);
         res.setCode(statusCode);
         res.setMessage(message);
         return res;

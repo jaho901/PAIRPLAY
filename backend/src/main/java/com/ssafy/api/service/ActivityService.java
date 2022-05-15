@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -134,13 +136,24 @@ public class ActivityService {
     
     
     //메이트 등록
-    public void createActivity(ActivityPostReq activityInfo) {
+    public void createActivity(ActivityPostReq activityInfo, List<String> fileName) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long memberId = Long.parseLong(authentication.getName());
 
         Member member = memberRepository.findById(memberId).orElse(null);
 
+
+        String fileNameArr = "";
+
+        if(fileName.size() != 0){
+            for (String file : fileName) {
+                fileNameArr = fileNameArr + " " + file + " ";
+            }
+        }
+
+
+        System.out.println("확인" + fileNameArr);
 
         Activity activity = Activity.builder()
                 .categoryId(activityInfo.getCategoryId())
@@ -149,6 +162,7 @@ public class ActivityService {
                 .title(activityInfo.getTitle())
                 .description(activityInfo.getDescription())
                 .location(activityInfo.getLocation())
+                .mateImage(fileNameArr)
                 .isEnd(false)
                 .build();
         activityRepository.save(activity);
@@ -192,7 +206,7 @@ public class ActivityService {
 
 
 
-    //메이트 공고 등록/삭제
+    //메이트 찜하기/취소
     @Transactional
     public void likeActivity(Long activityId) {
 
