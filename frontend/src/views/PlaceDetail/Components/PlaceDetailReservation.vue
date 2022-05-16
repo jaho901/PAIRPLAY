@@ -2,53 +2,88 @@
   <div>
     <Datepicker v-model="date" :enableTimePicker="false" autoApply class="datePicker" inline></Datepicker>
     <div class="ReservationRealTime" id="style-1">
-      <div class="wrapper">
-        <div class="col">
-          <div class="menu d-flex justify-content-center">10,000원</div>
-          <div class="d-flex justify-content-around align-items-center">
+      <div class="wrapper d-flex flex-row">
+        <div class="d-flex row">
+          <div class="d-flex">
+            <div class="col menu justify-content-center">10,000원</div>
+            <div class="col menu justify-content-center">10,000원</div>
+            <div class="col menu justify-content-center">10,000원</div>
+            <div class="col menu justify-content-center">10,000원</div>
+            <div class="col menu justify-content-center">10,000원</div>
+            <div class="col menu justify-content-center">10,000원</div>
+            <div class="col menu justify-content-center">10,000원</div>
+          </div>
+          <div class="d-flex justify-content-between">
             <p class="time-mark">09:00</p>
-            <p class="time-mark ps-5">10:00</p>
-          </div>
-        </div>
-        <div class="col">
-          <div class="menu d-flex justify-content-center">10,000원</div>
-          <div class="d-flex justify-content-around align-items-center">
-            <!-- <p class="time-mark"></p> -->
+            <p class="time-mark">10:00</p>
             <p class="time-mark">11:00</p>
+            <p class="time-mark">12:00</p>
+            <p class="time-mark">13:00</p>
+            <p class="time-mark">14:00</p>
+            <p class="time-mark">15:00</p>
+            <p class="time-mark">16:00</p>
+            <p class="time-mark">17:00</p>
+            <p class="time-mark">18:00</p>
+            <p class="time-mark">19:00</p>
+            <p class="time-mark">20:00</p>
+            <p class="time-mark">21:00</p>
+            <p class="time-mark">22:00</p>
+            <p class="time-mark">23:00</p>
+          </div>
+        </div>
+        <!-- <div class="col">
+          <div class="menu d-flex justify-content-center">10,000원</div>
+          <div class="d-flex justify-content-around align-items-center">
+            <p class="time-mark text-white">10:00</p>
+            <p class="time-mark ps-5">12:00</p>
           </div>
         </div>
         <div class="col">
           <div class="menu d-flex justify-content-center">10,000원</div>
           <div class="d-flex justify-content-around align-items-center">
-            <p class="time-mark">아아</p>
-            <p class="time-mark">아아</p>
+            <p class="time-mark text-white">10:00</p>
+            <p class="time-mark ps-5">13:00</p>
           </div>
         </div>
         <div class="col">
           <div class="menu d-flex justify-content-center">10,000원</div>
           <div class="d-flex justify-content-around align-items-center">
-            <p class="time-mark">아아</p>
-            <p class="time-mark">아아</p>
+            <p class="time-mark text-white">10:00</p>
+            <p class="time-mark ps-5">14:00</p>
           </div>
         </div>
         <div class="col">
           <div class="menu d-flex justify-content-center">10,000원</div>
           <div class="d-flex justify-content-around align-items-center">
-            <p class="time-mark">아아</p>
-            <p class="time-mark">아아</p>
+            <p class="time-mark text-white">10:00</p>
+            <p class="time-mark ps-5">15:00</p>
           </div>
         </div>
         <div class="col">
           <div class="menu d-flex justify-content-center">10,000원</div>
           <div class="d-flex justify-content-around align-items-center">
-            <p class="time-mark">아아</p>
-            <p class="time-mark">아아</p>
+            <p class="time-mark text-white">10:00</p>
+            <p class="time-mark ps-5">16:00</p>
           </div>
         </div>
+        <div class="col">
+          <div class="menu d-flex justify-content-center">10,000원</div>
+          <div class="d-flex justify-content-around align-items-center">
+            <p class="time-mark text-white">10:00</p>
+            <p class="time-mark ps-5">17:00</p>
+          </div>
+        </div>
+        <div class="col">
+          <div class="menu d-flex justify-content-center">10,000원</div>
+          <div class="d-flex justify-content-around align-items-center">
+            <p class="time-mark text-white">10:00</p>
+            <p class="time-mark ps-5">18:00</p>
+          </div>
+        </div> -->
       </div>
     </div>
     <div class="d-flex justify-content-center mt-3">
-      <div class="btn btn-primary me-3">예약</div>
+      <div class="btn reservation me-3">예약</div>
       <div class="btn btn-secondary ms-3">취소</div>
     </div>
   </div>
@@ -129,17 +164,32 @@ export default {
   width: 120%;
 }
 .menu {
-  display: inline-block;
+  // display: inline-block;
   text-align: center;
-  background-color: rgb(145, 145, 145);
+  background-color: #1976d2;
   padding: 0.8rem 0.2rem 0.8rem 0.2rem;
-  margin: 0rem 0rem 0rem 0.5rem;
+  margin: 0rem 0rem 0rem 0.2rem;
   box-shadow: 0 0 8px rgba(24, 24, 24, 0.1);
   color: white;
   border-radius: 5px;
   // width: 130px;
 }
-
+.menu.disabled {
+  // display: inline-block;
+  text-align: center;
+  background-color: rgb(145, 145, 145);
+  padding: 0.8rem 0rem 0.8rem 0rem;
+  margin: 0rem 0rem 0rem 0.2rem;
+  box-shadow: 0 0 8px rgba(24, 24, 24, 0.1);
+  color: white;
+  border-radius: 5px;
+}
+.btn.reservation {
+  background-color: #1976d2;
+  color: white;
+  &:hover {
+  }
+}
 .time-mark {
   font-size: 0.8rem;
 }

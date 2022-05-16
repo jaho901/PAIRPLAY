@@ -426,7 +426,7 @@ h5 {
   /* justify-items: center; */
   /* align-self: center; */
   /* align-items: center; */
-  padding: 1rem 0rem 1rem 1rem;
+  padding: 1rem 1rem 1rem 1rem;
   height: auto;
   box-shadow: 0 0 8px rgba(24, 24, 24, 0.1);
   border-radius: 10px;
