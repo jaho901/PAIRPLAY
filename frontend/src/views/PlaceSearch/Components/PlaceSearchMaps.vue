@@ -1,10 +1,16 @@
 <template>
   <div>
-    <naver-maps class="naverMaps" :mapOptions="mapOptions" style="width: 100%; height: 70vh" :initLayers="initLayers" @onLoad="onLoadMap($event)" @click="checkPosition">
-      <naver-marker v-for="(mark, idx) in markers" :key="idx" :latitude="mark.latitude" :longitude="mark.longitude" @click="onMarkerClicked" @onLoad="onLoadMarker($markerObject)">
-        <div class="marker"><i class="bi bi-geo-alt-fill"></i> {{ cards[idx].name }}</div>
+    <naver-maps class="naverMaps" :mapOptions="mapOptions" style="width: 100%; height: 70vh" :initLayers="initLayers" @onLoad="onLoadMap($event)">
+      <naver-marker v-for="card in cards" :key="card.id" :latitude="card.latitude" :longitude="card.longitude" @click="popUP($event)">
+        <div class="marker">
+          <i class="bi bi-geo-alt-fill"></i> {{ card.name }}
+          <div class="show">
+            <img :src="`${card.img[0]}`" class="card-image" alt="" />
+          </div>
+        </div>
       </naver-marker>
-      <!-- <naver-marker :latitude="markers.latitude" :longitude="markers.longitude" @click="onMarkerClicked" @onLoad="onLoadMarker($markerObject)"></naver-marker> -->
+      <!-- <naver-marker :latitude="markers[0].latitude" :longitude="markers[0].longitude" /@click="onMarkerClicked" @onLoad="onLoadMarker($markerObject)" -->
+      <!-- ><div class="marker"><i class="bi bi-geo-alt-fill"></i> {{ markers[0].placeName }}</div></naver-marker -->
     </naver-maps>
   </div>
 </template>
@@ -18,15 +24,17 @@ import { NaverMaps, NaverMarker } from "vue3-naver-maps";
 export default {
   name: "PlaceSearchMaps",
   components: { NaverMaps, NaverMarker },
+  props: ["cards"],
   setup() {
     const store = useStore();
-    const markers = reactive(computed(() => store.state.root.mapPosition));
+    let markers = reactive(computed(() => store.state.root.placeSearchInfo.placeList));
     // const markers = reactive();
     // watch(markers, () => console.log(markers.value));
     // { latitude: 36, longitude: 127 },
     // { latitude: 36.5759477, longitude: 128.5056462 },
     // ];
-    let cards = reactive(computed(() => store.state.root.placeSearchInfo.placeList));
+    // let cards = reactive(computed(() => store.state.root.placeSearchInfo.placeList));
+    console.log(markers.value, "markers");
     const positionYX = ref({});
     const map = ref();
     const marker = ref();
@@ -42,6 +50,7 @@ export default {
 
         // return temp;
       }),
+
       zoom: 14,
       zoomControl: true,
       zoomControlOptions: { position: "TOP_RIGHT" },
@@ -67,50 +76,44 @@ export default {
       }
       return tempLongitude;
     };
-    // const LatLng = new window.naver.maps.LatLng(37, 127);
-    const changeMarkers = async () => {
-      var tempLong;
-      var tempLat;
-      var tempList = { tempLong, tempLat };
-      for (let i = 0; i < store.state.root.placeSearchInfo.placeList.length; i++) {
-        tempLong = store.state.root.placeSearchInfo.placeList[i].longitude;
-        tempLat = store.state.root.placeSearchInfo.placeList[i].latitude;
-        // console.log(tempLat);
-        markers.pos = tempList;
+    const popUP = (event) => {
+      // console.log(event.pointerEvent.target);
+      var showElement = event.pointerEvent.target.querySelector(".show");
+      console.log(showElement);
+      var target = showElement.style.display;
+      if (target === "none") {
+        target = "block";
+      } else {
+        target = "none";
       }
-      return tempList;
-      // await store.dispatch("root/changePosition", markers.value);
-      // console.log(markers.value);
+      showElement.style.display = target;
     };
-    // watch(markers.pos, async () => {
+
+    // watch(markers, () => {
+    //   markers = reactive(computed(() => store.state.root.placeSearchInfo.placeList));
+    //   // console.log(timeData, "timeData");
+    //   // console.log(searchFiltersData.value, "searchFiltersData");
+    // });
+    // const LatLng = new window.naver.maps.LatLng(37, 127);
+    // onMounted(async () => {
     // changeMarkers();
     // });
-    onMounted(async () => {
-      // changeMarkers();
-      // checkLatitude;
-      // checkLongitude;
-    });
 
     const onLoadMap = (mapObject) => {
       map.value = mapObject; // map에 반환된 객체 저장
       map.value.setCenter(new window.naver.maps.LatLng(37, 127));
-      // console.log(map.value, "map");
-      // map.value.setCenter(new window.naver.maps.LatLng(36, 127)); // 지도 중앙 변경
     };
     const onLoadMarker = (markerObject) => {
-      // markerObject.marker.setDraggable(true).setCursor("").setClickable(true);
       marker.value = markerObject;
-      // console.log(marker.value, "marker");
     };
     const onMarkerClicked = (event) => {
       console.log(event, "onMarkerClicked");
     };
     const checkPosition = (event) => {
-      // positionYX['latitude':]
       console.log(event, "checkPosition");
     };
     return {
-      cards,
+      // cards,
       map,
       marker,
       mapOptions,
@@ -124,19 +127,15 @@ export default {
       onLoadMarker,
       onMarkerClicked,
       checkPosition,
-      changeMarkers,
       checkLatitude,
       checkLongitude,
+      popUP,
     };
   },
 };
 </script>
 
 <style lang="scss" scoped>
-// .naverMaps {
-// width: 100%;
-// height: 500px;
-// }
 .marker {
   padding: 0.25rem 0.25rem 0.25rem 0.25rem;
   min-height: 30px;
@@ -162,4 +161,35 @@ export default {
     position: relative;
   }
 }
+.show {
+  display: none;
+  margin: 0.5rem 0rem 0rem 0rem;
+  flex-direction: row;
+  align-items: stretch;
+  text-align: center;
+  // background-color: black;
+  height: 200px;
+  width: 100px;
+  z-index: 10;
+  &:hover {
+    z-index: 10;
+    background: black;
+    color: white;
+    position: relative;
+  }
+}
+.card-image {
+  width: 100px;
+  object-fit: cover;
+}
+// .marker.show {
+//   background-color: black;
+//   height: 200px;
+//   z-index: 10;
+// }
+// .active {
+//   height: 100px;
+//   width: 100px;
+//   background-color: black;
+// }
 </style>

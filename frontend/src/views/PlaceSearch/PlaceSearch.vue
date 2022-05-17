@@ -38,7 +38,7 @@
             </div>
           </div>
         </div>
-        <place-search-maps class="col placeSearchMaps"></place-search-maps>
+        <place-search-maps :cards="cards" class="col placeSearchMaps"></place-search-maps>
       </div>
     </div>
     <footer>푸터</footer>

@@ -137,15 +137,19 @@ export async function CHANGE_POSITION(state, data) {
   state.mapPosition = [];
   let longitude;
   let latitude;
-  console.log(data);
+  let placeName;
+  // console.log(data);
   const markers = [];
   for (let i = 0; i < data.placeList.length; i++) {
     longitude = data.placeList[i].longitude;
     latitude = data.placeList[i].latitude;
+    placeName = data.placeList[i].name;
     // console.log(tempLat);
-    let tempList = { longitude, latitude };
+    let tempList = { longitude, latitude, placeName };
     markers.push(tempList);
   }
+  console.log(markers, "마커임");
+  // console.log(markers, "템프리스트");
   state.mapPosition = markers;
 }
 export async function PLACE_RECOMMEND(state, data) {
