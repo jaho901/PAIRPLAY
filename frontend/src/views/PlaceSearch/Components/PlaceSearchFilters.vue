@@ -6,9 +6,9 @@
       <!-- <div class="input-group serachbar">search</div> -->
       <div class="d-flex align-items-center col-lg-9 filters">
         <place-search-filters-region @regionData="selectRegion"></place-search-filters-region>
-        <place-search-filters-price></place-search-filters-price>
-        <place-search-filters-time @timeData="selectTime"></place-search-filters-time>
+        <!-- <place-search-filters-price></place-search-filters-price> -->
         <place-search-filter-sports-category @sportsCategoryData="selectSportsCategory"></place-search-filter-sports-category>
+        <place-search-filters-time @timeData="selectTime"></place-search-filters-time>
         <div class="btn btn-Cancel btn-secondary" type="button" @click="cancelFilters">초기화</div>
         <!-- <div class="btn-group">
         <button type="button" class="btn btnPlace dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" :aria-expanded="`${expand}`">Price</button>
@@ -34,7 +34,7 @@
 
 <script>
 import { ref, watch } from "vue";
-import PlaceSearchFiltersPrice from "./PlaceSearchFiltersPrice.vue";
+// import PlaceSearchFiltersPrice from "./PlaceSearchFiltersPrice.vue";
 import PlaceSearchFiltersRegion from "./PlaceSearchFiltersRegion.vue";
 import PlaceSearchFiltersTime from "./PlaceSearchFiltersTime.vue";
 import PlaceSearchFilterSportsCategory from "./PlaceSearchFilterSportsCategory.vue";
@@ -46,7 +46,7 @@ import { useRouter } from "vue-router";
 export default {
   name: "PlaceSearchFilters",
   // emits: ["searchFiltersData"],
-  components: { PlaceSearchFiltersRegion, PlaceSearchFiltersPrice, PlaceSearchFiltersTime, PlaceSearchFilterSportsCategory },
+  components: { PlaceSearchFiltersRegion, /*PlaceSearchFiltersPrice*/ PlaceSearchFiltersTime, PlaceSearchFilterSportsCategory },
   setup(/*_, { emit }*/) {
     const store = useStore();
     const router = useRouter();
@@ -118,7 +118,7 @@ export default {
 // }
 .btn {
   &:hover {
-    border: 0.5px solid black;
+    border: 0.02px solid rgba(1, 1, 1, 0.3);
   }
 }
 .placeSearchFiltersTotalFrame {
@@ -144,7 +144,7 @@ export default {
   font-family: "bootstrap-icons", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 .btn-Cancel {
-  margin: 10px 5px 10px 5px;
+  margin: auto 0.5rem auto 0.8rem;
   // background: red;
   color: white;
   border-radius: 5px;

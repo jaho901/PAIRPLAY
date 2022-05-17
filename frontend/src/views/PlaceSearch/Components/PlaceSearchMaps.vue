@@ -1,11 +1,13 @@
 <template>
   <div>
-    <naver-maps class="naverMaps" :mapOptions="mapOptions" style="width: 100%; height: 70vh" :initLayers="initLayers" @onLoad="onLoadMap($event)">
+    <naver-maps class="naverMaps" style="width: 100%; height: 100vh; position: sticky" :mapOptions="mapOptions" :initLayers="initLayers" @onLoad="onLoadMap($event)">
       <naver-marker v-for="card in cards" :key="card.id" :latitude="card.latitude" :longitude="card.longitude" @click="popUP($event)">
         <div class="marker">
           <i class="bi bi-geo-alt-fill"></i> {{ card.name }}
           <div class="show">
-            <img :src="`${card.img[0]}`" class="card-image" alt="" />
+            <div class="d-flex flex-column">
+              <img :src="`${card.img[0]}`" class="card-image" alt="" />
+            </div>
           </div>
         </div>
       </naver-marker>
@@ -53,7 +55,7 @@ export default {
 
       zoom: 14,
       zoomControl: true,
-      zoomControlOptions: { position: "TOP_RIGHT" },
+      zoomControlOptions: { position: "RIGHT_TOP" },
     });
     const initLayers = ["BACKGROUND", "BACKGROUND_DETAIL", "POI_KOREAN", "TRANSIT", "ENGLISH"];
     let checkLatitude = () => {
@@ -79,14 +81,23 @@ export default {
     const popUP = (event) => {
       // console.log(event.pointerEvent.target);
       var showElement = event.pointerEvent.target.querySelector(".show");
-      console.log(showElement);
-      var target = showElement.style.display;
-      if (target === "none") {
-        target = "block";
+      // console.log(showElement);
+      if (showElement.classList.contains("active")) {
+        showElement.classList.remove("active");
+        console.log(showElement);
       } else {
-        target = "none";
+        showElement.classList.add("active");
+        console.log(showElement);
       }
-      showElement.style.display = target;
+      // console.log(showElement);
+      // if ()
+      // var target = showElement.style.;
+      // if (target === "none") {
+      //   target = "block";
+      // } else {
+      //   target = "none";
+      // }
+      // showElement.style.display = target;
     };
 
     // watch(markers, () => {
@@ -155,7 +166,7 @@ export default {
   // -webkit-box-orient: vertical;
   cursor: pointer;
   &:hover {
-    z-index: 10;
+    z-index: 1;
     background: black;
     color: white;
     position: relative;
@@ -163,7 +174,7 @@ export default {
 }
 .show {
   display: none;
-  margin: 0.5rem 0rem 0rem 0rem;
+  // margin: 0.5rem 0rem 0rem 0rem;
   flex-direction: row;
   align-items: stretch;
   text-align: center;
@@ -171,6 +182,19 @@ export default {
   height: 200px;
   width: 100px;
   z-index: 10;
+}
+.show.active {
+  display: block;
+  // margin: 0.5rem 0rem 0rem 0rem;
+  flex-direction: row;
+  align-items: stretch;
+  text-align: center;
+  background-color: white;
+  height: 200px;
+  width: 100px;
+  z-index: 11;
+  position: relative;
+
   &:hover {
     z-index: 10;
     background: black;
@@ -179,8 +203,8 @@ export default {
   }
 }
 .card-image {
-  width: 100px;
-  object-fit: cover;
+  width: 100%;
+  // object-fit: cover;
 }
 // .marker.show {
 //   background-color: black;

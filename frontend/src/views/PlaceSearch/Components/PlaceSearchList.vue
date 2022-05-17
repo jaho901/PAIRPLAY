@@ -67,14 +67,14 @@ export default {
         },
       });
     };
-    const changeMark = () => {};
+    // const changeMark = () => {};
     return {
       // placeSearchData,
       clickLike,
       moveToPlaceDetail,
       // getCards,
       // like,
-      changeMark,
+      // changeMark,
     };
   },
 };
