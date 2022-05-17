@@ -1,5 +1,6 @@
 package com.ssafy.api.response;
 
+import com.ssafy.api.service.S3FileUploadService;
 import com.ssafy.domain.entity.Activity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -37,17 +38,25 @@ public class ActivityDetailRes extends BaseResponseBody{
     @ApiModelProperty(name = "이미지 목록")
     List<String> multipartFile;
 
+    private static S3FileUploadService s3FileUploadService;
+
+
     public static ActivityDetailRes of(Activity activity, Integer statusCode, String message) {
+
+
 
 
         List<String> imageList = new ArrayList<>();
 
         assert activity != null;
-        if(!activity.getMateImage().equals("")){
+        if(activity.getMateImage() != null && activity.getMateImage().length() != 0){
+            System.out.println("이미지리스트확인"+ activity.getMateImage());
             String image = activity.getMateImage();
             String[] arr = image.split(" ");
 
-            imageList.addAll(Arrays.asList(arr));
+            for (String imgUrl : arr){
+                imageList.add(s3FileUploadService.findImg(imgUrl));
+            }
         }
 
         ActivityDetailRes res = new ActivityDetailRes();

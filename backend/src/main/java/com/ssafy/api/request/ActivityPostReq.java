@@ -33,7 +33,5 @@ public class ActivityPostReq {
     @ApiModelProperty(name = "내용")
     String description;
 
-    @ApiModelProperty(name = "이미지 리스트")
-    List<MultipartFile> multipartFile;
 
 }

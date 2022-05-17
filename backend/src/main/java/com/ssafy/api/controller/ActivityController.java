@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -96,12 +97,14 @@ public class ActivityController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "공고 생성 성공하였습니다.", response = BaseResponseBody.class),
     })
-    public ResponseEntity<BaseResponseBody> createActivity(@RequestBody @ApiParam(value = "공고 정보", required = true) ActivityPostReq activityInfo) {
+    public ResponseEntity<? extends BaseResponseBody> createActivity(@RequestPart("content") @ApiParam(value = "공고 정보", required = true) ActivityPostReq activityInfo,
+                                                                     @RequestPart("imgUrl") @ApiParam(value = "공고 이미지 업로드 List", required = true)List<MultipartFile> multipartFile) {
 
         List<String> fileName = new ArrayList<>();
-        if(activityInfo.getMultipartFile().size() != 0){
 
-            activityInfo.getMultipartFile().forEach(image -> {
+        if(multipartFile.size() != 0){
+
+            multipartFile.forEach(image -> {
                 try {
                     fileName.add(s3FileUploadService.upload(image));
                 } catch (IOException e) {

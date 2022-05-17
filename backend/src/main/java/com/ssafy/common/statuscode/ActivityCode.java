@@ -13,7 +13,8 @@ public enum ActivityCode implements StatusCode{
     SUCCESS_ACTIVITY_LIKE(200,"메이트 찜하기 성공했습니다."),
 
 
-    FAIL_MATE_IMAGE_S3_UPLOAD_ERROR(404, "공고 이미지를 S3서버에 업로드하지 못했습니다.")
+    FAIL_MATE_IMAGE_S3_UPLOAD_ERROR(404, "공고 이미지를 S3서버에 업로드하지 못했습니다."),
+    FAIL_MEMBER_NOT_FOUND(404, "해당 유저 정보를 찾지 못했습니다.")
     ;
 
 
