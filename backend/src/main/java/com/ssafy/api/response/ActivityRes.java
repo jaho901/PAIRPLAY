@@ -1,8 +1,5 @@
 package com.ssafy.api.response;
 
-import com.querydsl.core.Tuple;
-import com.ssafy.domain.document.ActivityDto;
-import com.ssafy.domain.entity.Activity;
 import com.ssafy.domain.entity.Mate;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -43,33 +40,27 @@ public class ActivityRes{
     @ApiModelProperty(name = "이미지")
     String profileImage;
 
+    public static ActivityRes of(Mate mate, Long memberId) {
 
-    public static ActivityRes of(Mate activity) {
-        System.out.println(activity);
 
         ActivityRes res = new ActivityRes();
-//        res.setActivityId(activity.getId());
-//        res.setCreatedDate(activity.getCreatedDate());
-//        res.setCategoryId(activity.getCategoryId());
-//        res.setTitle(activity.getTitle());
-//        res.setDescription(activity.getDescription());
-//        res.setLocation(activity.getLocation());
+
+        res.setActivityId(mate.getActivityId().getId());
+        res.setCreatedDate(mate.getActivityId().getCreatedDate());
+        res.setCategoryId(mate.getActivityId().getCategoryId());
+        res.setTitle(mate.getActivityId().getTitle());
+        res.setDescription(mate.getActivityId().getDescription());
+        res.setLocation(mate.getActivityId().getLocation());
+        res.setNickname(mate.getMemberId().getNickname());
+        res.setProfileImage(mate.getMemberId().getProfileImage());
+
+        mate.getActivityId().getActivityLikeList().forEach( like -> {
+            if(like.getMemberId().getId().equals(memberId)){
+                res.setLike(true);
+            }
+        });
+
         return res;
     }
 
-//    public static ActivityRes of(ActivityDto activity) {
-//        System.out.println(activity);
-//
-//        ActivityRes res = new ActivityRes();
-////        res.setActivityId(activity.getId());
-////        res.setCreatedDate(activity.getCreatedDate());
-////        res.setCategoryId(activity.getCategoryId());
-////        res.setTitle(activity.getTitle());
-////        res.setDescription(activity.getDescription());
-////        res.setLocation(activity.getLocation());
-////        res.setNickname(activity.getNickname());
-////        res.setProfileImage(activity.getProfileImage());
-////        System.out.println(activity.getActivityIdId());
-//        return res;
-//    }
 }

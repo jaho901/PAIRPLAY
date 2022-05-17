@@ -1,12 +1,13 @@
 package com.ssafy.api.service;
 
-import com.querydsl.core.Tuple;
+
 import com.ssafy.api.request.ActivityCategoryReq;
 import com.ssafy.api.request.ActivityPostReq;
 import com.ssafy.api.request.ActivityRegisterReq;
+import com.ssafy.api.response.ActivityListRes;
 import com.ssafy.common.handler.CustomException;
-import com.ssafy.domain.document.ActivityDto;
 import com.ssafy.domain.entity.Activity;
+import com.ssafy.domain.entity.ActivityLike;
 import com.ssafy.domain.entity.Mate;
 import com.ssafy.domain.entity.Member;
 import com.ssafy.domain.repository.*;
@@ -18,6 +19,10 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static com.ssafy.common.statuscode.ActivityCode.SUCCESS_MATE_LIST;
 import static com.ssafy.common.statuscode.CommonCode.EMPTY_REQUEST_VALUE;
 
 @Service
@@ -49,49 +54,30 @@ public class ActivityService {
     }
 
     @Transactional
-    public Page<Mate> getActivityList(Pageable pageable) {
+    public ActivityListRes getActivityList(Pageable pageable) {
 
         Member member = findId();
-//
-//        if(member != null) {
-//            if (member.getSido() != null || member.getGugun() != null) {
-//                String location = member.getSido() + " " + member.getGugun();
-//                System.out.println(location);
-//                return activityRepositorySupport.findAllByLocation(pageable, location);
-//            }
-//        }
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long memberId = Long.parseLong(authentication.getName());
-        Page<Mate> mates = mateRepository.findAllByActivityId_CreateIdEqualsMemberId_Id( pageable);
 
-//        activities.getContent().forEach(activity -> {
-//            activity.getMateList().forEach( mate -> {
-//                System.out.println(mate.getActivityId().getId());
-//            });
-//        });
+        if(member != null) {
+            if (member.getSido() != null || member.getGugun() != null) {
+                String location = member.getSido() + " " + member.getGugun();
+                System.out.println(location);
+                Page<Mate> mates = activityRepositorySupport.findAllByLocation(pageable, location);
+                return ActivityListRes.of(mates, SUCCESS_MATE_LIST.getCode(), SUCCESS_MATE_LIST.getMessage());
+            }
+        }
 
-        mates.forEach(mate -> {
-            System.out.println("아이디 " + mate.getId());
-            System.out.println("멤버아이디 " + mate.getMemberId());
-            System.out.println("멤버아이디.! " + mate.getMemberId().getProfileImage());
-            System.out.println("엑티비티아이디" + mate.getActivityId().getDescription());
-            System.out.println("엑티비티아이디.~" + mate.getMemberId().getActivityLikeList());
-            System.out.println("사이즈으으" + mate.getMemberId().getActivityLikeList().size());
-            mate.getMemberId().getActivityLikeList().forEach(like -> {
-                System.out.println("라이크아이디.!" + like.getMemberId().getId());
-                System.out.println("라이크아이디.D" + like.getActivityId().getTitle());
-            });
-        });
+        Page<Mate> mates = activityRepositorySupport.findAllByActivityId_CreateIdEqualsMemberId_Id(pageable);
 
 
-        return mates;
+        return ActivityListRes.of(mates, SUCCESS_MATE_LIST.getCode(), SUCCESS_MATE_LIST.getMessage());
 //        return activityRepositorySupport.findAll(pageable);
-
     }
 
-    public Page<Activity> getCategoryList(ActivityCategoryReq activityCategoryReq, Pageable pageable) {
+    @Transactional
+    public ActivityListRes getCategoryList(ActivityCategoryReq activityCategoryReq, Pageable pageable) {
 
-        Page<Activity> activities = null;
+        Page<Mate> activities = null;
         String location = null, sido = null, gugun = null;
 
         Member member = findId();
@@ -107,14 +93,13 @@ public class ActivityService {
         }
 
         location = sido + " " + gugun;
-
-
-
-        /*
-         * 운동 카테고리, 검색어
-         */
+//
+//
+//
+//        /*
+//         * 운동 카테고리, 검색어
+//         */
         if(activityCategoryReq.getCategoryId()!=0 && !activityCategoryReq.getSearch().equals("")){
-
             activities = activityRepositorySupport.findByCategorySearch(pageable, location, activityCategoryReq.getCategoryId(), activityCategoryReq.getSearch());
 
         }
@@ -140,12 +125,11 @@ public class ActivityService {
          */
         else{
 
-            activities = activityRepositorySupport.findByCategorySearch(pageable, location);
+            activities = activityRepositorySupport.findAllByLocation(pageable, location);
         }
 
 
-
-        return  activities;
+        return ActivityListRes.of(activities, SUCCESS_MATE_LIST.getCode(), SUCCESS_MATE_LIST.getMessage());
     }
     
     
@@ -208,17 +192,35 @@ public class ActivityService {
 
 
 
-//    //메이트 공고 등록/삭제
-//    public void likeActivity(Long activityId) {
-//
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        Long memberId = Long.parseLong(authentication.getName());
-//        Member member = memberRepository.findById(memberId).orElse(null);
-//        List<ActivityLikeList> activityLikelist = activityLikeRepository.findActivityIdByMemberId(memberId);
-//
-//
-//
-//    }
+    //메이트 공고 등록/삭제
+    @Transactional
+    public void likeActivity(Long activityId) {
+
+
+        Member member = findId();
+
+        Activity activity = activityRepository.findById(activityId).orElse(null);
+
+        Long id = null;
+        for (ActivityLike like : member.getActivityLikeList()) {
+            if (like.getActivityId().getId().equals(activityId)) {
+                id = like.getId();
+            }
+        }
+       
+        if(id != null){
+            activityLikeRepository.deleteById(id);
+        }else{
+           ActivityLike activityLike = ActivityLike.builder()
+                   .activityId(activity)
+                   .memberId(member)
+                   .build();
+
+           activityLikeRepository.save(activityLike);
+        }
+
+
+    }
 
 
 }
