@@ -64,6 +64,11 @@ const routes = [
     name: "ProfileTemp",
     component: () => import("../views/Profile/Components/ProfileTemp.vue"),
   },
+  {
+    path: "/matecreate",
+    name: "MateCreate",
+    component: () => import("../views/MateCreate/MateCreate.vue"),
+  },
 ];
 
 const router = createRouter({
