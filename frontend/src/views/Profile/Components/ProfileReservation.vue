@@ -7,8 +7,7 @@
 </template>
 
 <script>
-import { reactive, onMounted } from 'vue'
-import { useStore } from 'vuex'
+import { reactive } from 'vue'
 import ProfileReservationView from './ProfileReservationView.vue'
 export default {
   name: "ProfileReservation",
@@ -20,17 +19,12 @@ export default {
     otherInfo: Object,
   },
   setup(props) {
-    const store = useStore()
     const state = reactive({
       userInfo: props.userInfo,
       otherInfo: props.otherInfo
     })
 
-    onMounted(async () => {
-      await store.dispatch("root/profileReservationList")
-    })
-
-    return { state, onMounted }
+    return { state }
   }
 }
 </script>

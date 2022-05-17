@@ -32,7 +32,7 @@ export function USER_INFO(state, data) {
 export function OTHER_INFO(state, data) {
   state.otherInfo = []
   state.otherInfo["address"] = data.address;
-  state.otherInfo["birthDt"] = data.birthDt;
+  state.otherInfo["birthDt"] = String(data.birthDt[0])+"년 " + String(data.birthDt[1])+"월 "+String(data.birthDt[2])+"일"
   state.otherInfo["description"] = data.description;
   state.otherInfo["email"] = data.email;
   if (data.gender == 0) {
@@ -80,8 +80,25 @@ export function PROFILE_MATE_LIST_TO(state, data) {
 }
 
 export function PROFILE_RESERVATION_LIST(state, data) {
-  console.log(data)
+  state.profileReservationList = []
   state.profileReservationList = data.list
+}
+
+export function PROFILE_RESERVATION_LIST_MORE(state, data) {
+  console.log(data.dataList)
+  const dataList = data.dataList
+  var page = data.page
+  var totalPages = dataList.totalPages
+  var totalElements = dataList.totalElements
+  if (page < totalPages) {
+    for (var i = 0; i < 10; i++) {
+      state.profileReservationList.push(dataList.list[i])
+    }
+  } else {
+    for (var j = totalPages * 10; j < totalElements; j++) {
+      state.profileReservationList.push(dataList.list[j-(10*totalPages)])
+    }
+  }
 }
 
 export function MATE_ARTICLE_PAGE(state, data) {

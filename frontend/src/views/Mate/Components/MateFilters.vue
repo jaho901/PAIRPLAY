@@ -3,14 +3,14 @@
     <div class="placeSearchFilters d-flex justify-content-between align-items-center">
       <div class="d-flex align-items-center col-lg-8 filters">
         <mate-filters-region @regionData="selectRegion"></mate-filters-region>
-        <mate-filters-time @timeData="selectTime"></mate-filters-time>
         <mate-filters-sports-category @sportsCategoryData="selectSportsCategory"></mate-filters-sports-category>
         <div class="btn btn-Cancel btn-secondary" type="button" @click="cancelFilters">초기화</div>
         <!-- 지역 -->
       </div>
       <div class="col-lg-4">
         <div class="input-group flex-nowrap">
-          <input type="text" class="form-control serachbar" placeholder="&#xf52a; search" aria-label="Username" aria-describedby="addon-wrapping" />
+          <input type="text" class="form-control serachbar" v-model="state.search">
+          <button @click="mateSearchView">검색</button>
         </div>
       </div>
     </div>
@@ -20,7 +20,6 @@
 <script>
 import { ref, watch, computed, reactive } from "vue";
 import MateFiltersRegion from "./MateFiltersRegion.vue";
-import MateFiltersTime from "./MateFiltersTime.vue";
 import MateFiltersSportsCategory from "./MateFiltersSportsCategory.vue";
 
 // import Slider from "@vueform/slider";
@@ -30,13 +29,13 @@ export default {
   emits: ["searchFiltersData"],
   components: { 
     MateFiltersRegion, 
-    MateFiltersTime, 
     MateFiltersSportsCategory
   },
   setup(_, { emit }) {
     const store = useStore()
     const state = reactive({
-      totalPages: computed(() => store.getters["root/mateArticleListTotalPage"])
+      totalPages: computed(() => store.getters["root/mateArticleListTotalPage"]),
+      search: ""
     })
     let searchFiltersData = ref({
       price: "",
@@ -73,6 +72,17 @@ export default {
       activeBtn.classList.add("active")
     };
 
+    const mateSearchView = async function () {
+      console.log(state.search)
+      const body = {
+        "categoryId": 0,
+        "gungu": "",
+        "search": state.search,
+        "sido": "",
+      }
+      await store.dispatch("root/mateFilterChange", body)
+    }
+
 
     watch(searchFiltersData.value, () => {
       emit("searchFiltersData", searchFiltersData.value);
@@ -80,7 +90,7 @@ export default {
       // console.log(searchFiltersData.value, "searchFiltersData");
     });
     // const refresh = () =>
-    return { searchFiltersData, selectRegion, selectTime, selectSportsCategory, cancelFilters };
+    return { state, searchFiltersData, selectRegion, selectTime, selectSportsCategory, cancelFilters, mateSearchView };
   },
 };
 </script>

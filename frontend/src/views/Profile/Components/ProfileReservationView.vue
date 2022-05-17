@@ -63,6 +63,9 @@
     </div>
     <hr>
   </div>
+  <div v-if="state.profileReservationList.length == (state.page+1)*10" style="margin: auto; text-align: center;" class="mt-5">
+    <button @click="profileGetMoreList" class="btn-more">더보기</button>
+  </div>
   <!-- Modal Create -->
   <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" style="max-width: 750px;">
@@ -73,30 +76,78 @@
         </div>
         <div class="modal-body">
           <div class="d-flex row">
-            <div class="col-4" style="height: 250px;">
-              <div class="d-flex justify-content-between">
+            <div class="col-5" style="height: 250px;">
+              <div class="d-flex justify-content-between align-items-center">
                 <span>cleanness: </span>
-                <input type="number" style="width: 50%;">
+                <div class="stars">
+                  <input type="radio" id="clean1" value="1" @click="changeClean($event)">
+                  <input type="radio" id="clean2" value="2" @click="changeClean($event)">
+                  <input type="radio" id="clean3" value="3" @click="changeClean($event)">
+                  <input type="radio" id="clean4" value="4" @click="changeClean($event)">
+                  <input type="radio" id="clean5" value="5" @click="changeClean($event)">
+                  
+                  <label for="clean1" aria-label="Clean">1 star</label>
+                  <label for="clean2">2 stars</label>
+                  <label for="clean3">3 stars</label>
+                  <label for="clean4">4 stars</label>
+                  <label for="clean5">5 stars</label>
+                </div>
               </div>
-              <div class="d-flex justify-content-between my-3">
+              <div class="d-flex justify-content-between align-items-center my-3">
                 <span>location: </span>
-                <input type="number" style="width: 50%;">
+                <div class="stars">
+                  <input type="radio" id="location1" value="1" @click="changeLocation($event)">
+                  <input type="radio" id="location2" value="2" @click="changeLocation($event)">
+                  <input type="radio" id="location3" value="3" @click="changeLocation($event)">
+                  <input type="radio" id="location4" value="4" @click="changeLocation($event)">
+                  <input type="radio" id="location5" value="5" @click="changeLocation($event)">
+                  
+                  <label for="location1" aria-label="Location">1 star</label>
+                  <label for="location2">2 stars</label>
+                  <label for="location3">3 stars</label>
+                  <label for="location4">4 stars</label>
+                  <label for="location5">5 stars</label>
+                </div>
               </div>
-              <div class="d-flex justify-content-between my-3">
+              <div class="d-flex justify-content-between align-items-center my-3">
                 <span>place: </span>
-                <input type="number" style="width: 50%;">
+                <div class="stars">
+                  <input type="radio" id="place1" value="1" @click="changePlace($event)">
+                  <input type="radio" id="place2" value="2" @click="changePlace($event)">
+                  <input type="radio" id="place3" value="3" @click="changePlace($event)">
+                  <input type="radio" id="place4" value="4" @click="changePlace($event)">
+                  <input type="radio" id="place5" value="5" @click="changePlace($event)">
+                  
+                  <label for="place1" aria-label="Place">1 star</label>
+                  <label for="place2">2 stars</label>
+                  <label for="place3">3 stars</label>
+                  <label for="place4">4 stars</label>
+                  <label for="place5">5 stars</label>
+                </div>
               </div>
-              <div class="d-flex justify-content-between my-3">
+              <div class="d-flex justify-content-between align-items-center my-3">
                 <span>price: </span>
-                <input type="number" style="width: 50%;">
+                <div class="stars">
+                  <input type="radio" id="price1" value="1" @click="changePrice($event)">
+                  <input type="radio" id="price2" value="2" @click="changePrice($event)">
+                  <input type="radio" id="price3" value="3" @click="changePrice($event)">
+                  <input type="radio" id="price4" value="4" @click="changePrice($event)">
+                  <input type="radio" id="price5" value="5" @click="changePrice($event)">
+                  
+                  <label for="price1" aria-label="Price">1 star</label>
+                  <label for="price2">2 stars</label>
+                  <label for="price3">3 stars</label>
+                  <label for="price4">4 stars</label>
+                  <label for="price5">5 stars</label>
+                </div>
               </div>
             </div>
             <div class="col-1"></div>
-            <div class="col-7" style="height: 250px;">
+            <div class="col-6" style="height: 250px;">
               <span class="me-3">사진 등록</span>
-              <input type="file">
-              <div>
-                <img src="" alt="">
+              <input type="file" @change="changeImgFile">
+              <div class="my-3">
+                <img :src="state.reviewImage" alt="" style="width: 270px; height: 180px;">
               </div>
             </div>
           </div>
@@ -130,7 +181,7 @@
 </template>
 
 <script>
-import { reactive, computed } from 'vue'
+import { reactive, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 export default {
@@ -145,20 +196,50 @@ export default {
     const state = reactive({
       userInfo: props.userInfo,
       otherInfo: props.otherInfo,
+      status: "All",
       profileReservationList: computed(() => store.getters["root/profileReservationList"]),
       reviewCreateId: 0,
+      page: 0,
+      clean: 0,
+      location: 0,
+      price: 0,
+      place: 0,
+      reviewImage: "",
+    })
+
+    onMounted(async () => {
+      await store.dispatch("root/profileReservationList", 0)
     })
 
     const profileReservationList = async function () {
-      await store.dispatch("root/profileReservationList")
+      state.status = "All"
+      state.page = 0
+      await store.dispatch("root/profileReservationList", state.page)
     }
 
     const profileReservationDoingList = async function () {
-      await store.dispatch("root/profileReservationDoingList")
+      state.status = "Doing"
+      state.page = 0
+      await store.dispatch("root/profileReservationDoingList", state.page)
     }
 
     const profileReservationDoneList = async function () {
-      await store.dispatch("root/profileReservationDoneList")
+      state.status = "Done"
+      state.page = 0
+      await store.dispatch("root/profileReservationDoneList", state.page)
+    }
+
+    const profileGetMoreList = async function () {
+      if (state.status == "All") {
+        state.page += 1
+        store.dispatch("root/profileReservationListMore", state.page)
+      } else if (state.status == "Doing") {
+        state.page += 1
+        store.dispatch("root/profileReservationDoingListMore", state.page)
+      } else if (state.status == "Done") {
+        state.page += 1
+        store.dispatch("root/profileReservationDoneListMore", state.page)
+      }
     }
 
     const reviewDetail = async function (id) {
@@ -180,7 +261,41 @@ export default {
       })
     }
 
-    return { state, profileReservationList, profileReservationDoingList, profileReservationDoneList, reviewDetail, moveToPlaceDetail, cancelPlaceReservation }
+    const changeClean = async function (event) {
+      state.clean = event.target.value
+    }
+    const changeLocation = async function (event) {
+      state.location = event.target.value
+    }
+    const changePlace = async function (event) {
+      state.place = event.target.value
+    }
+    const changePrice = async function (event) {
+      state.price = event.target.value
+    }
+
+    const changeImgFile = async function (event) {
+      if( event.target.files && event.target.files.length > 0 ) {
+        const file = event.target.files[0];
+        state.reviewImage = URL.createObjectURL(file);
+        // let data = new FormData()
+        // data.append("profileImage", file)
+        // await store.dispatch('root/profileChangeImage', { 'file': file })
+      }
+    }
+
+    return { state, onMounted,
+      profileReservationList, 
+      profileReservationDoingList, 
+      profileReservationDoneList, 
+      profileGetMoreList,
+      reviewDetail, 
+      moveToPlaceDetail, 
+      cancelPlaceReservation, 
+      changeImgFile,
+      changeClean, changeLocation,
+      changePlace, changePrice,
+    }
   }
 }
 </script>
@@ -222,6 +337,51 @@ export default {
   font-weight: bold;
   background-color: white;
   cursor: pointer;
+}
+
+
+$color: orange;
+
+@mixin set-star($border: $color, $fill: transparent) {
+  background: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='#{$fill}' stroke='#{$border}' stroke-width='38' d='M259.216 29.942L330.27 173.92l158.89 23.087L374.185 309.08l27.145 158.23-142.114-74.698-142.112 74.698 27.146-158.23L29.274 197.007l158.89-23.088z' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.stars {
+  display: flex;
+}
+
+.stars input {
+  position: absolute;
+  clip: rect(0,0,0,0);
+}
+
+.stars label {
+  box-sizing: border-box;
+  display: inline-block;
+  margin-left: 6px;
+  height: 25px;
+  width: 25px;
+  @include set-star;
+  font-size: 0;
+  cursor: pointer;
+}
+
+.stars input:nth-child(1):checked ~ label:nth-of-type(-n + 1),
+.stars input:nth-child(2):checked ~ label:nth-of-type(-n + 2),
+.stars input:nth-child(3):checked ~ label:nth-of-type(-n + 3),
+.stars input:nth-child(4):checked ~ label:nth-of-type(-n + 4),
+.stars input:nth-child(5):checked ~ label:nth-of-type(-n + 5) {
+  @include set-star($color, $color);
+}
+
+.btn-more {
+  font-size: large;
+  color: white;
+  font-weight: bold;
+  background-color: black;
+  border-radius: 30px;
+  width: 7rem;
+  height: 3rem;
 }
 
 </style>

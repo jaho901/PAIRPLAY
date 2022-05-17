@@ -28,7 +28,7 @@
         </div>
       </div>
     </div>
-    <div style="max-width: 70%; margin: auto;" class="mt-5">
+    <div v-if="state.userInfo.memberId==state.otherInfo.memberId" style="max-width: 70%; margin: auto;" class="mt-5">
       <hr style="margin-bottom: 0px;">
       <div class="d-flex">
         <div class="container pt-4" style="position: sticky; top: 30px; max-width: 20%; height: 100%;">
@@ -54,6 +54,23 @@
           <profile-reservation v-else-if="state.sideComponents=='Reservation'" :otherInfo="state.otherInfo" :userInfo="state.userInfo"></profile-reservation>
           <profile-schedule v-else-if="state.sideComponents=='Schedule'" :otherInfo="state.otherInfo" :userInfo="state.userInfo"></profile-schedule>
           <profile-mate v-else-if="state.sideComponents=='Mate List'" :otherInfo="state.otherInfo" :userInfo="state.userInfo"></profile-mate>
+        </div>
+      </div>
+    </div>
+    <div v-else style="max-width: 70%; margin: auto;" class="mt-5">
+      <hr style="margin-bottom: 0px;">
+      <div class="d-flex">
+        <div class="container pt-4" style="position: sticky; top: 30px; max-width: 20%; height: 100%;">
+          <div class="py-4">
+            <span class="side" :class="{ 'is-active': state.isActivePro }" @click="changeSideComponents($event)">Profile</span>
+          </div>
+          <div class="py-4">
+            <span class="side" :class="{ 'is-active': state.isActiveSch }" @click="changeSideComponents($event)">Schedule</span>
+          </div>
+        </div>
+        <div class="container pt-4" style="max-width: 80%; height: 100%; border-left: 1px solid #c8c9ca;">
+          <profile-view v-if="state.sideComponents=='Profile'" :otherInfo="state.otherInfo" :userInfo="state.userInfo"></profile-view>
+          <profile-schedule v-else-if="state.sideComponents=='Schedule'" :otherInfo="state.otherInfo" :userInfo="state.userInfo"></profile-schedule>
         </div>
       </div>
     </div>
@@ -90,11 +107,11 @@ export default {
     const state = reactive({
       userInfo: computed(() => store.getters["root/userInfo"]),
       otherInfo: computed(() => store.getters["root/otherInfo"]),
-      sideComponents: "Reservation",
+      sideComponents: "Profile",
       isDescript: false,
-      isActivePro: false,
+      isActivePro: true,
       isActiveLik: false,
-      isActiveRes: true,
+      isActiveRes: false,
       isActiveSch: false,
       isActiveMat: false,
     })
@@ -115,13 +132,11 @@ export default {
 
     const changeImgFile = async function (event) {
       if( event.target.files && event.target.files.length > 0 ) {
-        console.log(event.target.files, '파일')
         const file = event.target.files[0];
-        state.otherInfo.profileImage = file;
-        console.log(state.otherInfo)
+        state.otherInfo.profileImage = URL.createObjectURL(file);
         // let data = new FormData()
         // data.append("profileImage", file)
-        await store.dispatch('root/profileChangeImage', file)
+        await store.dispatch('root/profileChangeImage', { 'file': file })
       }
     }
 
