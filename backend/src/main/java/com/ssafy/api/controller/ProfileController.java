@@ -102,14 +102,14 @@ public class ProfileController {
             @ApiResponse(code = 200, message = "유저 프로필 이미지 수정에 성공했습니다.", response = BaseResponseBody.class),
     })
     public ResponseEntity<? extends BaseResponseBody> updateProfileImage(
-            @RequestParam(value = "profileImage", required = false) List<MultipartFile> file) {
-        MultipartFile image = file.get(0);
-        if (image != null && image.getSize() != 0) {
-            System.out.println(image.getOriginalFilename());
-            System.out.println(image.getSize());
+            @RequestParam(value = "profileImage", required = false) MultipartFile file) {
+
+        if (file != null) {
+            System.out.println(file.getOriginalFilename());
+            System.out.println(file.getSize());
 
             try {
-                String fileName = s3FileUploadService.upload(image);
+                String fileName = s3FileUploadService.upload(file);
                 profileService.updateMemberProfileImage(fileName);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -324,16 +324,9 @@ public class ProfileController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "예약 정보가 있는 체육시설 조회에 성공하였습니다.", response = ProfileRes.class),
     })
-    public ResponseEntity<? extends BaseResponseBody> searchMateLike() {
+    public ResponseEntity<? extends BaseResponseBody> searchMateLike(@PageableDefault(page = 0, size = 3) Pageable pageable) {
         List<ReservationRes> list= null;
 
-//        return ResponseEntity.status(200).body(
-//                ReservationListRes.of(
-//                        SUCCESS_SEARCH_PLACE_RESERVATION_TOTAL.getCode(),
-//                        SUCCESS_SEARCH_PLACE_RESERVATION_TOTAL.getMessage(),
-//                        list
-//                )
-//        );
         return null;
     }
 
