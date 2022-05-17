@@ -102,13 +102,14 @@ public class ProfileController {
             @ApiResponse(code = 200, message = "유저 프로필 이미지 수정에 성공했습니다.", response = BaseResponseBody.class),
     })
     public ResponseEntity<? extends BaseResponseBody> updateProfileImage(
-            @RequestParam(value = "profileImage", required = false) MultipartFile file) {
-        if (file != null && file.getSize() != 0) {
-            System.out.println(file.getOriginalFilename());
-            System.out.println(file.getSize());
+            @RequestParam(value = "profileImage", required = false) List<MultipartFile> file) {
+        MultipartFile image = file.get(0);
+        if (image != null && image.getSize() != 0) {
+            System.out.println(image.getOriginalFilename());
+            System.out.println(image.getSize());
 
             try {
-                String fileName = s3FileUploadService.upload(file);
+                String fileName = s3FileUploadService.upload(image);
                 profileService.updateMemberProfileImage(fileName);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -302,23 +303,19 @@ public class ProfileController {
 
     // 찜한 체육시설
     //// 찜한 체육시설의 정보는 몽고DB의 member 테이블 안의 자신의 멤버를 보면 알 수 있다
-    @GetMapping("/places/like")
+    @GetMapping("/places/like/{page}")
     @ApiOperation(value = "찜한 체육시설 조회", notes = "JWT토큰의 ID를 사용하여 찜한 체육시설목록을 조회한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "찜한 체육시설 조회에 성공하였습니다.", response = ProfilePlaceLikeListRes.class),
     })
-    public ResponseEntity<? extends BaseResponseBody> searchPlaceLike() {
+    public ResponseEntity<? extends BaseResponseBody> searchPlaceLike(@PathVariable("page") int page) {
 
         PlaceMember placeMember = placeService.getPlaceMemberFromAuthentication();
-        List<Place> list = profileService.searchPlaceLike(placeMember);
+        ProfilePlaceLikeListRes res = profileService.searchPlaceLike(placeMember, page);
 
-        return ResponseEntity.status(200).body(
-                ProfilePlaceLikeListRes.of(
-                        SUCCESS_SEARCH_PLACE_LIKE.getCode(),
-                        SUCCESS_SEARCH_PLACE_LIKE.getMessage(),
-                        list
-                )
-        );
+        res.setCode(SUCCESS_SEARCH_PLACE_LIKE.getCode());
+        res.setMessage(SUCCESS_SEARCH_PLACE_LIKE.getMessage());
+        return ResponseEntity.status(200).body(res);
     }
 
     // 찜한 메이트 공고

@@ -359,9 +359,24 @@ public class ProfileService {
 
 
     // 찜한 체육시설 찾기
-    public List<Place> searchPlaceLike(PlaceMember placeMember) {
+    public ProfilePlaceLikeListRes searchPlaceLike(PlaceMember placeMember, int page) {
         System.out.println(placeMember.getMemberId());
         System.out.println(placeMember.getLikeItems().size());
-        return placeRepository.findByPlaceIdIn(placeMember.getLikeItems());
+        List<Place> list = placeRepository.findByPlaceIdIn(placeMember.getLikeItems());
+
+        Long totalPages = Long.valueOf( list.size()/10 );
+        Long totalElements = Long.valueOf( list.size() );
+        System.out.println("TotalPages : " + totalPages + " || TotalElements : " + totalElements);
+
+        int fromIdx = page * 10;
+        int toIdx = fromIdx + 10;
+
+        if (totalElements < toIdx) toIdx = Math.toIntExact(totalElements);
+        if (page > totalPages) fromIdx = toIdx;
+        System.out.println("fromIdx : " + fromIdx + " || toIdx : " + toIdx);
+
+        list = list.subList(fromIdx, toIdx);
+
+        return ProfilePlaceLikeListRes.of(totalPages, totalElements, list);
     }
 }
