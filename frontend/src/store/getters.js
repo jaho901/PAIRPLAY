@@ -21,31 +21,31 @@ export function otherInfo(state) {
 }
 
 export function profileUserSchedule(state) {
-  return state.profileUserSchedule
+  return state.profileUserSchedule;
 }
 
 export function profileActivityPerDay(state) {
-  return state.profileActivityPerDay
+  return state.profileActivityPerDay;
 }
 
 export function profileDatePerDay(state) {
-  return state.profileDatePerDay
+  return state.profileDatePerDay;
 }
 
 export function profileMateListFromTotalPage(state) {
-  return state.profileMateListFromTotalPage
+  return state.profileMateListFromTotalPage;
 }
 
 export function profileMateListFrom(state) {
-  return state.profileMateListFrom
+  return state.profileMateListFrom;
 }
 
 export function profileMateListToTotalPage(state) {
-  return state.profileMateListToTotalPage
+  return state.profileMateListToTotalPage;
 }
 
 export function profileMateListTo(state) {
-  return state.profileMateListTo
+  return state.profileMateListTo;
 }
 
 export function profileReservationList(state) {
@@ -56,8 +56,11 @@ export function mateArticleList(state) {
   return state.mateArticleList;
 }
 
+export function matePage(state) {
+  return state.matePage;
+}
 export function mateArticlePage(state) {
-  return state.mateArticlePage
+  return state.mateArticlePage;
 }
 
 export function getPlaceInfo(state) {

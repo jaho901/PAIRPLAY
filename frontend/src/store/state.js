@@ -22,4 +22,7 @@ export default {
   placeLike: "",
   addPlaceFilters: "",
   mapPosition: [],
+  placeDetailInfo: "",
+  placeRecommend: [],
+  placeRecent: [],
 };

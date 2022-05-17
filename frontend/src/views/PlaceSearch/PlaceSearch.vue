@@ -8,8 +8,11 @@
     <place-search-filters></place-search-filters>
     <div class="container PlaceSearchContentFrame">
       <div class="placeSearchContent container d-flex justify-content-around align-items-start">
-        <div class="mt-4 col">
-          <div class="placeSearchTitle mb-3 ps-2">부산 {{}} 운동시설</div>
+        <div class="place-search-list-frame mt-4">
+          <div class="placeSearchTitle mb-3 ps-2" v-if="store.state.root.placeSearchInfo.placeList">
+            <strong>{{ store.state.root.placeSearchInfo.placeList[0].address.split(" ")[0] }} {{ store.state.root.placeSearchInfo.placeList[0].address.split(" ")[1] }}</strong
+            >에 위치한 <strong>{{ totalElements }}개</strong>의 시설
+          </div>
           <div class="py-2">
             <div class="placeSearchList">
               <place-search-list v-for="(card, idx) in cards" :key="idx" :card="card" :cardId="card.id" class="placeSearchList me-3 col"> </place-search-list>
@@ -35,7 +38,7 @@
             </div>
           </div>
         </div>
-        <place-search-maps class="col placeSearchMaps"></place-search-maps>
+        <place-search-maps :cards="cards" class="col placeSearchMaps"></place-search-maps>
       </div>
     </div>
     <footer>푸터</footer>
@@ -43,7 +46,7 @@
 </template>
 
 <script>
-import { onMounted, ref, reactive, computed } from "vue";
+import { onMounted, reactive, computed } from "vue";
 import { useStore } from "vuex";
 // import { useRoute } from "vue-router";
 import Header from "../Common/Header.vue";
@@ -58,9 +61,25 @@ export default {
     // console.log(store.state.root.addPlaceFilters);
     // const route = useRoute();
     let cards = reactive(computed(() => store.state.root.placeSearchInfo.placeList));
-    // let cards = reactive(computed(() => store.getters["root/getPlaceInfo"]));
-    let totalPages = ref(computed(() => store.state.root.placeSearchInfo.totalPages));
-    let nowPage = ref(computed(() => searchFiltersData.value["page"]));
+    let totalPages = reactive(computed(() => store.state.root.placeSearchInfo.totalPages));
+    let totalElements = reactive(computed(() => store.state.root.placeSearchInfo.totalElements));
+    // let address = reactive({
+    //   sido: computed(() => {
+    //     if (store.state.root.placeSearchInfo.placeList[0].address) {
+    //       return store.state.root.placeSearchInfo.placeList[0].address.split(" ")[0];
+    //     } else {
+    //       return store.state.root.userInfo.address.split(" ")[0];
+    //     }
+    //   }),
+    //   gugun: computed(() => {
+    //     if (store.state.root.placeSearchInfo.placeList) {
+    //       return store.state.root.placeSearchInfo.placeList[0].address.split(" ")[1];
+    //     } else {
+    //       return store.state.root.userInfo.address.split(" ")[1];
+    //     }
+    //   }),
+    // });
+    let nowPage = reactive(computed(() => searchFiltersData.value["page"]));
     let searchFiltersData = reactive(
       computed(() => store.state.root.addPlaceFilters)
       // categoryList: [route.params.categoryList],
@@ -72,6 +91,7 @@ export default {
       // searchWord: "",
       // startDate: "",
     );
+
     const getCards = async () => {
       await store.dispatch("root/getPlaceSearchInfo", searchFiltersData.value);
       if (store.state.root.placeSearchInfo) {
@@ -134,23 +154,26 @@ export default {
       await store.dispatch("root/getPlaceSearchInfo", searchFiltersData.value);
     };
     onMounted(async () => {
+      // await getCards();
       nowPage.value = computed(() => store.state.root.placeSearchInfo.page);
-
+      // console.log(cards, "카드들");
       // nowPage = computed(() => store.state.root.placeSearchInfo.page);
       // console.log(store.state.root.placeSearchInfo.page, "지금페이지");
 
       // if (nowPage.value == undefined) {
       //   nowPage.value = 0;
       // }
-      var activeBtn = document.getElementsByClassName("page-item")[0];
-      activeBtn.classList.add("active");
+      if (document.getElementsByClassName("page-item").length > 0) {
+        var activeBtn = document.getElementsByClassName("page-item")[0];
+        activeBtn.classList.add("active");
+      }
       // if (store.state.root.searchFiltersData.categoryList == []) {
       //   store.state.root.placeSearchInfo.categoryList = store.state.root.selectSportsCategory;
       // }
       // await getCards();
     });
 
-    return { cards, store, totalPages, nowPage, onMounted, changePage, /*getSearchFiltersData*/ getCards, prevPages, nextPages };
+    return { cards, store, totalPages, totalElements, nowPage, onMounted, changePage, /*getSearchFiltersData*/ getCards, prevPages, nextPages };
   },
 };
 </script>
@@ -167,7 +190,7 @@ export default {
 
   // width: 50%;
   // background-color: wheat;
-  max-height: 70vh;
+  max-height: 66vh;
   overflow-y: overlay;
   // overflow-x: overlay;
   // scrollbar-width: 0px;
@@ -179,11 +202,14 @@ export default {
 //   // display: none;
 //   // width: 0px;
 // }
+.place-search-list-frame {
+  width: 45%;
+}
 .placeSearchContent {
   max-width: 1400px;
 }
 .placeSearchTitle {
-  font-size: 16px;
+  font-size: 15px;
 }
 .paginationFrame {
   max-width: 70%;
@@ -193,6 +219,8 @@ export default {
   justify-content: center;
 }
 .page-item > .page-link {
+  width: 2.5rem;
+  text-align: center;
   background: white;
   color: black;
   line-height: 2rem;
