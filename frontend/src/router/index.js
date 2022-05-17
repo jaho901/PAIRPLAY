@@ -59,6 +59,11 @@ const routes = [
     name: "Profile",
     component: () => import("../views/Profile/Profile.vue"),
   },
+  {
+    path: "/ProfileTemp/temp",
+    name: "ProfileTemp",
+    component: () => import("../views/Profile/Components/ProfileTemp.vue"),
+  },
 ];
 
 const router = createRouter({

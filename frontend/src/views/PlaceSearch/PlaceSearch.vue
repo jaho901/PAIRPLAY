@@ -8,16 +8,37 @@
     <place-search-filters></place-search-filters>
     <div class="container PlaceSearchContentFrame">
       <div class="placeSearchContent container d-flex justify-content-around align-items-start">
-        <div class="mt-4 col">
-          <div class="placeSearchTitle mb-3 ps-2">부산 금정구 운동시설</div>
+        <div class="place-search-list-frame mt-4">
+          <div class="placeSearchTitle mb-3 ps-2" v-if="store.state.root.placeSearchInfo.placeList">
+            <strong>{{ store.state.root.placeSearchInfo.placeList[0].address.split(" ")[0] }} {{ store.state.root.placeSearchInfo.placeList[0].address.split(" ")[1] }}</strong
+            >에 위치한 <strong>{{ totalElements }}개</strong>의 시설
+          </div>
           <div class="py-2">
             <div class="placeSearchList">
-              <place-search-list v-for="card in cards" :key="card.idx" :card="card" class="placeSearchList me-3 col"> </place-search-list>
+              <place-search-list v-for="(card, idx) in cards" :key="idx" :card="card" :cardId="card.id" class="placeSearchList me-3 col"> </place-search-list>
+              <!-- 페이지네이션 시작 -->
+              <nav aria-label="Search results pages" class="paginationFrame">
+                <ul class="pagination">
+                  <li class="page-item-left" @click="prevPages">
+                    <a class="page-link" style="font-family: bootstrap-icons"> &#xF284; </a>
+                  </li>
+                  <!-- aria-current="page" -->
+                  <li v-for="(page, idx) in totalPages" @click="changePage($event)" :key="idx" class="page-item">
+                    <a class="page-link">{{ idx + 1 }}</a>
+                  </li>
+                  <!-- <li class="page-item"> -->
+                  <!-- <a class="page-link" href="#">{{ nowpage }}</a> -->
+                  <!-- </li> -->
+                  <li class="page-item-right" @click="nextPages">
+                    <a class="page-link" style="font-family: bootstrap-icons">&#xF285;</a>
+                  </li>
+                </ul>
+              </nav>
+              <!-- 페이지네이션 끝 -->
             </div>
           </div>
-          <!-- <place-search-maps class="placeSearchMaps col-6" style="height: 800px">아아</place-search-maps> -->
         </div>
-        <place-search-maps class="col placeSearchMaps">아아</place-search-maps>
+        <place-search-maps :cards="cards" class="col placeSearchMaps"></place-search-maps>
       </div>
     </div>
     <footer>푸터</footer>
@@ -25,62 +46,134 @@
 </template>
 
 <script>
-import { reactive } from "vue";
+import { onMounted, reactive, computed } from "vue";
+import { useStore } from "vuex";
+// import { useRoute } from "vue-router";
 import Header from "../Common/Header.vue";
 import PlaceSearchFilters from "./Components/PlaceSearchFilters.vue";
 import PlaceSearchList from "./Components/PlaceSearchList.vue";
 import PlaceSearchMaps from "./Components/PlaceSearchMaps.vue";
 export default {
   name: "PlaceSearch",
-
   components: { Header, PlaceSearchFilters, PlaceSearchList, PlaceSearchMaps },
   setup() {
-    const cards = reactive([
-      {
-        title: "장정구 복싱 체육관",
-        position: "부산 연제구",
-        imgUrl: "https://t4.ftcdn.net/jpg/00/83/15/95/240_F_83159570_JOI1NtD7MzEOqzTYIz3eTOhEm20HgGzp.jpg",
-        facility: "잔디, 바닥, 샤워",
-        rate: "3.9",
-        cost: "10,000원",
-      },
-      {
-        title: "위닝 헬스 클럽",
-        position: "부산 금정구",
-        imgUrl: "https://t4.ftcdn.net/jpg/02/67/46/51/240_F_267465121_hbjzEm2kJc9yowdM1TqCwdgNYZA76fse.jpg",
-        facility: "스미스 머신, 치닝디핑 바, 락커룸, 샤워",
-        rate: "3.9",
-        cost: "시간당 10,000원 ",
-      },
-      {
-        title: "피플 농구 gym",
-        position: "부산 해운대구",
-        imgUrl: "https://t3.ftcdn.net/jpg/04/95/38/22/240_F_495382282_buPZ5PEupMPyv1DzNnzKMtXdr4gDBVCC.jpg",
-        facility: "바닥, 농구 공 대여 가능, 장비 구매 가능, 샤워장",
-        rate: "4.5",
-        cost: "시간당 10,000원 ",
-      },
-      {
-        title: "해운대 실내 풋살장",
-        position: "부산 해운대구",
-        imgUrl: "https://t3.ftcdn.net/jpg/01/26/12/78/240_F_126127819_122Ec37M5l4ptz1AGZ4BsIp396yKm7se.jpg",
-        facility: "인조잔디, 공 대여, 신발대여가능 샤워",
-        rate: "4.0",
-        cost: "시간당 10,000원 ",
-      },
-      {
-        title: "부산 사하구 테니스실내코트장",
-        position: "부산 사하구",
-        imgUrl: "https://t3.ftcdn.net/jpg/01/66/25/70/240_F_166257070_l1cxVvzdBhzdtNDXro6Mibif2x80ovoP.jpg",
-        facility: "잔디, 테니스공 및 라켓 대여가능, 조명, 샤워시설",
-        rate: "4.1",
-        cost: "시간당 10,000원 ",
-      },
-    ]);
-
-    // const store = userStore();
+    const store = useStore();
+    // console.log(store.state.root.addPlaceFilters);
     // const route = useRoute();
-    return { cards };
+    let cards = reactive(computed(() => store.state.root.placeSearchInfo.placeList));
+    let totalPages = reactive(computed(() => store.state.root.placeSearchInfo.totalPages));
+    let totalElements = reactive(computed(() => store.state.root.placeSearchInfo.totalElements));
+    // let address = reactive({
+    //   sido: computed(() => {
+    //     if (store.state.root.placeSearchInfo.placeList[0].address) {
+    //       return store.state.root.placeSearchInfo.placeList[0].address.split(" ")[0];
+    //     } else {
+    //       return store.state.root.userInfo.address.split(" ")[0];
+    //     }
+    //   }),
+    //   gugun: computed(() => {
+    //     if (store.state.root.placeSearchInfo.placeList) {
+    //       return store.state.root.placeSearchInfo.placeList[0].address.split(" ")[1];
+    //     } else {
+    //       return store.state.root.userInfo.address.split(" ")[1];
+    //     }
+    //   }),
+    // });
+    let nowPage = reactive(computed(() => searchFiltersData.value["page"]));
+    let searchFiltersData = reactive(
+      computed(() => store.state.root.addPlaceFilters)
+      // categoryList: [route.params.categoryList],
+      // categoryList: ref(Object.values(store.state.root.selectSportsCategory)).value,
+      // endDate: "",
+      // gugun: "",
+      // page: 0,
+      // sido: "",
+      // searchWord: "",
+      // startDate: "",
+    );
+
+    const getCards = async () => {
+      await store.dispatch("root/getPlaceSearchInfo", searchFiltersData.value);
+      if (store.state.root.placeSearchInfo) {
+        totalPages = store.state.root.placeSearchInfo.totalPages;
+      }
+    };
+    const prevPages = async () => {
+      for (var i = 0; i < totalPages.value; i++) {
+        var Btn = document.getElementsByClassName("page-item")[searchFiltersData.value["page"]];
+        Btn.classList.remove("active");
+      }
+      if (searchFiltersData.value["page"] == 0) {
+        searchFiltersData.value["page"] = 0;
+        var activeBtn = document.getElementsByClassName("page-item")[searchFiltersData.value["page"]];
+      } else {
+        searchFiltersData.value["page"] -= 1;
+        activeBtn = document.getElementsByClassName("page-item")[searchFiltersData.value["page"]];
+      }
+
+      activeBtn.classList.add("active");
+      searchFiltersData.value["page"];
+      await store.dispatch("root/getPlaceSearchInfo", searchFiltersData.value);
+      console.log(nowPage.value);
+    };
+    const nextPages = async () => {
+      for (var i = 0; i < totalPages.value; i++) {
+        var Btn = document.getElementsByClassName("page-item")[i];
+        Btn.classList.remove("active");
+        activeBtn = document.getElementsByClassName("page-item")[searchFiltersData.value["page"]];
+      }
+      if (searchFiltersData.value["page"] == totalPages.value - 1) {
+        searchFiltersData.value["page"] == totalPages.value - 1;
+        var activeBtn = document.getElementsByClassName("page-item")[searchFiltersData.value["page"]];
+      } else {
+        searchFiltersData.value["page"] += 1;
+        activeBtn = document.getElementsByClassName("page-item")[searchFiltersData.value["page"]];
+      }
+
+      activeBtn.classList.add("active");
+      searchFiltersData.value["page"];
+      await store.dispatch("root/getPlaceSearchInfo", searchFiltersData.value);
+      console.log(nowPage.value);
+    };
+    const changePage = async (event) => {
+      console.log(event.target.textContent);
+      if (Number(event.target.textContent) <= 1) {
+        var activeBtn = document.getElementsByClassName("page-item")[0];
+      } else if (Number(event.target.textContent) >= totalPages.value) {
+        activeBtn = document.getElementsByClassName("page-item")[Number(event.target.textContent) - 1];
+      } else {
+        activeBtn = document.getElementsByClassName("page-item")[Number(event.target.textContent) - 1];
+      }
+      for (var i = 0; i < totalPages.value; i++) {
+        var Btn = document.getElementsByClassName("page-item")[i];
+        Btn.classList.remove("active");
+      }
+      // console.log(Number(event.target.textContent));
+      activeBtn.classList.add("active");
+      searchFiltersData.value["page"] = Number(event.target.textContent) - 1;
+      await store.dispatch("root/getPlaceSearchInfo", searchFiltersData.value);
+    };
+    onMounted(async () => {
+      // await getCards();
+      nowPage.value = computed(() => store.state.root.placeSearchInfo.page);
+      // console.log(cards, "카드들");
+      // nowPage = computed(() => store.state.root.placeSearchInfo.page);
+      // console.log(store.state.root.placeSearchInfo.page, "지금페이지");
+
+      // if (nowPage.value == undefined) {
+      //   nowPage.value = 0;
+      // }
+      if (document.getElementsByClassName("page-item").length > 0) {
+        var activeBtn = document.getElementsByClassName("page-item")[0];
+        activeBtn.classList.add("active");
+      }
+      // if (store.state.root.searchFiltersData.categoryList == []) {
+      //   store.state.root.placeSearchInfo.categoryList = store.state.root.selectSportsCategory;
+      // }
+      // await getCards();
+    });
+
+    return { cards, store, totalPages, totalElements, nowPage, onMounted, changePage, /*getSearchFiltersData*/ getCards, prevPages, nextPages };
   },
 };
 </script>
@@ -97,7 +190,7 @@ export default {
 
   // width: 50%;
   // background-color: wheat;
-  max-height: 70vh;
+  max-height: 66vh;
   overflow-y: overlay;
   // overflow-x: overlay;
   // scrollbar-width: 0px;
@@ -109,13 +202,68 @@ export default {
 //   // display: none;
 //   // width: 0px;
 // }
+.place-search-list-frame {
+  width: 45%;
+}
 .placeSearchContent {
   max-width: 1400px;
 }
 .placeSearchTitle {
-  font-size: 16px;
+  font-size: 15px;
 }
-
+.paginationFrame {
+  max-width: 70%;
+  margin: 1rem auto 0rem auto;
+}
+.pagination {
+  justify-content: center;
+}
+.page-item > .page-link {
+  width: 2.5rem;
+  text-align: center;
+  background: white;
+  color: black;
+  line-height: 2rem;
+  font-weight: bold;
+  border: #fafafa;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: (0 0 8px rgba(24, 24, 24, 0.05));
+  margin: 0rem 0.5rem 0rem 0.5rem;
+  // border: 1px solid rgba(1, 1, 1, 0.1);
+}
+.page-item-left > .page-link {
+  background: white;
+  color: black;
+  line-height: 2rem;
+  font-weight: bold;
+  border: #fafafa;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: (0 0 8px rgba(24, 24, 24, 0.05));
+  margin: 0rem 0.5rem 0rem 0.5rem;
+}
+.page-item-right > .page-link {
+  background: white;
+  color: black;
+  line-height: 2rem;
+  font-weight: bold;
+  border: #fafafa;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: (0 0 8px rgba(24, 24, 24, 0.05));
+  margin: 0rem 0.5rem 0rem 0.5rem;
+}
+.active > .page-link {
+  background: black;
+  color: white;
+  line-height: 2rem;
+  font-weight: bold;
+  border: #fafafa;
+  border-radius: 50%;
+  box-shadow: (0 0 8px rgba(24, 24, 24, 0.05));
+  margin: 0rem 0.5rem 0rem 0.5rem;
+}
 // .placeSearchListCards {
 // padding-left: 5px;
 // padding-right: 5px;

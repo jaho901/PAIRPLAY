@@ -107,7 +107,7 @@
     <div class="col-1"></div>
     <div class="col-9 pt-4">
       <div class="d-flex justify-content-between" v-if="state.isBirthDt==false">
-        <span>{{ state.otherInfo.birthDt[0] }}년 {{ state.otherInfo.birthDt[1] }}월 {{ state.otherInfo.birthDt[2] }}일</span>
+        <span>{{ state.otherInfo.birthDt }}</span>
         <div v-if="state.userInfo.memberId == state.otherInfo.memberId" class="edit" id="birthDt" @click="changeIsInfo($event)"></div>
       </div>
       <div class="d-flex justify-content-between" v-if="state.isBirthDt==true">
@@ -161,7 +161,7 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
+import { reactive, computed } from 'vue'
 import { useStore } from 'vuex'
 export default {
   name: "ProfileViewInfo",
@@ -172,8 +172,8 @@ export default {
   setup (props) {
     const store = useStore()
     const state = reactive({
-      userInfo: props.userInfo,
-      otherInfo: props.otherInfo,
+      userInfo: computed(() => props.userInfo),
+      otherInfo: computed(() => props.otherInfo),
       password: '',
       newPassword: '',
       newPasswordConfirm: '',
