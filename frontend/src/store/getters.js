@@ -48,6 +48,10 @@ export function profileMateListTo(state) {
   return state.profileMateListTo
 }
 
+export function profileReservationList(state) {
+  return state.profileReservationList
+}
+
 export function mateArticleList(state) {
   return state.mateArticleList;
 }

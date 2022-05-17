@@ -1,6 +1,6 @@
 <template>
   <h4 class="mt-5">
-    <b>{{ state.datePerDay.substr(0,4) }}년 {{ state.datePerDay.substr(5, 2) }}월 {{ state.datePerDay.substr(8, 10)}}일 활동 기록</b>
+    <!-- <b>{{ state.datePerDay.substr(0,4) }}년 {{ state.datePerDay.substr(5, 2) }}월 {{ state.datePerDay.substr(8, 10)}}일 활동 기록</b> -->
     <hr>
   </h4>
   <div v-if="state.activityPerDay.length >= 1">

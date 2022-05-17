@@ -9,7 +9,7 @@
           </a>
           <ul class="dropdown-menu dropdown-submenu px-2 text-align" @click="selectBusanGugun">
             <li class="d-flex justify-content-around text-start my-2">
-              <input type="button" class="dropdown-item ps-4" value="중구" />
+              <input type="button" class="dropdown-item ps-4" value="중구" @click="selectSidoGugun($event)">
               <input type="button" class="dropdown-item" value="서구" />
             </li>
             <li class="d-flex justify-content-around text-start my-2">
@@ -69,6 +69,7 @@
 // console.log();
 
 import { ref } from "vue";
+// import { useStore } from 'vuex'
 // import {useRoute} from "vue-router"
 // import {mapState, useStore} from "vuex"
 
@@ -76,15 +77,22 @@ export default {
   name: "MateFiltersRegion",
   emits: ["regionData"],
   setup(props, { emit }) {
+    // const store = useStore()
     const regionData = ref({ sido: "", gugun: "" });
     // const store = userStore();
     // const route = useRoute();
+
     const selectBusanGugun = (res) => {
       regionData.value.sido = "부산";
       regionData.value.gugun = res.target.value;
       emit("regionData", regionData.value);
     };
-    return { regionData, selectBusanGugun };
+
+    const selectSidoGugun = async function() {
+      // let search = event.target.value
+    }
+
+    return { regionData, selectBusanGugun, selectSidoGugun };
   },
 };
 // let getDropdownItemsData = document.querySelectorAll(".dropdown-item");

@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, reactive } from "vue";
 import { useStore } from 'vuex'
 
 export default {
@@ -82,20 +82,36 @@ export default {
   // setup(_, { emit }) {
   setup () {
     const store = useStore()
+    const state = reactive({
+      checkingCategory: {
+        '축구': 1, 
+        '풋살': 2, 
+        '농구': 3, 
+        '야구': 4, 
+        '볼링': 5, 
+        '골프': 6, 
+        '테니스': 7, 
+        '배드민턴': 8, 
+        '헬스': 9, 
+        '필라테스': 10, 
+        '격투기': 11, 
+        '수영': 12, 
+      }
+    })
     let sportsCategoryData = ref([]);
     const checkingClicked = {
-      축구: 0,
-      풋살: 0,
-      농구: 0,
-      야구: 0,
-      골프: 0,
-      볼링: 0,
-      수영: 0,
-      격투기: 0,
-      배드민턴: 0,
-      테니스: 0,
-      피트니스: 0,
-      필라테스: 0,
+      "축구": 0,
+      "풋살": 0,
+      "농구": 0,
+      "야구": 0,
+      "골프": 0,
+      "볼링": 0,
+      "수영": 0,
+      "격투기": 0,
+      "배드민턴": 0,
+      "테니스": 0,
+      "피트니스": 0,
+      "필라테스": 0,
     };
     const inputCategory = (res) => {
       if (checkingClicked[res.target.value]) {
@@ -106,19 +122,22 @@ export default {
       // console.log(checkingClicked, "확인용");
     };
     const submitSportsCategory = async function() {
-      console.log(checkingClicked)
-      await store.dispatch("root/change", checkingClicked)
-      // let temp = ref([]);
-      // for (let i = 0; i < Object.keys(checkingClicked).length; i++) {
-      //   if (checkingClicked[Object.keys(checkingClicked)[i]]) {
-      //     temp.value.push(Object.keys(checkingClicked)[i]);
-      //   }
-      // }
-      // sportsCategoryData = temp;
-      // emit("sportsCategoryData", sportsCategoryData.value);
+      let category = ''
+      for (var i in checkingClicked) {
+        if (checkingClicked[i] == 1) {
+          category = i
+        }
+      }
+      const body = {
+        "categoryId": state.checkingCategory[category],
+        "gungu": "",
+        "search": "",
+        "sido": ""
+      }
+      await store.dispatch("root/mateFilterChange", body)
     };
 
-    return { sportsCategoryData, checkingClicked, inputCategory, submitSportsCategory };
+    return { state, sportsCategoryData, checkingClicked, inputCategory, submitSportsCategory };
   },
 };
 </script>

@@ -28,7 +28,7 @@ export default {
     })
 
     onMounted (() => {
-      store.dispatch("root/profileUserSchedule")
+      store.dispatch("root/profileUserSchedule", state.otherInfo.memberId)
     })
 
     return { state, onMounted }

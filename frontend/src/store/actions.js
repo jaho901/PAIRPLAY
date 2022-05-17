@@ -149,16 +149,16 @@ export async function profileChangeInfo({ state, dispatch }, payload) {
 }
 
 export async function profileChangeImage({ state }, payload) {
-  const body = payload;
+  let formData = new FormData()
+  formData.append("profileImage", payload.file)
   console.log(state);
-  // const memberId = state.userInfo.memberId;
   const url = "profiles/profileImage";
   const header = localStorage.getItem("jwt");
   await $axios
-    .put(url, body, {
+    .post(url, formData, {
       headers: {
         Authorization: "Bearer " + header,
-        "Content-Type": "multipart/form-data",
+        // "Content-Type": "multipart/form-data",
       },
     })
     .then((res) => {
@@ -173,8 +173,9 @@ export async function profileChangeImage({ state }, payload) {
     });
 }
 
-export async function profileUserSchedule({ commit }) {
-  const url = `profiles/calendar`
+export async function profileUserSchedule({ commit }, payload) {
+  const memberId = payload
+  const url = `profiles/calendar/${memberId}`
   const header = localStorage.getItem("jwt");
   await $axios
     .get(url, {
@@ -183,7 +184,7 @@ export async function profileUserSchedule({ commit }) {
       },
     })
     .then((res) => {
-      console.log(typeof(res.data.list[0].date[0]))
+      console.log(res)
       commit("PROFILE_USER_SCHEDULE", res.data.list)
     })
     .catch((err) => {
@@ -202,6 +203,7 @@ export async function profileDateTodo({ commit }, payload) {
       },
     })
     .then((res) => {
+      console.log(res)
       commit("PROFILE_ACTIVITY_PER_DAY", res.data.calendarDetailActivityResList)
       commit("PROFILE_DATE_PER_DAY", body.date)
     })
@@ -211,7 +213,7 @@ export async function profileDateTodo({ commit }, payload) {
 }
 
 export async function profileMateListFrom({ commit }, payload) {
-  const page = payload["body"]
+  const page = payload["page"]
   const size = payload["size"]
   const url = `profiles/mates/received?page=${page}&size=${size}`
   const jwt = localStorage.getItem("jwt");
@@ -229,8 +231,51 @@ export async function profileMateListFrom({ commit }, payload) {
   })
 }
 
+export async function profileMateFromAccept({ dispatch }, payload) {
+  const url = 'profiles/mates/accept'
+  const body = { "id": payload['id'] }
+  const page = payload['page']
+  const jwt = localStorage.getItem("jwt")
+  await $axios
+    .put(url, body, {
+      headers: {
+        Authorization: "Bearer " + jwt
+      }
+    })
+    .then((res) => {
+      console.log(res)
+      dispatch("profileMateListFrom", {
+        'page': page, 'size': 3
+      })
+    })
+    .catch((err) => {
+      console.log(err)
+  })
+}
+
+export async function profileMateFromReject({ dispatch }, payload) {
+  const id = payload['id']
+  const url = `profiles/mates/reject/${id}`
+  const jwt = localStorage.getItem("jwt")
+  await $axios
+    .delete(url, {
+      headers: {
+        Authorization: "Bearer " + jwt
+      }
+    })
+    .then((res) => {
+      console.log(res)
+      dispatch("profileMateListFrom", {
+        'page': payload['page'], 'size': 3
+      })
+    })
+    .catch((err) => {
+      console.log(err)
+  })
+}
+
 export async function profileMateListTo({ commit }, payload) {
-  const page = payload["body"]
+  const page = payload["page"]
   const size = payload["size"]
   const url = `profiles/mates/send?page=${page}&size=${size}`
   const jwt = localStorage.getItem("jwt");
@@ -242,6 +287,160 @@ export async function profileMateListTo({ commit }, payload) {
     })
     .then((res) => {
       commit("PROFILE_MATE_LIST_TO", res.data)
+    })
+    .catch((err) => {
+      console.log(err)
+  })
+}
+
+export async function profileReservationList({ commit }, payload) {
+  const page = payload
+  const url = `profiles/places/${page}`
+  const jwt = localStorage.getItem("jwt")
+  await $axios
+    .get(url, {
+      headers: {
+        Authorization: "Bearer " + jwt
+      }
+    })
+    .then((res) => {
+      commit("PROFILE_RESERVATION_LIST", res.data)
+    })
+    .catch((err) => {
+      console.log(err)
+  })
+}
+
+export async function profileReservationListMore({ commit }, payload) {
+  const page = payload
+  const url = `profiles/places/${page}`
+  const jwt = localStorage.getItem("jwt")
+  await $axios
+    .get(url, {
+      headers: {
+        Authorization: "Bearer " + jwt
+      }
+    })
+    .then((res) => {
+      commit("PROFILE_RESERVATION_LIST_MORE", { 'dataList': res.data, 'page': page })
+    })
+    .catch((err) => {
+      console.log(err)
+  })
+}
+
+export async function profileReservationDoingList({ commit }, payload) {
+  const page = payload
+  const url = `profiles/places/reservation/${page}`
+  const jwt = localStorage.getItem("jwt")
+  await $axios
+    .get(url, {
+      headers: {
+        Authorization: "Bearer " + jwt
+      }
+    })
+    .then((res) => {
+      commit("PROFILE_RESERVATION_LIST", res.data)
+    })
+    .catch((err) => {
+      console.log(err)
+  })
+}
+
+export async function profileReservationDoingListMore({ commit }, payload) {
+  const page = payload
+  const url = `profiles/places/reservation/${page}`
+  const jwt = localStorage.getItem("jwt")
+  await $axios
+    .get(url, {
+      headers: {
+        Authorization: "Bearer " + jwt
+      }
+    })
+    .then((res) => {
+      commit("PROFILE_RESERVATION_LIST_MORE", { 'dataList': res.data, 'page': page })
+    })
+    .catch((err) => {
+      console.log(err)
+  })
+}
+
+export async function profileReservationDoneList({ commit }, payload) {
+  const page = payload
+  const url = `profiles/places/used/${page}`
+  const jwt = localStorage.getItem("jwt")
+  await $axios
+    .get(url, {
+      headers: {
+        Authorization: "Bearer " + jwt
+      }
+    })
+    .then((res) => {
+      commit("PROFILE_RESERVATION_LIST", res.data)
+    })
+    .catch((err) => {
+      console.log(err)
+  })
+}
+
+export async function profileReservationDoneListMore({ commit }, payload) {
+  const page = payload
+  const url = `profiles/places/used/${page}`
+  const jwt = localStorage.getItem("jwt")
+  await $axios
+    .get(url, {
+      headers: {
+        Authorization: "Bearer " + jwt
+      }
+    })
+    .then((res) => {
+      commit("PROFILE_RESERVATION_LIST_MORE", { 'dataList': res.data, 'page': page })
+    })
+    .catch((err) => {
+      console.log(err)
+  })
+}
+
+export async function profileCancelPlaceReservation({ dispatch }, payload) {
+  const url = `places/reservation`
+  const body = payload
+  console.log(body)
+  console.log(typeof(body["reservationId"]))
+  const jwt = localStorage.getItem("jwt")
+  await $axios
+    .delete(url, {
+      data: {
+        'reservationId': body['reservationId']
+      }
+    }, {
+      headers: {
+        Authorization: "Bearer " + jwt
+      }
+    })
+    .then((res) => {
+      console.log(res)
+      dispatch("profileReservationList")
+    })
+    .catch((err) => {
+      console.log(err)
+  })
+}
+
+export async function profileMateToCancle({ dispatch }, payload) {
+  const id = payload['id']
+  const url = `profiles/mates/cancel/${id}`
+  const jwt = localStorage.getItem("jwt")
+  await $axios
+    .delete(url, {
+      headers: {
+        Authorization: "Bearer " + jwt
+      }
+    })
+    .then((res) => {
+      console.log(res)
+      dispatch("profileMateListTo", {
+        'page': payload['page'], 'size': 3
+      })
     })
     .catch((err) => {
       console.log(err)
@@ -267,8 +466,24 @@ export async function mateArticleList({ commit }, payload) {
       console.log(err);
     });
 }
-export async function change({ commit }, payload) {
-  await commit("CHANGE", payload);
+export async function mateFilterChange({ commit }, payload) {
+  const jwt = localStorage.getItem("jwt");
+  const body = payload
+  const url = `mates?page=0&size=8`;
+  await $axios
+    .post(url, body, {
+      headers: {
+        Authorization: "Bearer " + jwt,
+      },
+    })
+    .then((res) => {
+      console.log(res)
+      commit("MATE_ARTICLE_LIST", res.data.list);
+      commit("MATE_ARTICLE_PAGE", 0);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
 
 export async function getPlaceSearchInfo({ commit }, searchFiltersData) {
