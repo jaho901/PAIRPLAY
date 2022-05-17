@@ -8,6 +8,7 @@ import com.ssafy.domain.document.MyReservation;
 import com.ssafy.domain.document.Place;
 import com.ssafy.domain.document.PlaceMember;
 import com.ssafy.domain.entity.Activity;
+import com.ssafy.domain.entity.ActivityLike;
 import com.ssafy.domain.entity.Mate;
 import com.ssafy.domain.entity.Member;
 import com.ssafy.domain.repository.*;
@@ -36,11 +37,12 @@ public class ProfileService {
     private final PlaceRepository placeRepository;
     private final S3FileUploadService s3FileUploadService;
     private final ReservationRepository reservationRepository;
+    private final ActivityLikeRepository activityLikeRepository;
     private final ReservationRepositorySupport reservationRepositorySupport;
 
     public ProfileService(MemberRepository memberRepository, ActivityRepository activityRepository, MateRepository mateRepository,
                           PlaceReservationRepository placeReservationRepository, PlaceRepository placeRepository, S3FileUploadService s3FileUploadService,
-                          ReservationRepository reservationRepository, ReservationRepositorySupport reservationRepositorySupport ) {
+                          ReservationRepository reservationRepository, ActivityLikeRepository activityLikeRepository, ReservationRepositorySupport reservationRepositorySupport ) {
         this.memberRepository = memberRepository;
         this.activityRepository = activityRepository;
         this.mateRepository = mateRepository;
@@ -48,6 +50,7 @@ public class ProfileService {
         this.placeRepository = placeRepository;
         this.s3FileUploadService = s3FileUploadService;
         this.reservationRepository = reservationRepository;
+        this.activityLikeRepository = activityLikeRepository;
         this.reservationRepositorySupport = reservationRepositorySupport;
     }
 
@@ -359,9 +362,36 @@ public class ProfileService {
 
 
     // 찜한 체육시설 찾기
-    public List<Place> searchPlaceLike(PlaceMember placeMember) {
+    public ProfilePlaceLikeListRes searchPlaceLike(PlaceMember placeMember, int page) {
         System.out.println(placeMember.getMemberId());
         System.out.println(placeMember.getLikeItems().size());
-        return placeRepository.findByPlaceIdIn(placeMember.getLikeItems());
+        List<Place> list = placeRepository.findByPlaceIdIn(placeMember.getLikeItems());
+
+        Long totalPages = Long.valueOf( list.size()/3 );
+        Long totalElements = Long.valueOf( list.size() );
+        System.out.println("TotalPages : " + totalPages + " || TotalElements : " + totalElements);
+
+        int fromIdx = page * 3;
+        int toIdx = fromIdx + 3;
+
+        if (totalElements < toIdx) toIdx = Math.toIntExact(totalElements);
+        if (page > totalPages) fromIdx = toIdx;
+        System.out.println("fromIdx : " + fromIdx + " || toIdx : " + toIdx);
+
+        list = list.subList(fromIdx, toIdx);
+
+        return ProfilePlaceLikeListRes.of(totalPages, totalElements, list);
+    }
+
+    public Page<ActivityLike> searchActivityLike(Pageable pageable) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long memberId = Long.parseLong(authentication.getName());
+        System.out.println(memberId);
+
+        Page<ActivityLike> activityLikeList = activityLikeRepository.findByMemberId_Id(memberId, pageable);
+        System.out.println(activityLikeList.getTotalPages());
+        System.out.println(activityLikeList.getTotalElements());
+
+        return activityLikeList;
     }
 }

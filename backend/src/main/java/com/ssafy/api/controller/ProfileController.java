@@ -12,14 +12,17 @@ import com.ssafy.api.service.S3FileUploadService;
 import com.ssafy.common.handler.CustomException;
 import com.ssafy.domain.document.Place;
 import com.ssafy.domain.document.PlaceMember;
+import com.ssafy.domain.entity.ActivityLike;
 import com.ssafy.domain.entity.Member;
 import io.swagger.annotations.*;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -103,7 +106,8 @@ public class ProfileController {
     })
     public ResponseEntity<? extends BaseResponseBody> updateProfileImage(
             @RequestParam(value = "profileImage", required = false) MultipartFile file) {
-        if (file != null && file.getSize() != 0) {
+
+        if (file != null) {
             System.out.println(file.getOriginalFilename());
             System.out.println(file.getSize());
 
@@ -302,42 +306,40 @@ public class ProfileController {
 
     // 찜한 체육시설
     //// 찜한 체육시설의 정보는 몽고DB의 member 테이블 안의 자신의 멤버를 보면 알 수 있다
-    @GetMapping("/places/like")
+    @GetMapping("/places/like/{page}")
     @ApiOperation(value = "찜한 체육시설 조회", notes = "JWT토큰의 ID를 사용하여 찜한 체육시설목록을 조회한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "찜한 체육시설 조회에 성공하였습니다.", response = ProfilePlaceLikeListRes.class),
     })
-    public ResponseEntity<? extends BaseResponseBody> searchPlaceLike() {
+    public ResponseEntity<? extends BaseResponseBody> searchPlaceLike(@PathVariable("page") int page) {
 
         PlaceMember placeMember = placeService.getPlaceMemberFromAuthentication();
-        List<Place> list = profileService.searchPlaceLike(placeMember);
+        ProfilePlaceLikeListRes res = profileService.searchPlaceLike(placeMember, page);
 
-        return ResponseEntity.status(200).body(
-                ProfilePlaceLikeListRes.of(
-                        SUCCESS_SEARCH_PLACE_LIKE.getCode(),
-                        SUCCESS_SEARCH_PLACE_LIKE.getMessage(),
-                        list
-                )
-        );
+        res.setCode(SUCCESS_SEARCH_PLACE_LIKE.getCode());
+        res.setMessage(SUCCESS_SEARCH_PLACE_LIKE.getMessage());
+        return ResponseEntity.status(200).body(res);
     }
 
     // 찜한 메이트 공고
+    @Transactional
     @GetMapping("/mates/like")
     @ApiOperation(value = "찜한 메이트 공고 조회", notes = "JWT토큰의 ID를 사용하여 찜한 메이트 공고목록을 조회한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "예약 정보가 있는 체육시설 조회에 성공하였습니다.", response = ProfileRes.class),
     })
-    public ResponseEntity<? extends BaseResponseBody> searchMateLike() {
-        List<ReservationRes> list= null;
+    public ResponseEntity<? extends BaseResponseBody> searchMateLike(@PageableDefault(page = 0, size = 3) Pageable pageable) {
+        Page<ActivityLike> page= profileService.searchActivityLike(pageable);
 
-//        return ResponseEntity.status(200).body(
-//                ReservationListRes.of(
-//                        SUCCESS_SEARCH_PLACE_RESERVATION_TOTAL.getCode(),
-//                        SUCCESS_SEARCH_PLACE_RESERVATION_TOTAL.getMessage(),
-//                        list
-//                )
-//        );
-        return null;
+        return ResponseEntity.status(200).body(
+                ProfileActivityLikeRes.of(
+                        SUCCESS_SEARCH_MATE_LIKE.getCode(),
+                        SUCCESS_SEARCH_MATE_LIKE.getMessage(),
+                        page.getTotalPages(),
+                        page.getTotalElements(),
+                        page
+                )
+        );
     }
 
 
