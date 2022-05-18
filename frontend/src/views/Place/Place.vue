@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="checkJwt()">
     <!-- 헤더 -->
     <div style="max-width: 1255px; margin: auto">
       <Header></Header>
@@ -59,17 +59,31 @@ import PlaceRecommend from "./Components/PlaceRecommend.vue";
 import Header from "../Common/Header.vue";
 import Footer from "../Common/Footer.vue";
 
-import { computed, reactive } from "vue";
+import { computed, onMounted, reactive } from "vue";
 import { useStore } from "vuex";
-
+import { useRouter } from "vue-router";
 export default {
   name: "Place",
   components: { Header, Footer, PlaceCategory, PlaceRecommend, PlaceRecentView },
   setup() {
     const store = useStore();
+    const router = useRouter();
     const address = reactive(computed(() => store.state.root.userInfo.address));
     // const route = useRoute();
-    return { address };
+    const checkJwt = () => {
+      if (localStorage.getItem("jwt")) {
+        // pass
+        return true;
+      } else {
+        router.push({
+          name: "Login",
+        });
+      }
+    };
+    onMounted(() => {
+      checkJwt();
+    });
+    return { address, onMounted, checkJwt };
   },
 };
 </script>

@@ -5,15 +5,26 @@
       <div class="wrapper d-flex flex-row">
         <div class="d-flex row">
           <div class="d-flex">
-            <div class="col menu justify-content-center">10,000원</div>
-            <div class="col menu justify-content-center">10,000원</div>
-            <div class="col menu justify-content-center">10,000원</div>
-            <div class="col menu justify-content-center">10,000원</div>
-            <div class="col menu justify-content-center">10,000원</div>
-            <div class="col menu justify-content-center">10,000원</div>
-            <div class="col menu justify-content-center">10,000원</div>
+            <!-- <div class="col menu justify-content-center">10,000원</div> -->
+            <div class="col menu justify-content-center">1 / 20</div>
+            <div class="col menu justify-content-center">1 / 20</div>
+
+            <div class="col menu justify-content-center">1 / 20</div>
+            <div class="col menu justify-content-center">1 / 20</div>
+            <div class="col menu justify-content-center">1 / 20</div>
+            <div class="col menu justify-content-center">1 / 20</div>
+            <div class="col menu justify-content-center">1 / 20</div>
+            <div class="col menu justify-content-center">1 / 20</div>
+            <div class="col menu justify-content-center">1 / 20</div>
+            <div class="col menu justify-content-center">1 / 20</div>
+            <div class="col menu justify-content-center">1 / 20</div>
+            <div class="col menu justify-content-center">1 / 20</div>
+            <div class="col menu justify-content-center">1 / 20</div>
+            <div class="col menu justify-content-center">1 / 20</div>
+            <div class="col menu justify-content-center">1 / 20</div>
           </div>
           <div class="d-flex justify-content-between">
+            <p class="time-mark">08:00</p>
             <p class="time-mark">09:00</p>
             <p class="time-mark">10:00</p>
             <p class="time-mark">11:00</p>
@@ -28,7 +39,6 @@
             <p class="time-mark">20:00</p>
             <p class="time-mark">21:00</p>
             <p class="time-mark">22:00</p>
-            <p class="time-mark">23:00</p>
           </div>
         </div>
         <!-- <div class="col">
@@ -83,7 +93,7 @@
       </div>
     </div>
     <div class="d-flex justify-content-center mt-3">
-      <div class="btn reservation me-3">예약</div>
+      <div class="btn reservation me-3" @click="requestPay">예약</div>
       <div class="btn btn-secondary ms-3">취소</div>
     </div>
   </div>
@@ -100,10 +110,38 @@ export default {
 
   setup() {
     const date = ref(new Date());
+    const requestPay = function () {
+      const { IMP } = window;
+      IMP.init("imp57638465"); //iamport 대신 자신의 "가맹점 식별코드"를 사용
+      IMP.request_pay(
+        {
+          pg: "inicis",
+          pay_method: "card",
+          merchantuid: "merchant" + new Date().getTime(),
+          name: "결제테스트",
+          amount: 0, // 결제금액
+          buyer_email: "iamport@siot.do",
+          buyer_name: "구매자",
+          buyer_tel: "010-1234-5678",
+          buyer_addr: "서울특별시 강남구 삼성동",
+          buyer_postcode: "123-456",
+        },
+        function (rsp) {
+          // callback
+          if (rsp.success) {
+            console.log("결제성공");
+            alert("예약이 완료되었습니다.");
+          } else {
+            console.log("결제실패");
+          }
+        }
+      );
+    };
     onMounted(() => {});
     // const picked = ref(new Date());
     return {
       date,
+      requestPay,
       // picked,
     };
     // const store = userStore();
@@ -161,14 +199,17 @@ export default {
   overflow-x: auto;
   display: flex;
   flex-direction: row;
-  width: 120%;
+  width: 300%;
+  // width: 200%;
 }
 .menu {
   // display: inline-block;
   text-align: center;
   background-color: #1976d2;
   padding: 0.8rem 0.2rem 0.8rem 0.2rem;
-  margin: 0rem 0rem 0rem 0.2rem;
+  margin: 0rem 0rem 0rem 0.8rem;
+  // margin: 0rem 0rem 0rem 0.2rem;
+
   box-shadow: 0 0 8px rgba(24, 24, 24, 0.1);
   color: white;
   border-radius: 5px;

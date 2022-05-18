@@ -2,12 +2,14 @@
   <div>
     <naver-maps class="naverMaps" style="width: 100%; height: 100vh; position: sticky" :mapOptions="mapOptions" :initLayers="initLayers" @onLoad="onLoadMap($event)">
       <naver-marker v-for="card in cards" :key="card.id" :latitude="card.latitude" :longitude="card.longitude" @click="popUP($event)">
-        <div class="marker">
-          <i class="bi bi-geo-alt-fill"></i> {{ card.name }}
+        <div class="marker d-flex">
+          <i class="bi bi-geo-alt-fill"></i>
+          {{ card.name }}
           <div class="show">
-            <div class="d-flex flex-column">
-              <img :src="`${card.img[0]}`" class="card-image" alt="" />
-            </div>
+            <!-- <div class="d-flex flex-column"> -->
+            <!-- <div>{{ card.name }}</div> -->
+            <img :src="`${card.img[0]}`" class="card-image" alt="" />
+            <!-- </div> -->
           </div>
         </div>
       </naver-marker>
@@ -79,9 +81,9 @@ export default {
       return tempLongitude;
     };
     const popUP = (event) => {
-      // console.log(event.pointerEvent.target);
+      console.log(event.pointerEvent.target);
       var showElement = event.pointerEvent.target.querySelector(".show");
-      // console.log(showElement);
+      console.log(showElement);
       if (showElement.classList.contains("active")) {
         showElement.classList.remove("active");
         console.log(showElement);
@@ -154,7 +156,7 @@ export default {
   max-width: 10rem;
   border-radius: 0.5rem;
   background: white;
-  font-size: 12px;
+  font-size: 0.81rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -205,6 +207,9 @@ export default {
 .card-image {
   width: 100%;
   // object-fit: cover;
+}
+.bi-geo-alt-fill {
+  font-size: 1rem;
 }
 // .marker.show {
 //   background-color: black;

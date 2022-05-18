@@ -25,7 +25,15 @@
       <div class="col-lg-2">
         <div class="input-group flex-nowrap">
           <!-- <span class="input-group-text" id="addon-wrapping">@</span> -->
-          <input type="text" class="form-control serachbar" placeholder="&#xf52a;  시설명, 해시태그 입력" aria-label="Username" aria-describedby="addon-wrapping" />
+          <input
+            type="text"
+            class="form-control serachbar"
+            placeholder="&#xf52a;  시설명, 해시태그 입력"
+            @input="inputWord"
+            @keyup.enter="addSearchWord"
+            aria-label="Username"
+            aria-describedby="addon-wrapping"
+          />
         </div>
       </div>
     </div>
@@ -58,11 +66,11 @@ export default {
       endDate: "",
       categoryList: [],
       page: 0,
+      searchWord: "",
     });
-    // console.log(store.state.root.addPlaceFilters, "store.state.root.addPlaceFilters");
+    const word = ref("");
     const selectRegion = (res) => {
       console.log(res, "지역나오나");
-      // console.log(res, "나옵니까");
       searchFiltersData.value.sido = res.sido;
       searchFiltersData.value.gugun = res.gugun;
     };
@@ -81,13 +89,17 @@ export default {
       }
       // console.log(res);
     };
-    // searchFiltersData.value.region.sido = regionData.sido;
-    // searchFiltersData.value.region.gugun = regionData.gugun;
-    // let value = [20, 40];
-    // const format = (value) => {
-    //   return `${value}원`;
-    // };
-    // console.log(searchFiltersData, "아아");
+    const inputWord = async (e) => (word.value = e.target.value);
+
+    const addSearchWord = () => {
+      console.log(word.value, "검색어임");
+      searchFiltersData.value.searchWord = word.value;
+      console.log(searchFiltersData.value.searchWord, "추가됬음?");
+    };
+    const changeFilters = async () => {
+      console.log(searchFiltersData.value);
+      await store.dispatch("root/addPlaceFilters", searchFiltersData.value);
+    };
     const cancelFilters = () => {
       searchFiltersData.value.price = "";
       searchFiltersData.value.sido = "";
@@ -96,16 +108,18 @@ export default {
       searchFiltersData.value.endDate = "";
       searchFiltersData.value.categoryList = [];
       searchFiltersData.value.page = 0;
+      searchFiltersData.value.page = 0;
+      searchFiltersData.value.searchWord = "";
       router.go(0);
     };
     watch(searchFiltersData.value, async () => {
+      await changeFilters();
       // console.log(res, "맞나이거");
       // console.log(searchFiltersData.value, "searchFiltersData.value");
       // emit("searchFiltersData", searchFiltersData.value);
-      await store.dispatch("root/addPlaceFilters", searchFiltersData.value);
     });
     // const refresh = () =>
-    return { searchFiltersData, selectRegion, selectTime, selectSportsCategory, cancelFilters };
+    return { searchFiltersData, selectRegion, selectTime, selectSportsCategory, cancelFilters, inputWord, addSearchWord, changeFilters };
   },
 };
 </script>
