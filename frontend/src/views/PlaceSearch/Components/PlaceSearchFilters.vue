@@ -10,27 +10,17 @@
         <place-search-filter-sports-category @sportsCategoryData="selectSportsCategory"></place-search-filter-sports-category>
         <place-search-filters-time @timeData="selectTime"></place-search-filters-time>
         <div class="btn btn-Cancel btn-secondary" type="button" @click="cancelFilters">초기화</div>
-        <!-- <div class="btn-group">
-        <button type="button" class="btn btnPlace dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" :aria-expanded="`${expand}`">Price</button>
-        <ul class="dropdown-menu ps-5" style="width: 400px; height: 300px; font-size: 14px">
-          <Slider v-model="value" type="input" :format="format" />
-          <div class="d-flex justify-content-around">
-            <button type="button" class="btn btn-dark mb-2" @click="changedExpand">적용</button>
-            <button type="button" class="btn btn-outline-secondary mb-2">취소</button>
-          </div>
-        </ul>
-      </div> -->
         <!-- 지역 -->
       </div>
       <div class="col-lg-2">
         <div class="input-group flex-nowrap">
-          <!-- <span class="input-group-text" id="addon-wrapping">@</span> -->
+          <!-- <input @keyup.enter="inputWord($event)" type="text" class="form-control serachbar" placeholder="&#xf52a;  시설명, 해시태그 입력" aria-label="Username" aria-describedby="addon-wrapping" />           -->
           <input
+            v-model="searchFiltersData.searchWord"
+            @keyup.enter="inputWord"
             type="text"
             class="form-control serachbar"
-            placeholder="&#xf52a;  시설명, 해시태그 입력"
-            @input="inputWord"
-            @keyup.enter="addSearchWord"
+            placeholder="&#xf52a; 시설명, 해시태그 입력"
             aria-label="Username"
             aria-describedby="addon-wrapping"
           />
@@ -41,7 +31,7 @@
 </template>
 
 <script>
-import { ref, watch } from "vue";
+import { reactive, ref, watch } from "vue";
 // import PlaceSearchFiltersPrice from "./PlaceSearchFiltersPrice.vue";
 import PlaceSearchFiltersRegion from "./PlaceSearchFiltersRegion.vue";
 import PlaceSearchFiltersTime from "./PlaceSearchFiltersTime.vue";
@@ -58,7 +48,7 @@ export default {
   setup(/*_, { emit }*/) {
     const store = useStore();
     const router = useRouter();
-    let searchFiltersData = ref({
+    let searchFiltersData = reactive({
       price: "",
       sido: "",
       gugun: "",
@@ -71,55 +61,65 @@ export default {
     const word = ref("");
     const selectRegion = (res) => {
       console.log(res, "지역나오나");
-      searchFiltersData.value.sido = res.sido;
-      searchFiltersData.value.gugun = res.gugun;
+      searchFiltersData.sido = res.sido;
+      searchFiltersData.gugun = res.gugun;
     };
     const selectTime = (res) => {
       let startTime = new Date(+res[0] + 3240 * 10000).toISOString().replace("T", " ").replace(/\..*/, "").substring(0, 10);
       let endTime = new Date(+res[1] + 3240 * 10000).toISOString().replace("T", " ").replace(/\..*/, "").substring(0, 10);
-      searchFiltersData.value.startDate = startTime;
-      searchFiltersData.value.endDate = endTime;
+      searchFiltersData.startDate = startTime;
+      searchFiltersData.endDate = endTime;
     };
     const selectSportsCategory = (res) => {
       if (res) {
         //   console.log(res, "고른 스포츠");
-        searchFiltersData.value.categoryList = res;
+        searchFiltersData.categoryList = res;
       } else {
-        searchFiltersData.value.categoryList = store.state.root.selectSportsCategory;
+        searchFiltersData.categoryList = store.state.root.selectSportsCategory;
       }
       // console.log(res);
     };
-    const inputWord = async (e) => (word.value = e.target.value);
+    // const  async (e) => {
+    //   word.value = e.target.value;
+    //   console.log(word.value, "검색어추가함");
+    //   await store.dispatch("root/addSearchWord", [searchFiltersData, word.value]);
+    //   // searchFiltersData.searchWord = e.target.value;
+    // };
 
-    const addSearchWord = () => {
-      console.log(word.value, "검색어임");
-      searchFiltersData.value.searchWord = word.value;
-      console.log(searchFiltersData.value.searchWord, "추가됬음?");
-    };
+    // const = () => {
+    //   console.log(word.value, "검색어임");
+    //   searchFiltersData.searchWord = word.value;
+    //   console.log(searchFiltersData.value.searchWord, "추가됬음?");
+    // };
     const changeFilters = async () => {
-      console.log(searchFiltersData.value);
-      await store.dispatch("root/addPlaceFilters", searchFiltersData.value);
+      console.log(searchFiltersData);
+      await store.dispatch("root/addPlaceFilters", searchFiltersData);
     };
     const cancelFilters = () => {
-      searchFiltersData.value.price = "";
-      searchFiltersData.value.sido = "";
-      searchFiltersData.value.gugun = "";
-      searchFiltersData.value.startDate = "";
-      searchFiltersData.value.endDate = "";
-      searchFiltersData.value.categoryList = [];
-      searchFiltersData.value.page = 0;
-      searchFiltersData.value.page = 0;
-      searchFiltersData.value.searchWord = "";
+      searchFiltersData.price = "";
+      searchFiltersData.sido = "";
+      searchFiltersData.gugun = "";
+      searchFiltersData.startDate = "";
+      searchFiltersData.endDate = "";
+      searchFiltersData.categoryList = [];
+      searchFiltersData.page = 0;
+      searchFiltersData.page = 0;
+      searchFiltersData.searchWord = "";
       router.go(0);
     };
-    watch(searchFiltersData.value, async () => {
+    watch(searchFiltersData, async () => {
+      // word.value = "";
       await changeFilters();
-      // console.log(res, "맞나이거");
-      // console.log(searchFiltersData.value, "searchFiltersData.value");
-      // emit("searchFiltersData", searchFiltersData.value);
     });
+    // watch(() => {
+    //   if (word.value.length == 0) {
+    //     async () => {
+    //       // await changeFilters();
+    //     };
+    //   }
+    // });
     // const refresh = () =>
-    return { searchFiltersData, selectRegion, selectTime, selectSportsCategory, cancelFilters, inputWord, addSearchWord, changeFilters };
+    return { searchFiltersData, word, selectRegion, selectTime, selectSportsCategory, cancelFilters, changeFilters };
   },
 };
 </script>
