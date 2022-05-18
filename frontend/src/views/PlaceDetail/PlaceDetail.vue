@@ -1,9 +1,10 @@
 <template>
   <div v-if="checkJwt() && placeInfos">
-    <div style="max-width: 1400px; margin: auto">
+    <div style="max-width: 1255px; margin: auto">
       <Header></Header>
     </div>
-    <div class="container">
+    <hr style="margin-top: 0px; margin-bottom: 0px; color: #b7b7b7" />
+    <div class="container" style="max-width: 1200px; margin: auto">
       <div class="imageBox" v-if="placeInfos.img">
         <img class="imageFrist col-6" :src="`${placeInfos.img[0]}`" alt="" />
         <img v-for="(placeInfoImage, idx) in placeInfos.img.slice(1)" :key="idx" :src="`${placeInfoImage}`" class="imageOthers col-3" alt="" />
@@ -22,11 +23,11 @@
             <div class="saveBox ms-2 p-2">
               <div v-if="`${placeInfos.like}` == `true`" @click="clickLike" class="d-flex">
                 <h5><i class="bi bi-heart-fill me-1" style="color: #e01760"></i></h5>
-                <h5 class="ms-1 fw-bold"><u>저장</u></h5>
+                <h5 class="ms-1 fw-bold"><u>찜하기 취소</u></h5>
               </div>
               <div v-else @click="clickLike" class="d-flex">
                 <h5><i class="bi bi-heart me-1"></i></h5>
-                <h5 class="ms-1 fw-bold"><u>저장</u></h5>
+                <h5 class="ms-1 fw-bold"><u>찜하기 </u></h5>
               </div>
             </div>
           </div>
@@ -42,9 +43,9 @@
         <div class="detailInfosLeft col-7">
           <div style="min-height: 150px">
             <h4 class="pb-4">이용시간 및 가격</h4>
-            <p v-for="(각시간, idx) in placeInfos.bizhour" :key="idx" class="">{{ 각시간 }}</p>
+            <p v-for="(각시간, idx) in placeInfos.bizhour" :key="idx" class="">{{ 각시간 }} / 10,000원</p>
             <p v-for="(각시간, idx) in placeInfos.menu" :key="idx" class="">{{ 각시간 }}</p>
-            <!-- <p></p> -->
+            <br />
           </div>
           <hr class="class-2" />
           <h4 class="pb-4 pt-3">시설정보</h4>
@@ -262,9 +263,8 @@
           {{ refundPolicy }}
         </p>
       </div>
-      <hr class="class-1" />
     </div>
-    <Footer></Footer>
+    <Footer class="footer"></Footer>
   </div>
 </template>
 
@@ -296,9 +296,11 @@ export default {
         // pass
         return true;
       } else {
-        router.push({
-          name: "Login",
-        });
+        router
+          .push({
+            name: "Login",
+          })
+          .then(() => window.scrollTo(0, 0));
       }
     };
     const rules =
@@ -362,7 +364,7 @@ h5 {
 .imageBox {
   max-width: 100%;
   height: 60vh;
-  /* margin: auto; */
+  // /* margin: auto; */
   display: flex;
   /* height: 100%; */
   justify-content: center;
@@ -371,14 +373,14 @@ h5 {
 .imageFrist {
   object-fit: cover;
   border-radius: 5px;
-  margin: 1rem 0.5rem 1rem 0.5rem;
+  margin: 0rem 0.5rem 1rem 0.5rem;
   align-self: stretch;
 }
 .imageOthers {
   object-fit: cover;
   border-radius: 5px;
   align-self: stretch;
-  margin: 1rem 0.5rem 1rem 0;
+  margin: 0rem 0.5rem 1rem 0;
 }
 .placeDetailImage {
   /* margin: 1rem 0.1vw 1rem 0.1vw; */
@@ -488,6 +490,10 @@ hr.class-2 {
 
   /* border-top: 1px solid black; */
   /* border: 0px; */
+}
+.footer {
+  /* background-color: wheat; */
+  margin-top: 6rem;
 }
 /* .dropwdonwTotal {
   width: 450px;

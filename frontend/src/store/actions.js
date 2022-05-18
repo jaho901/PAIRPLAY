@@ -113,18 +113,18 @@ export async function getUserInfo({ commit }, payload) {
 }
 
 export async function loginResetPassword({ state }, payload) {
-  const url = `members/password`
-  const body = payload
-  console.log(state)
+  const url = `members/password`;
+  const body = payload;
+  console.log(state);
   await $axios
     .post(url, body)
     .then(() => {
-      alert('해당 이메일로 임시 비밀번호가 발급되었습니다.')
+      alert("해당 이메일로 임시 비밀번호가 발급되었습니다.");
     })
     .catch((err) => {
-      console.log(err)
-      alert('임시 비밀번호 발급이 실패했습니다.')
-    })
+      console.log(err);
+      alert("임시 비밀번호 발급이 실패했습니다.");
+    });
 }
 
 export async function profileOtherInfo({ commit }, payload) {
@@ -168,8 +168,8 @@ export async function profileChangeInfo({ state, dispatch }, payload) {
 }
 
 export async function profileChangeImage({ state }, payload) {
-  const formData = new FormData()
-  formData.append("profileImage", payload.file)
+  const formData = new FormData();
+  formData.append("profileImage", payload.file);
   console.log(state);
   const url = "profiles/profileImage";
   const jwt = localStorage.getItem("jwt");
@@ -177,8 +177,8 @@ export async function profileChangeImage({ state }, payload) {
     headers: {
       Authorization: "Bearer " + jwt,
       "Content-Type": "multipart/form-data",
-    }
-  }
+    },
+  };
   await $axios
     .post(url, formData, header)
     .then((res) => {
@@ -213,8 +213,8 @@ export async function profileChangePassword({ state }, payload) {
 }
 
 export async function profileUserSchedule({ commit }, payload) {
-  const memberId = payload
-  const url = `profiles/calendar/${memberId}`
+  const memberId = payload;
+  const url = `profiles/calendar/${memberId}`;
   const header = localStorage.getItem("jwt");
   await $axios
     .get(url, {
@@ -223,8 +223,8 @@ export async function profileUserSchedule({ commit }, payload) {
       },
     })
     .then((res) => {
-      console.log(res)
-      commit("PROFILE_USER_SCHEDULE", res.data.list)
+      console.log(res);
+      commit("PROFILE_USER_SCHEDULE", res.data.list);
     })
     .catch((err) => {
       console.log(err);
@@ -242,9 +242,9 @@ export async function profileDateTodo({ commit }, payload) {
       },
     })
     .then((res) => {
-      console.log(res)
-      commit("PROFILE_ACTIVITY_PER_DAY", res.data.calendarDetailActivityResList)
-      commit("PROFILE_DATE_PER_DAY", body.date)
+      console.log(res);
+      commit("PROFILE_ACTIVITY_PER_DAY", res.data.calendarDetailActivityResList);
+      commit("PROFILE_DATE_PER_DAY", body.date);
     })
     .catch((err) => {
       console.log(err);
@@ -252,9 +252,9 @@ export async function profileDateTodo({ commit }, payload) {
 }
 
 export async function profileMateListFrom({ commit }, payload) {
-  const page = payload["page"]
-  const size = payload["size"]
-  const url = `profiles/mates/received?page=${page}&size=${size}`
+  const page = payload["page"];
+  const size = payload["size"];
+  const url = `profiles/mates/received?page=${page}&size=${size}`;
   const jwt = localStorage.getItem("jwt");
   await $axios
     .get(url, {
@@ -271,52 +271,54 @@ export async function profileMateListFrom({ commit }, payload) {
 }
 
 export async function profileMateFromAccept({ dispatch }, payload) {
-  const url = 'profiles/mates/accept'
-  const body = { "id": payload['id'] }
-  const page = payload['page']
-  const jwt = localStorage.getItem("jwt")
+  const url = "profiles/mates/accept";
+  const body = { id: payload["id"] };
+  const page = payload["page"];
+  const jwt = localStorage.getItem("jwt");
   await $axios
     .put(url, body, {
       headers: {
-        Authorization: "Bearer " + jwt
-      }
+        Authorization: "Bearer " + jwt,
+      },
     })
     .then((res) => {
-      console.log(res)
+      console.log(res);
       dispatch("profileMateListFrom", {
-        'page': page, 'size': 3
-      })
+        page: page,
+        size: 3,
+      });
     })
     .catch((err) => {
-      console.log(err)
-  })
+      console.log(err);
+    });
 }
 
 export async function profileMateFromReject({ dispatch }, payload) {
-  const id = payload['id']
-  const url = `profiles/mates/reject/${id}`
-  const jwt = localStorage.getItem("jwt")
+  const id = payload["id"];
+  const url = `profiles/mates/reject/${id}`;
+  const jwt = localStorage.getItem("jwt");
   await $axios
     .delete(url, {
       headers: {
-        Authorization: "Bearer " + jwt
-      }
+        Authorization: "Bearer " + jwt,
+      },
     })
     .then((res) => {
-      console.log(res)
+      console.log(res);
       dispatch("profileMateListFrom", {
-        'page': payload['page'], 'size': 3
-      })
+        page: payload["page"],
+        size: 3,
+      });
     })
     .catch((err) => {
-      console.log(err)
-  })
+      console.log(err);
+    });
 }
 
 export async function profileMateListTo({ commit }, payload) {
-  const page = payload["page"]
-  const size = payload["size"]
-  const url = `profiles/mates/send?page=${page}&size=${size}`
+  const page = payload["page"];
+  const size = payload["size"];
+  const url = `profiles/mates/send?page=${page}&size=${size}`;
   const jwt = localStorage.getItem("jwt");
   await $axios
     .get(url, {
@@ -333,234 +335,247 @@ export async function profileMateListTo({ commit }, payload) {
 }
 
 export async function profileReservationList({ commit }, payload) {
-  const page = payload
-  const url = `profiles/places/${page}`
-  const jwt = localStorage.getItem("jwt")
+  const page = payload;
+  const url = `profiles/places/${page}`;
+  const jwt = localStorage.getItem("jwt");
   await $axios
     .get(url, {
       headers: {
-        Authorization: "Bearer " + jwt
-      }
+        Authorization: "Bearer " + jwt,
+      },
     })
     .then((res) => {
-      commit("PROFILE_RESERVATION_LIST", res.data)
+      commit("PROFILE_RESERVATION_LIST", res.data);
     })
     .catch((err) => {
-      console.log(err)
-  })
+      console.log(err);
+    });
 }
 
 export async function profileReservationListMore({ commit }, payload) {
-  const page = payload
-  const url = `profiles/places/${page}`
-  const jwt = localStorage.getItem("jwt")
+  const page = payload;
+  const url = `profiles/places/${page}`;
+  const jwt = localStorage.getItem("jwt");
   await $axios
     .get(url, {
       headers: {
-        Authorization: "Bearer " + jwt
-      }
+        Authorization: "Bearer " + jwt,
+      },
     })
     .then((res) => {
-      commit("PROFILE_RESERVATION_LIST_MORE", { 'dataList': res.data, 'page': page })
+      commit("PROFILE_RESERVATION_LIST_MORE", { dataList: res.data, page: page });
     })
     .catch((err) => {
-      console.log(err)
-  })
+      console.log(err);
+    });
 }
 
 export async function profileReservationDoingList({ commit }, payload) {
-  const page = payload
-  const url = `profiles/places/reservation/${page}`
-  const jwt = localStorage.getItem("jwt")
+  const page = payload;
+  const url = `profiles/places/reservation/${page}`;
+  const jwt = localStorage.getItem("jwt");
   await $axios
     .get(url, {
       headers: {
-        Authorization: "Bearer " + jwt
-      }
+        Authorization: "Bearer " + jwt,
+      },
     })
     .then((res) => {
-      commit("PROFILE_RESERVATION_LIST", res.data)
+      commit("PROFILE_RESERVATION_LIST", res.data);
     })
     .catch((err) => {
-      console.log(err)
-  })
+      console.log(err);
+    });
 }
 
 export async function profileReservationDoingListMore({ commit }, payload) {
-  const page = payload
-  const url = `profiles/places/reservation/${page}`
-  const jwt = localStorage.getItem("jwt")
+  const page = payload;
+  const url = `profiles/places/reservation/${page}`;
+  const jwt = localStorage.getItem("jwt");
   await $axios
     .get(url, {
       headers: {
-        Authorization: "Bearer " + jwt
-      }
+        Authorization: "Bearer " + jwt,
+      },
     })
     .then((res) => {
-      commit("PROFILE_RESERVATION_LIST_MORE", { 'dataList': res.data, 'page': page })
+      commit("PROFILE_RESERVATION_LIST_MORE", { dataList: res.data, page: page });
     })
     .catch((err) => {
-      console.log(err)
-  })
+      console.log(err);
+    });
 }
 
 export async function profileReservationDoneList({ commit }, payload) {
-  const page = payload
-  const url = `profiles/places/used/${page}`
-  const jwt = localStorage.getItem("jwt")
+  const page = payload;
+  const url = `profiles/places/used/${page}`;
+  const jwt = localStorage.getItem("jwt");
   await $axios
     .get(url, {
       headers: {
-        Authorization: "Bearer " + jwt
-      }
+        Authorization: "Bearer " + jwt,
+      },
     })
     .then((res) => {
-      commit("PROFILE_RESERVATION_LIST", res.data)
+      commit("PROFILE_RESERVATION_LIST", res.data);
     })
     .catch((err) => {
-      console.log(err)
-  })
+      console.log(err);
+    });
 }
 
 export async function profileReservationDoneListMore({ commit }, payload) {
-  const page = payload
-  const url = `profiles/places/used/${page}`
-  const jwt = localStorage.getItem("jwt")
+  const page = payload;
+  const url = `profiles/places/used/${page}`;
+  const jwt = localStorage.getItem("jwt");
   await $axios
     .get(url, {
       headers: {
-        Authorization: "Bearer " + jwt
-      }
+        Authorization: "Bearer " + jwt,
+      },
     })
     .then((res) => {
-      commit("PROFILE_RESERVATION_LIST_MORE", { 'dataList': res.data, 'page': page })
+      commit("PROFILE_RESERVATION_LIST_MORE", { dataList: res.data, page: page });
     })
     .catch((err) => {
-      console.log(err)
-  })
+      console.log(err);
+    });
 }
 
 export async function profileCancelPlaceReservation({ dispatch }, payload) {
-  const url = `places/reservation`
-  const body = payload
-  console.log(body)
-  console.log(typeof(body["reservationId"]))
-  const jwt = localStorage.getItem("jwt")
+  const url = `places/reservation`;
+  const body = payload;
+  console.log(body);
+  console.log(typeof body["reservationId"]);
+  const jwt = localStorage.getItem("jwt");
   await $axios
-    .delete(url, {
-      data: {
-        'reservationId': body['reservationId']
+    .delete(
+      url,
+      {
+        data: {
+          reservationId: body["reservationId"],
+        },
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + jwt,
+        },
       }
-    }, {
-      headers: {
-        Authorization: "Bearer " + jwt
-      }
-    })
+    )
     .then((res) => {
-      console.log(res)
-      dispatch("profileReservationList")
+      console.log(res);
+      dispatch("profileReservationList");
     })
     .catch((err) => {
-      console.log(err)
-  })
+      console.log(err);
+    });
 }
 
 export async function profileMateToCancle({ dispatch }, payload) {
-  const id = payload['id']
-  const url = `profiles/mates/cancel/${id}`
-  const jwt = localStorage.getItem("jwt")
+  const id = payload["id"];
+  const url = `profiles/mates/cancel/${id}`;
+  const jwt = localStorage.getItem("jwt");
   await $axios
     .delete(url, {
       headers: {
-        Authorization: "Bearer " + jwt
-      }
+        Authorization: "Bearer " + jwt,
+      },
     })
     .then(async (res) => {
-      console.log(res)
+      console.log(res);
       await dispatch("profileMateListTo", {
-        'page': payload['page'], 'size': 3
-      })
+        page: payload["page"],
+        size: 3,
+      });
     })
     .catch((err) => {
-      console.log(err)
-  })
+      console.log(err);
+    });
 }
 
 export async function profileLikePlace({ commit }, payload) {
-  const page = payload
-  const url = `profiles/places/like/${page}`
-  const jwt = localStorage.getItem("jwt")
+  const page = payload;
+  const url = `profiles/places/like/${page}`;
+  const jwt = localStorage.getItem("jwt");
   await $axios
     .get(url, {
       headers: {
-        Authorization: "Bearer " + jwt
-      }
+        Authorization: "Bearer " + jwt,
+      },
     })
     .then((res) => {
-      console.log(res)
-      commit("PROFILE_LIKE_PLACE", res.data)
+      console.log(res);
+      commit("PROFILE_LIKE_PLACE", res.data);
     })
     .catch((err) => {
-      console.log(err)
-    })
+      console.log(err);
+    });
 }
 
 export async function profileLikePlaceCancle({ dispatch }, payload) {
-  const placeId = payload["id"]
-  const page = payload["page"]
-  const url = `places/like/${placeId}`
-  const jwt = localStorage.getItem("jwt")
+  const placeId = payload["id"];
+  const page = payload["page"];
+  const url = `places/like/${placeId}`;
+  const jwt = localStorage.getItem("jwt");
   await $axios
-    .put(url, {}, {
-      headers: {
-        Authorization: "Bearer " + jwt
+    .put(
+      url,
+      {},
+      {
+        headers: {
+          Authorization: "Bearer " + jwt,
+        },
       }
-    })
+    )
     .then((res) => {
-      console.log(res)
-      dispatch("profileLikePlace", page)
+      console.log(res);
+      dispatch("profileLikePlace", page);
     })
     .catch((err) => {
-      console.log(err)
-  })
+      console.log(err);
+    });
 }
 
 export async function profileLikeMate({ commit }, payload) {
-  const page = payload
-  const url = `profiles/mates/like?page=${page}`
-  const jwt = localStorage.getItem("jwt")
+  const page = payload;
+  const url = `profiles/mates/like?page=${page}`;
+  const jwt = localStorage.getItem("jwt");
   await $axios
     .get(url, {
       headers: {
-        Authorization: "Bearer " + jwt
-      }
+        Authorization: "Bearer " + jwt,
+      },
     })
     .then((res) => {
-      commit("PROFILE_LIKE_MATE", res.data)
+      commit("PROFILE_LIKE_MATE", res.data);
     })
     .catch((err) => {
-      console.log(err)
-    })
+      console.log(err);
+    });
 }
 
 export async function profileLikeMateCancle({ dispatch }, payload) {
-  const activityId = payload["id"]
-  const page = payload["page"]
-  const url = `mates/like/${activityId}`
-  const jwt = localStorage.getItem("jwt")
+  const activityId = payload["id"];
+  const page = payload["page"];
+  const url = `mates/like/${activityId}`;
+  const jwt = localStorage.getItem("jwt");
   await $axios
-    .put(url, {}, {
-      headers: {
-        Authorization: "Bearer " + jwt
+    .put(
+      url,
+      {},
+      {
+        headers: {
+          Authorization: "Bearer " + jwt,
+        },
       }
-    })
+    )
     .then((res) => {
-      console.log(res)
-      dispatch("profileLikeMate", page)
+      console.log(res);
+      dispatch("profileLikeMate", page);
     })
     .catch((err) => {
-      console.log(err)
-  })
+      console.log(err);
+    });
 }
 
 export async function mateCreate({ state }, payload) {
@@ -634,12 +649,12 @@ export async function mateDetailInfo({ commit }, payload) {
 export async function mateFilterChange({ commit }, payload) {
   const jwt = localStorage.getItem("jwt");
   const body = {
-    "categoryId": payload.categoryId,
-    "gungu": payload.gungu,
-    "search": payload.search,
-    "sido": payload.sido
-  }
-  const page = payload.page
+    categoryId: payload.categoryId,
+    gungu: payload.gungu,
+    search: payload.search,
+    sido: payload.sido,
+  };
+  const page = payload.page;
   const url = `mates?page=${page}`;
   await $axios
     .post(url, body, {
@@ -648,8 +663,8 @@ export async function mateFilterChange({ commit }, payload) {
       },
     })
     .then((res) => {
-      console.log(res)
-      commit("MATE_ARTICLE_FILTER", body)
+      console.log(res);
+      commit("MATE_ARTICLE_FILTER", body);
       commit("MATE_ARTICLE_LIST", res.data.list);
     })
     .catch((err) => {
@@ -658,10 +673,10 @@ export async function mateFilterChange({ commit }, payload) {
 }
 
 export async function mateApplyFor({ state }, payload) {
-  const body = payload
-  const url = `mates/register`
+  const body = payload;
+  const url = `mates/register`;
   const jwt = localStorage.getItem("jwt");
-  console.log(state)
+  console.log(state);
   await $axios
     .post(url, body, {
       headers: {
@@ -669,12 +684,12 @@ export async function mateApplyFor({ state }, payload) {
       },
     })
     .then((res) => {
-      console.log(res)
-      alert("메이트 신청에 성공했습니다.")
+      console.log(res);
+      alert("메이트 신청에 성공했습니다.");
     })
     .catch((err) => {
       console.log(err);
-      alert("메이트 신청에 실패했습니다.")
+      alert("메이트 신청에 실패했습니다.");
     });
 }
 
@@ -691,11 +706,15 @@ export async function mateLikeChange({ state }, payload) {
   const url = `mates/like/${activityId}`
   const jwt = localStorage.getItem("jwt");
   $axios
-    .put(url, {}, {
-      headers: {
-        Authorization: "Bearer " + jwt,
-      },
-    })
+    .put(
+      url,
+      {},
+      {
+        headers: {
+          Authorization: "Bearer " + jwt,
+        },
+      }
+    )
     .then((res) => {
       console.log(res)
       // dispatch("mateFilterChange", body)
@@ -820,4 +839,9 @@ export async function checkReservation({ commit }, payload) {
     .catch((err) => {
       console.log(err);
     });
+}
+
+export async function showMapMarker({ commit }, card) {
+  commit("SHOW_MAP_MARKER", card);
+  // console.log(card, "굿바디");
 }
