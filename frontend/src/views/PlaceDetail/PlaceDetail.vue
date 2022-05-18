@@ -263,9 +263,8 @@
           {{ refundPolicy }}
         </p>
       </div>
-      <hr class="class-1" />
     </div>
-    <Footer></Footer>
+    <Footer class="footer"></Footer>
   </div>
 </template>
 
@@ -491,6 +490,10 @@ hr.class-2 {
 
   /* border-top: 1px solid black; */
   /* border: 0px; */
+}
+.footer {
+  /* background-color: wheat; */
+  margin-top: 6rem;
 }
 /* .dropwdonwTotal {
   width: 450px;
