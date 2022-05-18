@@ -72,6 +72,10 @@ export function mateArticleList(state) {
   return state.mateArticleList;
 }
 
+export function mateDetailList(state) {
+  return state.mateDetailList
+}
+
 export function matePage(state) {
   return state.matePage;
 }

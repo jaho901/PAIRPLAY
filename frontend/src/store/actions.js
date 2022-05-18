@@ -81,9 +81,13 @@ export async function login({ commit }, payload) {
   await $axios
     .post(url, body)
     .then((res) => {
-      localStorage.setItem("jwt", res.data.accessToken);
-      commit("USER_INFO", res.data);
-      commit("LOGIN_STATUS", true);
+      if (res.data.code == 200) {
+        localStorage.setItem("jwt", res.data.accessToken);
+        commit("USER_INFO", res.data);
+        commit("LOGIN_STATUS", true);
+      } else {
+        console.log(res)
+      }
     })
     .catch((err) => {
       console.log(err);
@@ -106,6 +110,21 @@ export async function getUserInfo({ commit }, payload) {
     .catch((err) => {
       console.log(err);
     });
+}
+
+export async function loginResetPassword({ state }, payload) {
+  const url = `members/password`
+  const body = payload
+  console.log(state)
+  await $axios
+    .post(url, body)
+    .then(() => {
+      alert('해당 이메일로 임시 비밀번호가 발급되었습니다.')
+    })
+    .catch((err) => {
+      console.log(err)
+      alert('임시 비밀번호 발급이 실패했습니다.')
+    })
 }
 
 export async function profileOtherInfo({ commit }, payload) {
@@ -149,18 +168,19 @@ export async function profileChangeInfo({ state, dispatch }, payload) {
 }
 
 export async function profileChangeImage({ state }, payload) {
-  let formData = new FormData()
+  const formData = new FormData()
   formData.append("profileImage", payload.file)
   console.log(state);
   const url = "profiles/profileImage";
-  const header = localStorage.getItem("jwt");
+  const jwt = localStorage.getItem("jwt");
+  const header = {
+    headers: {
+      Authorization: "Bearer " + jwt,
+      "Content-Type": "multipart/form-data",
+    }
+  }
   await $axios
-    .post(url, formData, {
-      headers: {
-        Authorization: "Bearer " + header,
-        "Content-Type": "multipart/form-data",
-      },
-    })
+    .post(url, formData, header)
     .then((res) => {
       // dispatch("getOtherInfo", {
       //   memberId: memberId,
@@ -171,6 +191,25 @@ export async function profileChangeImage({ state }, payload) {
     .catch((err) => {
       console.log(err);
     });
+}
+
+export async function profileChangePassword({ state }, payload) {
+  console.log(state)
+  const url = `profiles`
+  const body = payload
+  const header = localStorage.getItem("jwt");
+  await $axios
+    .post(url, body, {
+      headers: {
+        Authorization: "Bearer " + header,
+      },
+    })
+    .then((res) => {
+      console.log(res)
+    })
+    .catch((err) => {
+      console.log(err);
+    })
 }
 
 export async function profileUserSchedule({ commit }, payload) {
@@ -524,6 +563,25 @@ export async function profileLikeMateCancle({ dispatch }, payload) {
   })
 }
 
+export async function mateCreate({ state }, payload) {
+  console.log(state)
+  const body = payload
+  const url = `mates/mate`
+  const jwt = localStorage.getItem("jwt");
+  await $axios
+    .post(url, body, {
+      headers: {
+        Authorization: "Bearer " + jwt,
+      },
+    })
+    .then((res) => {
+      console.log(res)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+}
+
 export async function mateArticleList({ commit }, payload) {
   const page = payload["page"];
   const jwt = localStorage.getItem("jwt");
@@ -535,18 +593,16 @@ export async function mateArticleList({ commit }, payload) {
       },
     })
     .then(async (res) => {
-      // console.log(res.data.list, "있음?");
       if (res.data.list.length == 0) {
         alert("해당결과가 없습니다.");
       } else {
-        console.log(res)
-        commit("MATE_ARTICLE_FILTER", {
+        await commit("MATE_ARTICLE_FILTER", {
           "categoryId": 0,
           "gungu": "",
           "search": "",
           "sido": ""
         })
-        await commit("MATE_ARTICLE_LIST", res.data.list);
+        await commit("MATE_ARTICLE_LIST", res.data);
       }
       // await commit("MATE_ARTICLE_LIST", res.data.list);
       // await commit("MATE_ARTICLE_PAGE", page);
@@ -555,6 +611,26 @@ export async function mateArticleList({ commit }, payload) {
       console.log(err);
     });
 }
+
+export async function mateDetailInfo({ commit }, payload) {
+  const activityId = payload.activityId
+  const url = `mates/${activityId}`
+  const jwt = localStorage.getItem("jwt")
+  await $axios
+    .get(url, {}, {
+      headers: {
+        Authorization: "Bearer " + jwt,
+      },
+    })
+    .then((res) => {
+      commit("MATE_DETAIL_INFO", res.data)
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+
 export async function mateFilterChange({ commit }, payload) {
   const jwt = localStorage.getItem("jwt");
   const body = {
@@ -602,14 +678,15 @@ export async function mateApplyFor({ state }, payload) {
     });
 }
 
-export async function mateLikeChange({ dispatch }, payload) {
-  const body = {
-    "categoryId": payload.categoryId,
-    "gungu": payload.gungu,
-    "search": payload.search,
-    "sido": payload.sido,
-    "page": payload.page,
-  }
+export async function mateLikeChange({ state }, payload) {
+  // const body = {
+  //   "categoryId": payload.categoryId,
+  //   "gungu": payload.gungu,
+  //   "search": payload.search,
+  //   "sido": payload.sido,
+  //   "page": payload.page,
+  // }
+  console.log(state)
   const activityId = payload.activityId
   const url = `mates/like/${activityId}`
   const jwt = localStorage.getItem("jwt");
@@ -621,7 +698,7 @@ export async function mateLikeChange({ dispatch }, payload) {
     })
     .then((res) => {
       console.log(res)
-      dispatch("mateFilterChange", body)
+      // dispatch("mateFilterChange", body)
     })
     .catch((err) => {
       console.log(err);
@@ -650,12 +727,11 @@ export async function getPlaceSearchInfo({ commit }, searchFiltersData) {
       },
     })
     .then((res) => {
-      // console.log(res, "없나?");
       if (res.data.placeList.length >= 1) {
         commit("PLACE_SEARCH_INFO", res.data);
         commit("CHANGE_POSITION", res.data);
       } else {
-        alert("데이터가없습니다.");
+        // alert("데이터가없습니다.");
       }
     })
     .catch((err) => {
@@ -719,6 +795,27 @@ export async function getPlaceRecent({ commit }) {
     .then((res) => {
       // console.log(res.data.placeList);
       commit("PLACE_RECENT", res.data.placeList.splice(0, 5));
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+export async function checkReservation({ commit }, payload) {
+  const jwt = localStorage.getItem("jwt");
+  const url = "places/reservation/check";
+  // let body = { placeId: payload.placeId, reservationDt: payload.reservationDt };
+  const body = payload;
+  // console.log(body, "굿바디");
+  await $axios
+    .post(url, body, {
+      headers: {
+        Authorization: "Bearer " + jwt,
+      },
+    })
+    .then((res) => {
+      // console.log(res, "나오나");
+      commit("CHECK_RESERVATION", res.data.times);
     })
     .catch((err) => {
       console.log(err);

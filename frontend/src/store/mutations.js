@@ -121,23 +121,29 @@ export async function MATE_ARTICLE_LIST(state, data) {
   state.mateArticleListTotalPage = 0;
   state.mateArticleListTotalPage = data.totalPages;
   state.mateArticleList = [];
-  for (var i in data.content) {
+  for (var i in data.list) {
     var sub = {};
-    sub["activityId"] = data.content[i]["activityId"];
-    sub["categoryId"] = data.content[i]["categoryId"];
-    sub["description"] = data.content[i]["description"];
-    sub["location"] = data.content[i]["location"];
-    sub["title"] = data.content[i]["title"];
-    sub["like"] = data.content[i]["like"];
-    var startDate = new Date(data.content[i]["createdDate"][0], data.content[i]["createdDate"][1] - 1, data.content[i]["createdDate"][2]);
+    sub["activityId"] = data.list[i]["activityId"];
+    sub["categoryId"] = data.list[i]["categoryId"];
+    sub["description"] = data.list[i]["description"];
+    sub["location"] = data.list[i]["location"];
+    sub["title"] = data.list[i]["title"];
+    sub["like"] = data.list[i]["like"];
+    var startDate = new Date(data.list[i]["createdDate"][0], data.list[i]["createdDate"][1] - 1, data.list[i]["createdDate"][2]);
     var today = new Date();
     var diff = today.getTime() - startDate.getTime();
-    sub["createdDate"] = String(data.content[i]["createdDate"][0]) + "-" + String(data.content[i]["createdDate"][1]) + "-" + String(data.content[i]["createdDate"][2]);
+    sub["createdDate"] = String(data.list[i]["createdDate"][0]) + "-" + String(data.list[i]["createdDate"][1]) + "-" + String(data.list[i]["createdDate"][2]);
     sub["timeDiff"] = Math.floor(diff / (1000 * 60 * 60 * 24));
+    sub["profileImage"] = data.list[i]["profileImage"];
     // console.log(new Date(k.getTimezoneOffset() * 60000).toISOString())
     // String(data[i].date[0]) + '-' + String(data[i].date[1]) + '-' + String(data[i].date[2])
     state.mateArticleList.push(sub);
   }
+}
+
+export async function MATE_DETAIL_INFO(state, data) {
+  state.mateDetailList = []
+  state.mateDetailList = data
 }
 
 export async function MATE_ARTICLE_FILTER(state, data) {
@@ -194,4 +200,7 @@ export async function PLACE_RECOMMEND(state, data) {
 }
 export async function PLACE_RECENT(state, data) {
   state.placeRecent = data;
+}
+export async function CHECK_RESERVATION(state, data) {
+  state.reservationCheck = data;
 }

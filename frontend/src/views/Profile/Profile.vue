@@ -82,6 +82,7 @@
 import { reactive, computed, onMounted } from "vue"
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import axios from "axios";
 import Header from "../Common/Header.vue";
 import Footer from "../Common/Footer.vue";
 import ProfileView from './Components/ProfileView.vue';
@@ -136,7 +137,25 @@ export default {
         const file = event.target.files[0];
         state.otherInfo.profileImage = URL.createObjectURL(file);
         state.profileImg = file
-        await store.dispatch('root/profileChangeImage', { 'file': state.profileImg })
+        // await store.dispatch('root/profileChangeImage', { file: state.profileImg })
+        const formData = new FormData()
+        formData.append("profileImage", state.profileImg)
+        const url = "profiles/profileImage";
+        const jwt = localStorage.getItem("jwt");
+        const header = {
+          headers: {
+            Authorization: "Bearer " + jwt,
+            "Content-Type": "multipart/form-data",
+          }
+        }
+        await axios
+          .post(url, formData, header)
+            .then((res) => {
+              console.log(res);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
       }
     }
 
