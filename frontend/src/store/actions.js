@@ -374,42 +374,21 @@ export async function getPlaceRecent({ commit }) {
     });
 }
 
-// export async function addSearchWord({ commit }, [searchFiltersData, word]) {
-//   const page = searchFiltersData.page;
-//   console.log(page, "페이지");
-//   console.log(searchFiltersData, "111111111");
-//   let body = searchFiltersData;
-//   console.log(word, "검색어는?");
-//   body.searchWord = word;
-//   console.log(body, "바디");
-
-//   // if (body.categoryList.length === 0) {
-//   //   console.log("안되나");
-//   //   body.categoryList = [store.state.root.selectSportsCategory];
-//   // } else {
-//   //   body = searchFiltersData;
-//   // }
-//   const size = 20;
-//   const jwt = localStorage.getItem("jwt");
-//   const url = `places/search?page=${page}&size=${size}`;
-//   await $axios
-//     .post(url, body, {
-//       headers: {
-//         Authorization: "Bearer " + jwt,
-//       },
-//     })
-//     .then((res) => {
-//       if (res.data.placeList.length >= 1) {
-//         commit("PLACE_SEARCH_INFO", res.data);
-//         commit("CHANGE_POSITION", res.data);
-//       } else {
-//         alert("데이터가없습니다.");
-//       }
-//     })
-//     .then(() => {
-//       commit("REMOVE_SEARCH_WORD");
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-// }
+export async function checkReservation({ commit }, temp) {
+  const jwt = localStorage.getItem("jwt");
+  const url = "places/reservation/check";
+  let body = temp;
+  await $axios
+    .post(url, body, {
+      headers: {
+        Authorization: "Bearer " + jwt,
+      },
+    })
+    .then((res) => {
+      console.log(res.data.times);
+      commit("CHECK_RESERVATION", res.data.times);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}

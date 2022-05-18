@@ -17,7 +17,6 @@
           <!-- <input @keyup.enter="inputWord($event)" type="text" class="form-control serachbar" placeholder="&#xf52a;  시설명, 해시태그 입력" aria-label="Username" aria-describedby="addon-wrapping" />           -->
           <input
             v-model="searchFiltersData.searchWord"
-            @keyup.enter="inputWord"
             type="text"
             class="form-control serachbar"
             placeholder="&#xf52a; 시설명, 해시태그 입력"
@@ -91,6 +90,22 @@ export default {
     //   searchFiltersData.searchWord = word.value;
     //   console.log(searchFiltersData.value.searchWord, "추가됬음?");
     // };
+    // const handleSearchInput = (e) => {
+    //   word.value = e.target.value;
+    //   if (word.value.length !== 0) {
+    //     clearTimeout(debounce);
+    //     const debounce = setTimeout(() => {
+    //       const filteredList = this.stageInfoList.filter((item) => item.title.includes(word.value));
+    //       searchFiltersData.searchWord = filteredList;
+    //     }, 300);
+    //   } else {
+    //     clearTimeout(debounce);
+    //     debounce = setTimeout(() => {
+    //       searchFiltersData.searchWord = "";
+    //     }, 500);
+    //   }
+    // };
+
     const changeFilters = async () => {
       console.log(searchFiltersData);
       await store.dispatch("root/addPlaceFilters", searchFiltersData);

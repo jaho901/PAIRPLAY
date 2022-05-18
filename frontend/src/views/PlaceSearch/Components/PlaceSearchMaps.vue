@@ -6,10 +6,10 @@
           <i class="bi bi-geo-alt-fill"></i>
           {{ card.name }}
           <div class="show">
-            <!-- <div class="d-flex flex-column"> -->
-            <!-- <div>{{ card.name }}</div> -->
-            <img :src="`${card.img[0]}`" class="card-image" alt="" />
-            <!-- </div> -->
+            <div class="show-box d-flex flex-column">
+              <div>{{ card.name }}</div>
+              <img :src="`${card.img[0]}`" class="card-image" alt="" />
+            </div>
           </div>
         </div>
       </naver-marker>
@@ -203,6 +203,9 @@ export default {
     color: white;
     position: relative;
   }
+}
+.show-box.show.active {
+  background: white;
 }
 .card-image {
   width: 100%;

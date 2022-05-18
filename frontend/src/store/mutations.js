@@ -158,7 +158,6 @@ export async function PLACE_RECOMMEND(state, data) {
 export async function PLACE_RECENT(state, data) {
   state.placeRecent = data;
 }
-// export async function REMOVE_SEARCH_WORD(state, data) {
-//   state.addPlaceFilters.searchWord = "";
-//   state.placeSearchInfo = data;
-// }
+export async function CHECK_RESERVATION(state, data) {
+  state.reservationCheck = data;
+}

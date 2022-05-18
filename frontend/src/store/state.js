@@ -24,4 +24,5 @@ export default {
   placeDetailInfo: "",
   placeRecommend: [],
   placeRecent: [],
+  reservationCheck: [],
 };

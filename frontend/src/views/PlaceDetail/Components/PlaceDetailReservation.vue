@@ -1,44 +1,72 @@
 <template>
   <div>
-    <Datepicker v-model="date" :enableTimePicker="false" autoApply class="datePicker" inline></Datepicker>
+    <Datepicker v-model="date" :format-locale="ko" :enableTimePicker="false" autoApply class="datePicker" inline></Datepicker>
     <div class="ReservationRealTime" id="style-1">
-      <div class="wrapper d-flex flex-row">
+      <div class="wrapper d-flex flex-row justify-content-center align-items-center">
         <div class="d-flex row">
           <div class="d-flex">
             <!-- <div class="col menu justify-content-center">10,000원</div> -->
-            <div class="col menu justify-content-center">1 / 20</div>
-            <div class="col menu justify-content-center">1 / 20</div>
-
-            <div class="col menu justify-content-center">1 / 20</div>
-            <div class="col menu justify-content-center">1 / 20</div>
-            <div class="col menu justify-content-center">1 / 20</div>
-            <div class="col menu justify-content-center">1 / 20</div>
-            <div class="col menu justify-content-center">1 / 20</div>
-            <div class="col menu justify-content-center">1 / 20</div>
-            <div class="col menu justify-content-center">1 / 20</div>
-            <div class="col menu justify-content-center">1 / 20</div>
-            <div class="col menu justify-content-center">1 / 20</div>
-            <div class="col menu justify-content-center">1 / 20</div>
-            <div class="col menu justify-content-center">1 / 20</div>
-            <div class="col menu justify-content-center">1 / 20</div>
-            <div class="col menu justify-content-center">1 / 20</div>
-          </div>
-          <div class="d-flex justify-content-between">
-            <p class="time-mark">08:00</p>
-            <p class="time-mark">09:00</p>
-            <p class="time-mark">10:00</p>
-            <p class="time-mark">11:00</p>
-            <p class="time-mark">12:00</p>
-            <p class="time-mark">13:00</p>
-            <p class="time-mark">14:00</p>
-            <p class="time-mark">15:00</p>
-            <p class="time-mark">16:00</p>
-            <p class="time-mark">17:00</p>
-            <p class="time-mark">18:00</p>
-            <p class="time-mark">19:00</p>
-            <p class="time-mark">20:00</p>
-            <p class="time-mark">21:00</p>
-            <p class="time-mark">22:00</p>
+            <div class="col" v-for="(time, idx) in reservationTime" :key="idx">
+              <div class="btn menu justify-content-center">1 / 20</div>
+              <p class="time-mark">{{ time }}</p>
+              {{ time }}
+            </div>
+            <!-- <div class="col">
+              <div class="btn menu justify-content-center" value="08:00">1 / 20</div>
+              <p class="time-mark">09:00</p>
+            </div>
+            <div class="col">
+              <div class="btn menu justify-content-center" value="08:00">1 / 20</div>
+              <p class="time-mark">10:00</p>
+            </div>
+            <div class="col">
+              <div class="btn menu justify-content-center" value="08:00">1 / 20</div>
+              <p class="time-mark">11:00</p>
+            </div>
+            <div class="col">
+              <div class="btn menu justify-content-center" value="08:00">1 / 20</div>
+              <p class="time-mark">12:00</p>
+            </div>
+            <div class="col">
+              <div class="btn menu justify-content-center" value="08:00">1 / 20</div>
+              <p class="time-mark">13:00</p>
+            </div>
+            <div class="col">
+              <div class="btn menu justify-content-center" value="08:00">1 / 20</div>
+              <p class="time-mark">14:00</p>
+            </div>
+            <div class="col">
+              <div class="btn menu justify-content-center" value="08:00">1 / 20</div>
+              <p class="time-mark">15:00</p>
+            </div>
+            <div class="col">
+              <div class="btn menu justify-content-center" value="08:00">1 / 20</div>
+              <p class="time-mark">16:00</p>
+            </div>
+            <div class="col">
+              <div class="btn menu justify-content-center" value="08:00">1 / 20</div>
+              <p class="time-mark">17:00</p>
+            </div>
+            <div class="col">
+              <div class="btn menu justify-content-center" value="08:00">1 / 20</div>
+              <p class="time-mark">18:00</p>
+            </div>
+            <div class="col">
+              <div class="btn menu justify-content-center" value="08:00">1 / 20</div>
+              <p class="time-mark">19:00</p>
+            </div>
+            <div class="col">
+              <div class="btn menu justify-content-center" value="08:00">1 / 20</div>
+              <p class="time-mark">20:00</p>
+            </div>
+            <div class="col">
+              <div class="btn menu justify-content-center" value="08:00">1 / 20</div>
+              <p class="time-mark">21:00</p>
+            </div>
+            <div class="col">
+              <div class="btn menu justify-content-center" value="08:00">1 / 20</div>
+              <p class="time-mark">22:00</p>
+            </div> -->
           </div>
         </div>
         <!-- <div class="col">
@@ -100,8 +128,11 @@
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref, reactive, computed, onMounted, watch } from "vue";
 import Datepicker from "@vuepic/vue-datepicker";
+import { ko } from "date-fns/locale";
+import { useStore } from "vuex";
+
 import "@vuepic/vue-datepicker/dist/main.css";
 
 export default {
@@ -109,7 +140,11 @@ export default {
   components: { Datepicker },
 
   setup() {
-    const date = ref(new Date());
+    const store = useStore();
+    const date = ref();
+    const reservationTime = reactive(computed(() => store.state.root.reservationCheck));
+    const placeInfos = reactive(computed(() => store.state.root.placeDetailInfo));
+
     const requestPay = function () {
       const { IMP } = window;
       IMP.init("imp57638465"); //iamport 대신 자신의 "가맹점 식별코드"를 사용
@@ -137,11 +172,28 @@ export default {
         }
       );
     };
-    onMounted(() => {});
+    const changeData = async () => {
+      let selectedDate = new Date(+date.value + 3240 * 10000).toISOString().replace("T", " ").replace(/\..*/, "").substring(0, 10);
+      let temp = { placeId: placeInfos.placeId, reservationDt: selectedDate };
+      await store.dispatch("root/checkReservation", temp);
+    };
+    onMounted(() => {
+      date.value = new Date();
+    });
+    console.log(placeInfos.value, "나오나요");
+    watch(date, () => {
+      // console.log(date.value, "몇일인데");
+
+      changeData();
+    });
     // const picked = ref(new Date());
     return {
+      placeInfos,
       date,
+      reservationTime,
+      ko,
       requestPay,
+      changeData,
       // picked,
     };
     // const store = userStore();
@@ -166,13 +218,13 @@ export default {
   width: 100%;
   // margin: 0rem 1rem 0rem 0rem;
   // padding: 0rem 0rem 0rem 0rem;
-  overflow: auto;
+  // overflow: auto;
   margin: 0rem auto 0rem auto;
   color: #112031;
   // border: 1px solid #000;
   // overflow: auto;
   // white-space: nowrap;
-  // overflow-x: overlay;
+  overflow-x: overlay;
   // overflow-y: overlay;
   ::-webkit-scrollbar {
     display: none;
@@ -196,15 +248,18 @@ export default {
   background-color: #555;
 }
 .wrapper {
-  overflow-x: auto;
-  display: flex;
-  flex-direction: row;
-  width: 300%;
-  // width: 200%;
+  // overflow-x: auto;
+  // display: flex;
+  // flex-direction: row;
+  // width: 100%;
+  // width: 100%;
+  width: 60rem;
 }
 .menu {
   // display: inline-block;
   text-align: center;
+  font-size: 0.8rem;
+  min-width: 3rem;
   background-color: #1976d2;
   padding: 0.8rem 0.2rem 0.8rem 0.2rem;
   margin: 0rem 0rem 0rem 0.8rem;
