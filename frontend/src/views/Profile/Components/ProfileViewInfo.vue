@@ -320,7 +320,9 @@ export default {
     }
 
     const changeProfilePassword = function () {
-      store.dispatch("root/profileCha")
+      store.dispatch("root/profileChangePassword", {
+        "password": state.newPassword
+      })
     }
 
     return { 

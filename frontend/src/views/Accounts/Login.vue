@@ -60,9 +60,14 @@ export default {
         password: state.password
       }
       await store.dispatch("root/login", payload)
-      await router.push({
+      const loginStatus = store.getters["root/loginStatus"]
+      if (loginStatus == true) {
+        await router.push({
         name: "Main"
       })
+      } else {
+        alert('로그인에 실패했습니다.')
+      }
     }
 
     const moveToSignup = async function () {

@@ -100,7 +100,7 @@ export default {
   background: black;
   margin-bottom: 5rem;
   /* background-color: rgba(0, 0, 0, 0.4); */
-  background: url("https://images.pexels.com/photos/3601094/pexels-photo-3601094.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260") 50% 40% no-repeat;
+  background: url("@/assets/images/Main/Mate2.jpeg") 50% 40% no-repeat;
   background-size: 100% auto;
 }
 .PlaceBackgroundImageCover {
@@ -117,7 +117,7 @@ export default {
   position: absolute;
   top: 40%;
   /* max-width: 968px; */
-  font-size: calc(1em + 2vw);
+  font-size: calc(1em + 1.5vw);
   /* transform: translate(-50%, -50%); */
   z-index: 2;
   text-align: left;

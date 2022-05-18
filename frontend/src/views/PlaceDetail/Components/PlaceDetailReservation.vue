@@ -8,13 +8,13 @@
             <!--  -->
             <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
               <!--  -->
-              <div v-if="`${reservation < 20}`">
+              <div v-if="reservation < 20">
                 <input type="checkbox" :id="`btn${time}`" class="btn-check btn menu" />
                 <label class="btn btn-primary" :for="`btn${time}`" @click="timeSelect(time)">{{ reservation }} / 20</label>
               </div>
               <div v-else>
                 <input type="checkbox" :id="`btn${time}`" class="btn-check btn menu" disabled />
-                <label class="btn btn-primary" :for="`btn${time}`" @click="timeSelect(time)">예약불가</label>
+                <label class="btn btn-secondary" :for="`btn${time}`" @click="timeSelect(time)">예약불가</label>
               </div>
             </div>
             <p class="time-mark">{{ time }}:00 ~</p>

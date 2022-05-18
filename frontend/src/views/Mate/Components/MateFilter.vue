@@ -58,6 +58,7 @@
         </div>
         <!-- 초기화 -->
         <div class="btn btn-Cancel btn-secondary" type="button" @click="cancelFilters">초기화</div>
+        <div class="btn btn-Cancel btn-secondary" type="button" @click="moveToMateCreate">메이트 생성</div>
       </div>
       <!-- 검색 -->
       <div class="col-lg-4">
@@ -73,10 +74,12 @@
 <script>
 import { computed, reactive } from "vue";
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 export default {
   name: "MateFilter",
   setup () {
     const store = useStore()
+    const router = useRouter()
     const state = reactive({
       totalPages: computed(() => store.getters["root/mateArticleListTotalPage"]),
       categoryId: 0,
@@ -122,6 +125,10 @@ export default {
       }
       var activeBtn = document.getElementsByClassName("page-item")[0]
       activeBtn.classList.add("active")
+      state.categoryId = 0
+      state.sido = ""
+      state.gungu = ""
+      state.search = ""
     };
 
     const changeSido = async function (event) {
@@ -161,7 +168,13 @@ export default {
       activeBtn.classList.add("active")
     }
 
-    return { state, cancelFilters, changeSido, changeGungu, mateFilterInfo, inputCategory }
+    const moveToMateCreate = async function () {
+      router.push({
+        name: "MateCreate"
+      })
+    }
+
+    return { state, cancelFilters, changeSido, changeGungu, mateFilterInfo, inputCategory, moveToMateCreate }
   }
 }
 </script>
