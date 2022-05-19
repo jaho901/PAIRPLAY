@@ -48,9 +48,9 @@
       </div>
       <!-- 검색 -->
       <div class="col-lg-4">
-        <div class="input-group flex-nowrap">
-          <input type="text" class="form-control serachbar" v-model="state.search" />
-          <button class="ms-4 btn-search" style="border-radius: 5px" @click="mateFilterInfo">검색</button>
+        <div class="input-group ps-4 flex-nowrap">
+          <input type="text" class="form-control serachbar" placeholder="&#xf52a; 검색어를 입력해주세요" v-model="state.search" />
+          <button class="ms-3 btn-search" style="border-radius: 5px" @click="mateFilterInfo">검색</button>
         </div>
       </div>
     </div>
@@ -188,6 +188,8 @@ export default {
       state.sido = "";
       state.gungu = "";
       state.search = "";
+      state.region = "지역";
+      state.categoryShow = "운동 종목";
     };
 
     const changeSido = async function (event) {
