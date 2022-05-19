@@ -58,7 +58,7 @@
       </div>
       <div v-else-if="data.used==true & data.myReservation.writtenReview==true" class="col-2 d-flex justify-content-evenly align-items-center" style="flex-direction: column;">
         <button class="reser-btn" @click="moveToPlaceDetail(data.myReservation.placeId)">자세히</button>
-        <button class="reser-btn"  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2">내 리뷰</button>
+        <button class="reser-btn"  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2" @click="reviewDetailInfo(data.myReservation.id)">내 리뷰</button>
       </div>
     </div>
     <hr>
@@ -165,18 +165,80 @@
   </div>
   <!-- Modal View -->
   <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 750px;">
       <div class="modal-content" style="border: none;">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel2">내 리뷰 보기</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          ...
+          <div class="d-flex row">
+            <div class="col-5" style="height: 300px;">
+              <div class="d-flex justify-content-start align-items-end ms-2">
+                <span>작성자: </span>
+                <div class="ms-4">{{ state.reviewDetailList.nickname }}</div>
+              </div>
+              <div class="d-flex justify-content-start align-items-end my-3 ms-2">
+                <span>청결: </span>
+                <div class="d-flex ms-5">
+                  <div v-for="(star, idx) in state.reviewDetailList.cleanness" :key="idx"
+                    class="view-star-full me-2" style="height: 25px; width: 25px;"
+                  ></div>
+                  <div v-for="(star, idx) in (5-state.reviewDetailList.cleanness)" :key="idx"
+                    class="view-star-none me-2" style="height: 25px; width: 25px;"
+                  ></div>
+                </div>
+              </div>
+              <div class="d-flex justify-content-start align-items-end my-3 ms-2">
+                <span>위치: </span>
+                <div class="d-flex ms-5">
+                  <div v-for="(star, idx) in state.reviewDetailList.location" :key="idx"
+                    class="view-star-full me-2" style="height: 25px; width: 25px;"
+                  ></div>
+                  <div v-for="(star, idx) in (5-state.reviewDetailList.location)" :key="idx"
+                    class="view-star-none me-2" style="height: 25px; width: 25px;"
+                  ></div>
+                </div>
+              </div>
+              <div class="d-flex justify-content-start align-items-end my-3 ms-2">
+                <span>시설: </span>
+                <div class="d-flex ms-5">
+                  <div v-for="(star, idx) in state.reviewDetailList.place" :key="idx"
+                    class="view-star-full me-2" style="height: 25px; width: 25px;"
+                  ></div>
+                  <div v-for="(star, idx) in (5-state.reviewDetailList.place)" :key="idx"
+                    class="view-star-none me-2" style="height: 25px; width: 25px;"
+                  ></div>
+                </div>
+              </div>
+              <div class="d-flex justify-content-start align-items-end mt-3 mb-4 ms-2">
+                <span>가격: </span>
+                <div class="d-flex ms-5">
+                  <div v-for="(star, idx) in state.reviewDetailList.price" :key="idx"
+                    class="view-star-full me-2" style="height: 25px; width: 25px;"
+                  ></div>
+                  <div v-for="(star, idx) in (5-state.reviewDetailList.price)" :key="idx"
+                    class="view-star-none me-2" style="height: 25px; width: 25px;"
+                  ></div>
+                </div>
+              </div>
+              <div class="my-2 ms-2">
+                <p>리뷰: </p>
+                <p>{{ state.reviewDetailList.description }}</p><br>
+              </div>
+            </div>
+            <div class="col-1"></div>
+            <div class="col-6" style="height: 250px;">
+              <span class="me-3">사진</span>
+              <div v-if="state.reviewDetailList.reviewImage" class="my-3">
+                <img :src="state.reviewDetailList.reviewImage" alt="" style="width: 270px; height: 180px;">
+              </div>
+            </div>
+          </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+          <button type="button" class="btn btn-primary">확인</button>
         </div>
       </div>
     </div>
@@ -209,7 +271,9 @@ export default {
       price: 0,
       place: 0,
       reviewImage: "",
-      description: ""
+      description: "",
+      reviewImg: "",
+      reviewDetailList: computed(() => store.getters["root/reviewDetailList"])
     })
 
     onMounted(async () => {
@@ -271,6 +335,13 @@ export default {
       state.reviewCreateId = id
     }
 
+    const reviewDetailInfo = async function (id) {
+      console.log(id)
+      store.dispatch("root/reviewDetailInfo", {
+        reservationId: id
+      })
+    }
+
     const moveToPlaceDetail = function (id) {
       router.push({
         name: "PlaceDetail",
@@ -303,6 +374,7 @@ export default {
       if( event.target.files && event.target.files.length > 0 ) {
         const file = event.target.files[0];
         state.reviewImage = URL.createObjectURL(file);
+        state.reviewImg = file
         // let data = new FormData()
         // data.append("profileImage", file)
         // await store.dispatch('root/profileChangeImage', { 'file': file })
@@ -310,7 +382,7 @@ export default {
     }
 
     const profileCreateReview = async function () {
-      const body = {
+      const reviewInfo = {
         reservationId: state.reviewCreateId,
         description: state.description,
         cleanness: state.clean,
@@ -318,7 +390,10 @@ export default {
         location: state.location,
         price: state.price,
       }
-      console.log(body)
+      const formData = new FormData();
+      formData.append('reviewInfo', new Blob([JSON.stringify(reviewInfo)] , {type: "application/json"}));
+      formData.append('reviewImage', state.reviewImg);
+      await store.dispatch("root/profileCreateReview", formData)
     }
 
     return { state, onMounted,
@@ -326,7 +401,8 @@ export default {
       profileReservationDoingList, 
       profileReservationDoneList, 
       profileGetMoreList,
-      reviewDetail, 
+      reviewDetail,
+      reviewDetailInfo,
       moveToPlaceDetail, 
       cancelPlaceReservation, 
       changeImgFile,
@@ -406,6 +482,14 @@ $color: orange;
 .stars input:nth-child(4):checked ~ label:nth-of-type(-n + 4),
 .stars input:nth-child(5):checked ~ label:nth-of-type(-n + 5) {
   @include set-star($color, $color);
+}
+
+.view-star-full {
+  @include set-star($color, $color);
+}
+
+.view-star-none {
+  @include set-star;
 }
 
 .btn-more {

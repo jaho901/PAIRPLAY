@@ -115,12 +115,17 @@ export function PROFILE_LIKE_MATE(state, data) {
   state.profileLikeMateList = data.list;
 }
 
+export function REVIEW_DETAIL_INFO(state, data) {
+  state.reviewDetailList = data
+}
+
 export async function MATE_ARTICLE_LIST(state, data) {
   state.mateArticleListTotalElements = 0;
   state.mateArticleListTotalElements = data.totalElements;
   state.mateArticleListTotalPage = 0;
   state.mateArticleListTotalPage = data.totalPages;
   state.mateArticleList = [];
+  console.log(data)
   for (var i in data.list) {
     var sub = {};
     sub["activityId"] = data.list[i]["activityId"];
@@ -129,6 +134,7 @@ export async function MATE_ARTICLE_LIST(state, data) {
     sub["location"] = data.list[i]["location"];
     sub["title"] = data.list[i]["title"];
     sub["like"] = data.list[i]["like"];
+    sub["nickname"] = data.list[i]["nickname"];
     var startDate = new Date(data.list[i]["createdDate"][0], data.list[i]["createdDate"][1] - 1, data.list[i]["createdDate"][2]);
     var today = new Date();
     var diff = today.getTime() - startDate.getTime();

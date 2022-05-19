@@ -68,6 +68,10 @@ export function profileLikeMateList(state) {
   return state.profileLikeMateList
 }
 
+export function reviewDetailList(state) {
+  return state.reviewDetailList
+}
+
 export function mateArticleList(state) {
   return state.mateArticleList;
 }

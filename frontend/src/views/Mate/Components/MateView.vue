@@ -6,17 +6,27 @@
         v-for="(card, i) in state.cards" :key="i"
         class="col-3 mt-4 mb-5"
       >
+      <!-- {{ card }} -->
         <a class="card d-flex justify-content-between" style="flex-direction: column;">
         <!-- Modal -->
-          <div class="mx-4 mt-4">
+          <div class="mx-4 mt-4"
+          type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+          @click="changeMateDetail(card.activityId)">
+            <div class="d-flex align-items-center">
+              <div class="me-3">
+                <img :src="card.profileImage" alt="" style="width: 25px; border-radius: 50px;">
+              </div>
+              <span>{{ card.nickname }}</span>
+            </div>
+            <br>
             <div class="d-flex justify-content-between">
               <span class="title">{{ card.title }}</span>
-              <button class="detail" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" @click="changeMateDetail(card.activityId)">자세히</button>
+              <!-- <button class="detail">자세히</button> -->
             </div>
             <div class="d-flex justify-content-between align-items-center pt-4">
               <div>
                 <div class="small mb-2">{{ card.location }}</div>
-                <div class="medium">{{ card.description }}</div>
+                <!-- <div class="medium">{{ card.description }}</div> -->
               </div>
               <div>
                 <span style="font-size: medium; font-weight: bold;">{{ state.category[card.categoryId] }}</span>
@@ -83,8 +93,8 @@
                     </div>
                     <div class="row my-3">
                       <div class="col-1"></div>
-                      <div class="col-3 modal-text" style="padding-bottom: 4%; border-bottom: 1px solid rgb(226 226 226);">설명</div>
-                      <div class="col-7" style="border-bottom: 1px solid rgb(226 226 226);">{{ mateDetail.description }}</div>
+                      <div class="col-3 modal-text" style="padding-bottom: 4%;">설명</div>
+                      <div class="col-7">{{ mateDetail.description }}</div>
                     </div>
                     <div class="row mt-5">
                       <div class="col-1"></div>
@@ -93,7 +103,7 @@
                   </div>
                   <div class="col-7" style="text-align: center;">
                     <br>
-                    <img :src="mateDetail.profileImage" alt="" style="width: 70%;">
+                    <img :src="mateDetail.profileImage" alt="" style="width: 70%; border-radius: 10px;">
                   </div>
                 </div>               
                 <br>

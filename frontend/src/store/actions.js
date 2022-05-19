@@ -625,6 +625,53 @@ export async function profileLikeMateCancle({ dispatch }, payload) {
     });
 }
 
+export async function profileCreateReview({ dispatch }, payload) {
+  const formData = payload
+  const url = `places/review`
+  const jwt = localStorage.getItem("jwt");
+  await $axios
+    .post(url, formData, {
+      headers: {
+        Authorization: "Bearer " + jwt,
+      },
+    })
+    .then(async () => {
+      await dispatch("profileReservationList", 0)
+      Swal.fire({
+        icon: 'success',
+        title: '성공!',
+        text: '리뷰 등록에 성공하셨습니다.',
+      })
+    })
+    .catch((err) => {
+      console.log(err)
+      Swal.fire({
+        icon: 'error',
+        title: '실패...',
+        text: '리뷰 등록에 실패하셨습니다.',
+      })
+    })
+}
+
+export async function reviewDetailInfo({ commit }, payload) {
+  const reservationId = payload.reservationId
+  const url = `places/review/${reservationId}`
+  const jwt = localStorage.getItem("jwt")
+  await $axios
+    .get(url, {}, {
+      headers: {
+        Authorization: jwt
+      }
+    })
+    .then((res) => {
+      console.log(res)
+      commit("REVIEW_DETAIL_INFO", res.data)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+}
+
 export async function mateCreate({ state }, payload) {
   console.log(state)
   const body = payload
@@ -689,6 +736,7 @@ export async function mateDetailInfo({ commit }, payload) {
       },
     })
     .then((res) => {
+      console.log(res)
       commit("MATE_DETAIL_INFO", res.data)
     })
     .catch((err) => {
