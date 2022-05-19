@@ -15,12 +15,12 @@
 
 ### Frontend
 
-| Name       | Version      |
-| ---------- | ------------ |
-|            |              |
-| Javascript | ES6이상      |
-|            |              |
-| Nginx      | nginx-1.21.6 |
+| Name       | Version        |
+| ---------- | -------------- |
+| Vue        | @vue/cli 5.0.4 |
+| Javascript | ES6이상        |
+| Node       | V16.13.2       |
+| Nginx      | nginx-1.21.6   |
 
 ### Backend
 
@@ -30,6 +30,19 @@
 |      |         |
 |      |         |
 |      |         |
+
+
+
+### Server
+
+| Name    | Version                                |
+| ------- | -------------------------------------- |
+| Docker  | Docker version 20.10.12, build e91ed57 |
+| Jenkins | jenkins/jenkins:lts 이미지 사용        |
+|         |                                        |
+|         |                                        |
+
+
 
 ### DevOps
 
@@ -48,8 +61,22 @@
 - Figma
 - ERD Cloud
 - Google Docs
+- MobaXterm (Ubuntu 환경)
+- MySQL Workbench
 
 ### 2. 빌드 시 사용되는 환경 변수 등의 주요 내용 상세 기재
+
+```markdown
+사용중인 포트
+
+8088 -> 백엔드
+80, 443 -> 프론트엔드
+9090, 8080 -> 젠킨스
+3333, 27017 -> mongoDB
+3663 -> MySQL
+```
+
+
 
 ```python
 # /frontend/Dockerfile
@@ -88,7 +115,7 @@ server {
   listen [::]:80;
 
     # server_name 도메인;
-  server_name k6e205.p.ssafy.io;
+  server_name pairplay.site;
 
   access_log /var/log/nginx/access.log;
   error_log /var/log/nginx/error.log;
@@ -105,7 +132,7 @@ server {
     listen [::]:443 ssl;
 
     # server_name 도메인;
-    server_name k6e205.p.ssafy.io;
+    server_name pairplay.site;
 
     ssl_certificate /var/www/html/fullchain.pem;
     ssl_certificate_key /var/www/html/privkey.pem;
@@ -118,13 +145,22 @@ server {
     }
 
     location /api {
-        proxy_pass https://k6e205.p.ssafy.io:8088/api;
+        proxy_pass https://pairplay.site:8088/api;
+    }
+
+    location /oauth2 {
+        proxy_pass https://pairplay.site:8088/oauth2;
     }
 
     location /swagger-ui {
-        return https://k6e205.p.ssafy.io:8088/swagger-ui/index.html;
+        return https://pairplay.site:8088/swagger-ui/index.html;
+    }
+
+    location /jenkins {
+        return http://pairplay.site:9090/;
     }
 }
+
 ```
 
 ```python
@@ -447,6 +483,20 @@ node {
 - 깃랩 해당하는 브랜치에 푸쉬/머지로 테스트 해보기.
 
 
+
+// 추가 편의사항
+
+
+
+1. 머지 또는 변화가 생겼을 경우 MM과 연결하여 빌드 시작과 오류/완료를 메세지로 받아볼 수 있도록 하였음.
+
+   -> Try - catch 문을 사용했기 때문에 오류에 대응할 수 있도록 하였다.
+
+   ​	중간에 오류가 발생하여도 docker run은 정상작동할 수 있는지 테스트 해보기 위해 finally를 사용하였다.
+
+![image-20220519153032807](Docs.assets/image-20220519153032807.png)
+
+![image-20220519153052733](Docs.assets/image-20220519153052733.png)
 
 
 
