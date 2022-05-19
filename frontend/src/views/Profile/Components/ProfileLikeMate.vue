@@ -1,12 +1,8 @@
 <template>
-  <div class="d-flex" style="width: 100%;">
-    <div
-      v-for="(data, idx) in state.profileLikeMateList"
-      :key="idx"
-      class="col-4"
-    >
+  <div class="d-flex" style="width: 100%">
+    <div v-for="(data, idx) in state.profileLikeMateList" :key="idx" class="col-4">
       <div class="container my-4 ms-5">
-        <img :src="data.categoryImage" alt="" class="like-img">
+        <img :src="data.categoryImage" alt="" class="like-img" />
       </div>
       <div class="container d-flex justify-content-between">
         <div>
@@ -16,7 +12,7 @@
         </div>
         <div class="me-3">
           <label class="like">
-            <input type="checkbox" checked @click="profileLikeMateCancle(data.id)">
+            <input type="checkbox" checked @click="profileLikeMateCancle(data.id)" />
             <div class="hearth" />
           </label>
         </div>
@@ -45,54 +41,74 @@
 </template>
 
 <script>
-import { reactive, computed, onMounted } from 'vue'
-import { useStore } from 'vuex'
+import { reactive, computed, onMounted } from "vue";
+import { useStore } from "vuex";
+import Swal from "sweetalert2";
 
 export default {
   name: "ProfileLikeMate",
-  setup () {
-    const store = useStore()
+  setup() {
+    const store = useStore();
     const state = reactive({
       page: 0,
       profileLikeMateTotalPages: computed(() => store.getters["root/profileLikeMateTotalPages"]),
       profileLikeMateList: computed(() => store.getters["root/profileLikeMateList"]),
       category: {
-        1: "축구", 2: "풋살", 3: "농구", 4: "야구",
-        5: "볼링", 6: "골프", 7: "테니스", 8: "배드민턴",
-        9: "헬스", 10:	"필라테스", 11:	"격투기", 12:	"수영"
+        1: "축구",
+        2: "풋살",
+        3: "농구",
+        4: "야구",
+        5: "볼링",
+        6: "골프",
+        7: "테니스",
+        8: "배드민턴",
+        9: "헬스",
+        10: "필라테스",
+        11: "격투기",
+        12: "수영",
       },
-    })
+    });
 
-    onMounted (async () => {
-      var activeBtn = document.getElementsByClassName("page-mate")[state.page]
-      activeBtn.classList.add("active")
-    })
+    onMounted(async () => {
+      var activeBtn = document.getElementsByClassName("page-mate")[state.page];
+      activeBtn.classList.add("active");
+    });
 
-    const changePage = async function () {
-      for (var i=0; i < state.profileLikeMateTotalPages; i++) {
-        var Btn = document.getElementsByClassName("page-mate")[i]
-        Btn.classList.remove("active")
+    const changePage = async function (event) {
+      for (var i = 0; i < state.profileLikeMateTotalPages; i++) {
+        var Btn = document.getElementsByClassName("page-mate")[i];
+        Btn.classList.remove("active");
       }
-      var activeBtn = document.getElementsByClassName("page-mate")[Number(event.target.textContent)-1]
-      activeBtn.classList.add("active")
-      console.log(Number(event.target.textContent)-1)
-      await store.dispatch("root/profileLikeMate", Number(event.target.textContent)-1)
-    }
+      var activeBtn = document.getElementsByClassName("page-mate")[Number(event.target.textContent) - 1];
+      activeBtn.classList.add("active");
+      await store.dispatch("root/profileLikeMate", Number(event.target.textContent) - 1);
+    };
 
     const profileLikeMateCancle = async function (id) {
-      await store.dispatch("root/profileLikeMateCancle", {
-        "id": id,
-        "page": state.page
-      })
-    }
+      Swal.fire({
+        title: "정말 찜하기를 취소합니까?",
+        showDenyButton: true,
+        showCancelButton: false,
+        confirmButtonText: "찜 취소하기",
+        denyButtonText: `그만두기`,
+      }).then(async (result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          Swal.fire("취소 성공!", "", "success");
+          await store.dispatch("root/profileLikeMateCancle", {
+            id: id,
+            page: state.page,
+          });
+        }
+      });
+    };
 
-    return { state, onMounted, changePage, profileLikeMateCancle }
-  }
-}
+    return { state, onMounted, changePage, profileLikeMateCancle };
+  },
+};
 </script>
 
 <style scoped lang="scss">
-
 .address {
   font-size: small;
   color: #adadad;
@@ -127,12 +143,12 @@ input {
   overflow: visible;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -webkit-tap-highlight-color: transparent;
-    --size: 80px;
+  --size: 80px;
   --frames: 62;
 }
 
 .hearth {
-  background-image: url('https://assets.codepen.io/23500/Hashflag-AppleEvent.svg');
+  background-image: url("https://assets.codepen.io/23500/Hashflag-AppleEvent.svg");
   background-size: calc(var(--size) * var(--frames)) var(--size);
   background-repeat: no-repeat;
   background-position-x: calc(var(--size) * (var(--frames) * -1 + 2));
@@ -141,12 +157,12 @@ input {
   height: var(--size);
   --size: 80px;
   --frames: 62;
-  animation: like 1s steps(calc(var(--frames) - 3));  
+  animation: like 1s steps(calc(var(--frames) - 3));
   animation-fill-mode: forwards;
 }
 
 input:checked + .hearth {
-  animation: like 1s steps(calc(var(--frames) - 3));  
+  animation: like 1s steps(calc(var(--frames) - 3));
   animation-fill-mode: forwards;
 }
 
@@ -161,7 +177,7 @@ input:checked + .hearth {
 
 @media (hover: hover) {
   .like:hover {
-    background-color: #E1255E15;
+    background-color: #e1255e15;
     .hearth {
       background-position-x: calc(var(--size) * (var(--frames) * -1 + 1));
     }
@@ -169,7 +185,6 @@ input:checked + .hearth {
 }
 
 /* pagination */
-
 
 .pagination {
   margin: auto;
@@ -231,6 +246,6 @@ input:checked + .hearth {
 .like-img {
   position: relative;
   width: 50%;
+  object-fit: cover;
 }
-
 </style>

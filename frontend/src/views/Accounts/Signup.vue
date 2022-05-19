@@ -83,6 +83,7 @@
 import { reactive, computed, onMounted } from "vue"
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import Swal from 'sweetalert2'
 export default {
   name: "Signup",
   setup(){
@@ -200,19 +201,43 @@ export default {
             name: 'SignUpSecond',
           })
         } else if (state.emailValid == false) {
-          alert('이메일 양식이 잘못되었습니다.')
+          Swal.fire({
+            icon: 'error',
+            title: '실패...',
+            text: '이메일 양식이 잘못되었습니다.',
+          })
         } else if (state.nicknameValid == false) {
-          alert('닉네임 양식이 잘못되었습니다.')
+          Swal.fire({
+            icon: 'error',
+            title: '실패...',
+            text: '닉네임 양식이 잘못되었습니다.',
+          })
         } else {
-          alert('비밀번호 양식이 잘못되었습니다.')
+          Swal.fire({
+            icon: 'error',
+            title: '실패...',
+            text: '비밀번호 양식이 잘못되었습니다.',
+          })
         }
       } else {
         if (state.emailDuplicate === 0) {
-          alert('이메일 중복 확인을 해주세요.')
+          Swal.fire({
+            icon: 'error',
+            title: '실패...',
+            text: '이메일 중복 확인을 해주세요.',
+          })
         } else if (state.nicknameDuplicate === 0) {
-          alert('닉네임 중복 확인을 해주세요.')
+          Swal.fire({
+            icon: 'error',
+            title: '실패...',
+            text: '닉네임 중복 확인을 해주세요.',
+          })
         } else {
-          alert('비밀번호와 비밀번호 확인이 동일하지 않습니다.')
+          Swal.fire({
+            icon: 'error',
+            title: '실패...',
+            text: '비밀번호와 비밀번호 확인이 동일하지 않습니다.',
+          })
         }
       }
       

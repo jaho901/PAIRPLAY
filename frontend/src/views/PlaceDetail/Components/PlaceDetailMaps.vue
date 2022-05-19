@@ -61,12 +61,12 @@ export default {
       marker.value = markerObject;
       // console.log(marker.value, "marker");
     };
-    const onMarkerClicked = (event) => {
-      console.log(event, "onMarkerClicked");
+    const onMarkerClicked = () => {
+      // console.log(event, "onMarkerClicked");
     };
-    const checkPosition = (event) => {
+    const checkPosition = () => {
       // positionYX['latitude':]
-      console.log(event, "checkPosition");
+      // console.log(event, "checkPosition");
     };
     // const moveToPlace = () => {
 

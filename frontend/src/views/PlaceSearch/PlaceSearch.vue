@@ -116,7 +116,6 @@ export default {
       activeBtn.classList.add("active");
       searchFiltersData.value["page"];
       await store.dispatch("root/getPlaceSearchInfo", searchFiltersData.value);
-      console.log(nowPage.value);
     };
     const nextPages = async () => {
       for (var i = 0; i < totalPages.value; i++) {
@@ -135,10 +134,8 @@ export default {
       activeBtn.classList.add("active");
       searchFiltersData.value["page"];
       await store.dispatch("root/getPlaceSearchInfo", searchFiltersData.value);
-      console.log(nowPage.value);
     };
     const changePage = async (event) => {
-      console.log(event.target.textContent);
       if (Number(event.target.textContent) <= 1) {
         var activeBtn = document.getElementsByClassName("page-item")[0];
       } else if (Number(event.target.textContent) >= totalPages.value) {

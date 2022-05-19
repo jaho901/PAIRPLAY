@@ -44,6 +44,7 @@ import { reactive } from "vue"
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import axios from "axios";
+import Swal from 'sweetalert2'
 export default {
   name: "Login",
   setup() {
@@ -62,11 +63,20 @@ export default {
       await store.dispatch("root/login", payload)
       const loginStatus = store.getters["root/loginStatus"]
       if (loginStatus == true) {
+        Swal.fire({
+          icon: 'success',
+          title: '성공!',
+          text: '로그인에 성공했습니다.',
+        })
         await router.push({
         name: "Main"
       })
       } else {
-        alert('로그인에 실패했습니다.')
+        Swal.fire({
+          icon: 'error',
+          title: '실패...',
+          text: '로그인에 실패했습니다.',
+        })
       }
     }
 
@@ -88,7 +98,11 @@ export default {
         await axios.post(url, state.email)
         .then((res) => {
           if (res.data.code == 200) {
-            alert('존재하지 않는 이메일입니다.')
+            Swal.fire({
+              icon: 'error',
+              title: '실패...',
+              text: '존재하지 않는 이메일입니다.',
+            })
             } else {  
             store.dispatch("root/loginResetPassword", {
               'value': state.email
@@ -96,7 +110,7 @@ export default {
           }
         })
       } else {
-        alert('자신의 이메일을 기입한 이후 클릭해주세요.')
+        Swal.fire('자신의 이메일을 기입한 이후 클릭해주세요.')
       }
     }
 

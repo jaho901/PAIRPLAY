@@ -39,7 +39,7 @@
         </div>
         <place-recommend></place-recommend>
       </div>
-      <div class="placeRecentView container my-5" v-if="recentCards.length >= 1">
+      <div class="placeRecentView container my-5" v-if="recentCards">
         <div class="category-title ps-3 mt-3 mb-2 d-flex justify-content-between">
           <div class="fs-5 fw-bold mb-4">최근 조회한 시설</div>
           <!-- <p class="fw-bold pe-2 pt-3" style="font-size: 16px">전체보기</p> -->
@@ -102,7 +102,9 @@ export default {
   background: black;
   margin-bottom: 5rem;
   /* background-color: rgba(0, 0, 0, 0.4); */
-  background: url("@/assets/images/Main/Mate2.jpeg") 50% 40% no-repeat;
+  // background: url("@/assets/images/Main/Place.jpeg") 50% 40% no-repeat;
+
+  background: url("https://images.pexels.com/photos/3660204/pexels-photo-3660204.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940") 50% 60% no-repeat;
   background-size: 100% auto;
 }
 .PlaceBackgroundImageCover {
