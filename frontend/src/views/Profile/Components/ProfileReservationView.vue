@@ -3,9 +3,9 @@
     <div class="d-flex justify-content-between">
       <div><b>예약 기록</b></div>
       <div class="d-flex align-items-end">
-        <div class="me-5" style="font-size: medium; cursor: pointer;" @click="profileReservationList"><b>모든 장소</b></div>
-        <div class="me-5" style="font-size: medium; cursor: pointer;" @click="profileReservationDoingList"><b>예악 중인 장소</b></div>
-        <div style="font-size: medium; cursor: pointer;" @click="profileReservationDoneList"><b>사용 완료 장소</b></div>
+        <div class="me-5" style="font-size: medium; cursor: pointer;" @click="profileReservationList"><b class="all">모든 장소</b></div>
+        <div class="me-5" style="font-size: medium; cursor: pointer;" @click="profileReservationDoingList"><b class="doing">예악 중인 장소</b></div>
+        <div style="font-size: medium; cursor: pointer;" @click="profileReservationDoneList"><b class="done">사용 완료 장소</b></div>
       </div>
     </div>
     <hr>
@@ -76,9 +76,9 @@
         </div>
         <div class="modal-body">
           <div class="d-flex row">
-            <div class="col-5" style="height: 250px;">
-              <div class="d-flex justify-content-between align-items-center">
-                <span>cleanness: </span>
+            <div class="col-5" style="height: 300px;">
+              <div class="d-flex justify-content-around align-items-end">
+                <span>청결: </span>
                 <div class="stars">
                   <input type="radio" id="clean1" value="1" name="clean" @click="changeClean($event)">
                   <input type="radio" id="clean2" value="2" name="clean" @click="changeClean($event)">
@@ -93,8 +93,8 @@
                   <label for="clean5">5 stars</label>
                 </div>
               </div>
-              <div class="d-flex justify-content-between align-items-center my-3">
-                <span>location: </span>
+              <div class="d-flex justify-content-around align-items-end my-2">
+                <span>위치: </span>
                 <div class="stars">
                   <input type="radio" id="location1" value="1" name="location" @click="changeLocation($event)">
                   <input type="radio" id="location2" value="2" name="location" @click="changeLocation($event)">
@@ -109,8 +109,8 @@
                   <label for="location5">5 stars</label>
                 </div>
               </div>
-              <div class="d-flex justify-content-between align-items-center my-3">
-                <span>place: </span>
+              <div class="d-flex justify-content-around align-items-end my-2">
+                <span>시설: </span>
                 <div class="stars">
                   <input type="radio" id="place1" value="1" name="place" @click="changePlace($event)">
                   <input type="radio" id="place2" value="2" name="place" @click="changePlace($event)">
@@ -125,8 +125,8 @@
                   <label for="place5">5 stars</label>
                 </div>
               </div>
-              <div class="d-flex justify-content-between align-items-center my-3">
-                <span>price: </span>
+              <div class="d-flex justify-content-around align-items-end mt-2 mb-4">
+                <span>가격: </span>
                 <div class="stars">
                   <input type="radio" id="price1" value="1" name="price" @click="changePrice($event)">
                   <input type="radio" id="price2" value="2" name="price" @click="changePrice($event)">
@@ -141,12 +141,16 @@
                   <label for="price5">5 stars</label>
                 </div>
               </div>
+              <div class="d-flex justify-content-around align-items-start my-2">
+                <span>리뷰: </span>
+                <textarea name="" id="" style="resize: none;" v-model="state.description"></textarea>
+              </div>
             </div>
             <div class="col-1"></div>
             <div class="col-6" style="height: 250px;">
               <span class="me-3">사진 등록</span>
               <input type="file" @change="changeImgFile">
-              <div class="my-3">
+              <div v-if="state.reviewImage" class="my-3">
                 <img :src="state.reviewImage" alt="" style="width: 270px; height: 180px;">
               </div>
             </div>
@@ -154,7 +158,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-          <button type="button" class="btn btn-primary">리뷰 생성</button>
+          <button type="button" class="btn btn-primary" @click="profileCreateReview">리뷰 생성</button>
         </div>
       </div>
     </div>
@@ -205,27 +209,48 @@ export default {
       price: 0,
       place: 0,
       reviewImage: "",
+      description: ""
     })
 
     onMounted(async () => {
       await store.dispatch("root/profileReservationList", 0)
+      var all = document.getElementsByClassName("all")[0]
+      all.classList.add("select")
     })
 
     const profileReservationList = async function () {
       state.status = "All"
       state.page = 0
+      var all = document.getElementsByClassName("all")[0]
+      var doing = document.getElementsByClassName("doing")[0]
+      var done = document.getElementsByClassName("done")[0]
+      all.classList.add("select")
+      doing.classList.remove("select")
+      done.classList.remove("select")
       await store.dispatch("root/profileReservationList", state.page)
     }
 
     const profileReservationDoingList = async function () {
       state.status = "Doing"
       state.page = 0
+      var all = document.getElementsByClassName("all")[0]
+      var doing = document.getElementsByClassName("doing")[0]
+      var done = document.getElementsByClassName("done")[0]
+      all.classList.remove("select")
+      doing.classList.add("select")
+      done.classList.remove("select")
       await store.dispatch("root/profileReservationDoingList", state.page)
     }
 
     const profileReservationDoneList = async function () {
       state.status = "Done"
       state.page = 0
+      var all = document.getElementsByClassName("all")[0]
+      var doing = document.getElementsByClassName("doing")[0]
+      var done = document.getElementsByClassName("done")[0]
+      all.classList.remove("select")
+      doing.classList.remove("select")
+      done.classList.add("select")
       await store.dispatch("root/profileReservationDoneList", state.page)
     }
 
@@ -284,6 +309,18 @@ export default {
       }
     }
 
+    const profileCreateReview = async function () {
+      const body = {
+        reservationId: state.reviewCreateId,
+        description: state.description,
+        cleanness: state.clean,
+        place: state.place,
+        location: state.location,
+        price: state.price,
+      }
+      console.log(body)
+    }
+
     return { state, onMounted,
       profileReservationList, 
       profileReservationDoingList, 
@@ -295,6 +332,7 @@ export default {
       changeImgFile,
       changeClean, changeLocation,
       changePlace, changePrice,
+      profileCreateReview,
     }
   }
 }
@@ -378,6 +416,10 @@ $color: orange;
   border-radius: 30px;
   width: 7rem;
   height: 3rem;
+}
+
+.select {
+  font-size: large;
 }
 
 </style>

@@ -191,7 +191,6 @@ export async function CHANGE_POSITION(state, data) {
     let tempList = { longitude, latitude, placeName };
     markers.push(tempList);
   }
-  console.log(markers, "마커임");
   // console.log(markers, "템프리스트");
   state.mapPosition = markers;
 }

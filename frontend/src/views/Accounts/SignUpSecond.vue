@@ -131,7 +131,6 @@ export default {
         address: state.address,
         phone: state.phone
       }
-      console.log(payload)
       await store.dispatch("root/signupSecond", payload)
       await router.push({
         name: "Main"
