@@ -88,7 +88,7 @@ export default {
             pay_method: "card",
             merchantuid: "merchant" + new Date().getTime(),
             name: "결제테스트",
-            amount: 1, // 결제금액
+            amount: 100, // 결제금액
             buyer_email: "iamport@siot.do",
             buyer_name: "구매자",
             buyer_tel: "010-1234-5678",
