@@ -64,7 +64,7 @@
             aria-describedby="addon-wrapping"
           />
         </div>
-        <button style="width: 5vw; border: none; border-radius: 5px" class="ms-4 btn-secondary" @click="changeFilters">검색</button>
+        <button style="width: 5vw; border: none; border-radius: 5px" class="ms-2 btn-secondary" @click="changeFilters">검색</button>
       </div>
     </div>
   </div>

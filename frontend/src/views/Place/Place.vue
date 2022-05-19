@@ -102,7 +102,9 @@ export default {
   background: black;
   margin-bottom: 5rem;
   /* background-color: rgba(0, 0, 0, 0.4); */
-  background: url("@/assets/images/Main/Place2.jpeg") 50% 40% no-repeat;
+  // background: url("@/assets/images/Main/Place.jpeg") 50% 40% no-repeat;
+
+  background: url("https://images.pexels.com/photos/3660204/pexels-photo-3660204.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940") 50% 60% no-repeat;
   background-size: 100% auto;
 }
 .PlaceBackgroundImageCover {
