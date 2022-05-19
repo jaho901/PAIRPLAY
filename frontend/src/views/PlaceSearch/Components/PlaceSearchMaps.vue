@@ -4,7 +4,7 @@
       <naver-marker v-for="card in cards" :key="card.id" :latitude="card.latitude" :longitude="card.longitude" @click="popUP(card.id)">
         <!-- @click="moveToDetail(card.id)" -->
         <div class="" v-if="card">
-          <div class="d-flex marker">
+          <div class="d-flex marker align-items-center">
             <i class="bi bi-geo-alt-fill"></i>
             <p class="my-0">{{ card.name }}</p>
           </div>
@@ -269,6 +269,7 @@ export default {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
+
   &:hover {
     z-index: 3;
     position: relative;

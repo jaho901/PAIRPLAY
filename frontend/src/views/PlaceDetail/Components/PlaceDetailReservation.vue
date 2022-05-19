@@ -83,7 +83,7 @@ export default {
             pay_method: "card",
             merchantuid: "merchant" + new Date().getTime(),
             name: "결제테스트",
-            amount: 1, // 결제금액
+            amount: 100, // 결제금액
             buyer_email: "iamport@siot.do",
             buyer_name: "구매자",
             buyer_tel: "010-1234-5678",
@@ -95,7 +95,7 @@ export default {
             if (rsp.success) {
               console.log("결제성공");
               alert("예약이 완료되었습니다.");
-              let tempbody = { placeId: placeInfos.value.placeId, reservationDt: selectedDate, price: 1, time: temp };
+              let tempbody = { placeId: placeInfos.value.placeId, reservationDt: selectedDate, price: 100, time: temp };
               // console.log(body, "제대로?");
               axios({
                 method: "post",
