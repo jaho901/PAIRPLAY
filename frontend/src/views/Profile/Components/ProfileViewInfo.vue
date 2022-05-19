@@ -215,7 +215,6 @@ export default {
       } else {
         state.isGender = true
       }
-      console.log(state)
     }
 
     const checkPasswordLength = function (num) {

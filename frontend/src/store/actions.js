@@ -1,5 +1,6 @@
 import store from "@/common/store";
 import $axios from "axios";
+import Swal from 'sweetalert2'
 
 export async function signupDuplicateEmail({ commit }, payload) {
   const url = "members/check/email";
@@ -9,15 +10,27 @@ export async function signupDuplicateEmail({ commit }, payload) {
     .then((res) => {
       if (res.data.code == 200) {
         commit("SIGNUP_DUPLICATE_EMAIL", 1);
-        alert("사용 가능한 이메일입니다.");
+        Swal.fire({
+          icon: 'success',
+          title: '성공!',
+          text: '사용 가능한 이메일입니다.',
+        })
       } else {
         commit("SIGNUP_DUPLICATE_EMAIL", 0);
-        alert("이미 존재하는 이메일입니다.");
+        Swal.fire({
+          icon: 'error',
+          title: '실패...',
+          text: '이미 존재하는 이메일입니다.',
+        })
       }
     })
     .catch(() => {
       commit("SIGNUP_DUPLICATE_EMAIL", 0);
-      alert("이미 존재하는 이메일입니다.");
+      Swal.fire({
+        icon: 'error',
+        title: '실패...',
+        text: '이미 존재하는 이메일입니다.',
+      })
     });
 }
 
@@ -29,15 +42,27 @@ export async function signupDuplicateNickname({ commit }, payload) {
     .then((res) => {
       if (res.data.code == 200) {
         commit("SIGNUP_DUPLICATE_NICKNAME", 1);
-        alert("사용 가능한 닉네임입니다.");
+        Swal.fire({
+          icon: 'success',
+          title: '성공!',
+          text: '사용 가능한 닉네임입니다.',
+        })
       } else {
         commit("SIGNUP_DUPLICATE_NICKNAME", 0);
-        alert("이미 존재하는 닉네임입니다.");
+        Swal.fire({
+          icon: 'error',
+          title: '실패...',
+          text: '이미 존재하는 닉네임입니다.',
+        })
       }
     })
     .catch(() => {
       commit("SIGNUP_DUPLICATE_NICKNAME", 0);
-      alert("이미 존재하는 닉네임입니다.");
+      Swal.fire({
+        icon: 'error',
+        title: '실패...',
+        text: '이미 존재하는 닉네임입니다.',
+      })
     });
 }
 
@@ -119,11 +144,19 @@ export async function loginResetPassword({ state }, payload) {
   await $axios
     .post(url, body)
     .then(() => {
-      alert("해당 이메일로 임시 비밀번호가 발급되었습니다.");
+      Swal.fire({
+        icon: 'success',
+        title: '성공!',
+        text: '해당 이메일로 임시 비밀번호가 발급되었습니다.',
+      })
     })
     .catch((err) => {
       console.log(err);
-      alert("임시 비밀번호 발급이 실패했습니다.");
+      Swal.fire({
+        icon: 'error',
+        title: '실패...',
+        text: '임시 비밀번호 발급이 실패했습니다.',
+      })
     });
 }
 
@@ -157,7 +190,7 @@ export async function profileChangeInfo({ state, dispatch }, payload) {
       },
     })
     .then(() => {
-      dispatch("getOtherInfo", {
+      dispatch("profileOtherInfo", {
         memberId: memberId,
         jwt: header,
       });
@@ -167,10 +200,10 @@ export async function profileChangeInfo({ state, dispatch }, payload) {
     });
 }
 
-export async function profileChangeImage({ state }, payload) {
+export async function profileChangeImage({ dispatch }, payload) {
   const formData = new FormData();
   formData.append("profileImage", payload.file);
-  console.log(state);
+  const memberId = payload.memberId
   const url = "profiles/profileImage";
   const jwt = localStorage.getItem("jwt");
   const header = {
@@ -182,10 +215,10 @@ export async function profileChangeImage({ state }, payload) {
   await $axios
     .post(url, formData, header)
     .then((res) => {
-      // dispatch("getOtherInfo", {
-      //   memberId: memberId,
-      //   jwt: header,
-      // });
+      dispatch("profileOtherInfo", {
+        memberId: memberId,
+        jwt: jwt,
+      });
       console.log(res);
     })
     .catch((err) => {
@@ -204,11 +237,19 @@ export async function profileChangePassword({ state }, payload) {
         Authorization: "Bearer " + header,
       },
     })
-    .then((res) => {
-      console.log(res)
+    .then(() => {
+      Swal.fire({
+        icon: 'success',
+        title: '성공!',
+        text: '비밀번호 변경에 성공했습니다.',
+      })
     })
-    .catch((err) => {
-      console.log(err);
+    .catch(() => {
+      Swal.fire({
+        icon: 'error',
+        title: '실패...',
+        text: '비밀번호 변경에 실패했습니다.',
+      })
     })
 }
 
@@ -223,7 +264,6 @@ export async function profileUserSchedule({ commit }, payload) {
       },
     })
     .then((res) => {
-      console.log(res);
       commit("PROFILE_USER_SCHEDULE", res.data.list);
     })
     .catch((err) => {
@@ -242,7 +282,6 @@ export async function profileDateTodo({ commit }, payload) {
       },
     })
     .then((res) => {
-      console.log(res);
       commit("PROFILE_ACTIVITY_PER_DAY", res.data.calendarDetailActivityResList);
       commit("PROFILE_DATE_PER_DAY", body.date);
     })
@@ -281,12 +320,16 @@ export async function profileMateFromAccept({ dispatch }, payload) {
         Authorization: "Bearer " + jwt,
       },
     })
-    .then((res) => {
-      console.log(res);
-      dispatch("profileMateListFrom", {
+    .then(async () => {
+      await dispatch("profileMateListFrom", {
         page: page,
         size: 3,
       });
+      Swal.fire({
+        icon: 'success',
+        title: '성공!',
+        text: '해당 메이트 신청을 수락했습니다.',
+      })
     })
     .catch((err) => {
       console.log(err);
@@ -303,12 +346,16 @@ export async function profileMateFromReject({ dispatch }, payload) {
         Authorization: "Bearer " + jwt,
       },
     })
-    .then((res) => {
-      console.log(res);
-      dispatch("profileMateListFrom", {
+    .then(async () => {
+      await dispatch("profileMateListFrom", {
         page: payload["page"],
         size: 3,
       });
+      Swal.fire({
+        icon: 'success',
+        title: '성공!',
+        text: '해당 메이트 신청을 거절했습니다.',
+      })
     })
     .catch((err) => {
       console.log(err);
@@ -462,8 +509,7 @@ export async function profileCancelPlaceReservation({ dispatch }, payload) {
         },
       }
     )
-    .then((res) => {
-      console.log(res);
+    .then(() => {
       dispatch("profileReservationList");
     })
     .catch((err) => {
@@ -481,12 +527,16 @@ export async function profileMateToCancle({ dispatch }, payload) {
         Authorization: "Bearer " + jwt,
       },
     })
-    .then(async (res) => {
-      console.log(res);
+    .then(async () => {
       await dispatch("profileMateListTo", {
         page: payload["page"],
         size: 3,
       });
+      Swal.fire({
+        icon: 'success',
+        title: '성공!',
+        text: '해당 메이트 신청이 취소되었습니다.',
+      })
     })
     .catch((err) => {
       console.log(err);
@@ -504,7 +554,6 @@ export async function profileLikePlace({ commit }, payload) {
       },
     })
     .then((res) => {
-      console.log(res);
       commit("PROFILE_LIKE_PLACE", res.data);
     })
     .catch((err) => {
@@ -527,8 +576,7 @@ export async function profileLikePlaceCancle({ dispatch }, payload) {
         },
       }
     )
-    .then((res) => {
-      console.log(res);
+    .then(() => {
       dispatch("profileLikePlace", page);
     })
     .catch((err) => {
@@ -569,8 +617,7 @@ export async function profileLikeMateCancle({ dispatch }, payload) {
         },
       }
     )
-    .then((res) => {
-      console.log(res);
+    .then(() => {
       dispatch("profileLikeMate", page);
     })
     .catch((err) => {
@@ -609,7 +656,11 @@ export async function mateArticleList({ commit }, payload) {
     })
     .then(async (res) => {
       if (res.data.list.length == 0) {
-        alert("해당결과가 없습니다.");
+        Swal.fire({
+          icon: 'error',
+          title: '실패...',
+          text: '해당결과가 없습니다.',
+        })
       } else {
         await commit("MATE_ARTICLE_FILTER", {
           "categoryId": 0,
@@ -663,7 +714,6 @@ export async function mateFilterChange({ commit }, payload) {
       },
     })
     .then((res) => {
-      console.log(res);
       commit("MATE_ARTICLE_FILTER", body);
       commit("MATE_ARTICLE_LIST", res.data.list);
     })
@@ -683,24 +733,23 @@ export async function mateApplyFor({ state }, payload) {
         Authorization: "Bearer " + jwt,
       },
     })
-    .then((res) => {
-      console.log(res);
-      alert("메이트 신청에 성공했습니다.");
+    .then(() => {
+      Swal.fire({
+        icon: 'success',
+        title: '성공!',
+        text: '메이트 신청에 성공했습니다.',
+      })
     })
-    .catch((err) => {
-      console.log(err);
-      alert("메이트 신청에 실패했습니다.");
+    .catch(() => {
+      Swal.fire({
+        icon: 'error',
+        title: '실패...',
+        text: '메이트 신청에 실패했습니다.',
+      })
     });
 }
 
 export async function mateLikeChange({ state }, payload) {
-  // const body = {
-  //   "categoryId": payload.categoryId,
-  //   "gungu": payload.gungu,
-  //   "search": payload.search,
-  //   "sido": payload.sido,
-  //   "page": payload.page,
-  // }
   console.log(state)
   const activityId = payload.activityId
   const url = `mates/like/${activityId}`
@@ -717,7 +766,6 @@ export async function mateLikeChange({ state }, payload) {
     )
     .then((res) => {
       console.log(res)
-      // dispatch("mateFilterChange", body)
     })
     .catch((err) => {
       console.log(err);
@@ -746,11 +794,16 @@ export async function getPlaceSearchInfo({ commit }, searchFiltersData) {
       },
     })
     .then((res) => {
+      console.log(res)
       if (res.data.placeList.length >= 1) {
         commit("PLACE_SEARCH_INFO", res.data);
         commit("CHANGE_POSITION", res.data);
       } else {
-        // alert("데이터가없습니다.");
+        Swal.fire({
+          icon: 'error',
+          title: '실패...',
+          text: '데이터가없습니다.',
+        })
       }
     })
     .catch((err) => {

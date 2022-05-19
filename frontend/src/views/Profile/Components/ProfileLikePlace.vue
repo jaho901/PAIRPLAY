@@ -47,6 +47,7 @@
 import { reactive, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import Swal from 'sweetalert2'
 
 export default {
   name: "ProfileLikePlace",
@@ -71,14 +72,25 @@ export default {
       }
       var activeBtn = document.getElementsByClassName("page-item")[Number(event.target.textContent)-1]
       activeBtn.classList.add("active")
-      console.log(Number(event.target.textContent)-1)
       await store.dispatch("root/profileLikePlace", Number(event.target.textContent)-1)
     }
 
     const profileLikePlaceCancle = async function (id) {
-      await store.dispatch("root/profileLikePlaceCancle", {
-        "id": id,
-        "page": state.page
+      Swal.fire({
+        title: '정말 찜하기를 취소합니까?',
+        showDenyButton: true,
+        showCancelButton: false,
+        confirmButtonText: '찜 취소하기',
+        denyButtonText: `그만두기`,
+      }).then(async (result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          Swal.fire('취소 성공!', '', 'success')
+          await store.dispatch("root/profileLikePlaceCancle", {
+            "id": id,
+            "page": state.page
+          })
+        } 
       })
     }
 

@@ -191,7 +191,6 @@ export async function CHANGE_POSITION(state, data) {
     let tempList = { longitude, latitude, placeName };
     markers.push(tempList);
   }
-  console.log(markers, "마커임");
   // console.log(markers, "템프리스트");
   state.mapPosition = markers;
 }
@@ -205,5 +204,6 @@ export async function CHECK_RESERVATION(state, data) {
   state.reservationCheck = data;
 }
 export async function SHOW_MAP_MARKER(state, data) {
+  state.showMapMarker = []
   state.showMapMarker = data;
 }

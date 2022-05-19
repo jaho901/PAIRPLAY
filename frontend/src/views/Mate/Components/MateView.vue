@@ -54,6 +54,7 @@
                 <br>
                 <div class="row">
                   <div class="col-5">
+                    {{ mateDetail }}
                     <div class="row my-3">
                       <div class="col-1"></div>
                       <div class="col-3 modal-text" style="padding-bottom: 4%; border-bottom: double; border-color: rgb(226 226 226);">공고 제목</div>
@@ -93,7 +94,6 @@
                   </div>
                   <div class="col-7" style="text-align: center;">
                     <br>
-                    {{ mateDetail }}
                     <img :src="mateDetail.profileImage" alt="" style="width: 70%;">
                   </div>
                 </div>               
