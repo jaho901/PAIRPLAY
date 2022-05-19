@@ -11,7 +11,7 @@
             <div class="dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">{{ state.region }}</div>
             <ul class="dropdown-menu mt-2" aria-labelledby="dropdownMenuButton" style="height: 60vh">
               <li class="sido">
-                <a v-for="(sido, idx) in state.sidoList" :key="idx" class="dropdown-item d-flex justify-content-between px-4" @mouseover="changeSido($event)">
+                <a v-for="(sido, idx) in state.sidoList" :key="idx" class="dropdown-item d-flex justify-content-center" @mouseover="changeSido($event)">
                   <div>{{ sido }}</div>
                 </a>
 
