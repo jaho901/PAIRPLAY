@@ -87,7 +87,7 @@ export default {
             pg: "inicis",
             pay_method: "card",
             merchantuid: "merchant" + new Date().getTime(),
-            name: "결제테스트",
+            name: placeInfos.value.name + " 예약",
             amount: 100, // 결제금액
             buyer_email: "iamport@siot.do",
             buyer_name: "구매자",
@@ -212,7 +212,7 @@ export default {
   width: 70rem;
 }
 .btn-primary {
-  background-color: #1976d2;
+  background-color: #3f8fdf;
   color: white;
   padding: 0.8rem 0.2rem 0.8rem 0.2rem;
   margin: 0rem 0rem 0rem 0.8rem;
@@ -232,7 +232,7 @@ export default {
   background-color: #1976d2;
   color: white;
   &:hover {
-    background-color: #1664b1;
+    background-color: #1976d2;
     color: white;
     box-shadow: 0 0 8px rgba(24, 24, 24, 0.1);
     border: 1px solid rgba(1, 1, 1, 0.3);
