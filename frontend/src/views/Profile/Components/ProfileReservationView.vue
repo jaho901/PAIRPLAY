@@ -203,10 +203,10 @@
               <div class="d-flex justify-content-start align-items-end my-3 ms-2">
                 <span>시설: </span>
                 <div class="d-flex ms-5">
-                  <div v-for="(star, idx) in state.reviewDetailList.place" :key="idx"
+                  <div v-for="(star, idx) in Number(state.reviewDetailList.place)" :key="idx"
                     class="view-star-full me-2" style="height: 25px; width: 25px;"
                   ></div>
-                  <div v-for="(star, idx) in (5-state.reviewDetailList.place)" :key="idx"
+                  <div v-for="(star, idx) in (5-Number(state.reviewDetailList.place))" :key="idx"
                     class="view-star-none me-2" style="height: 25px; width: 25px;"
                   ></div>
                 </div>
