@@ -705,6 +705,7 @@ export async function mateFilterChange({ commit }, payload) {
     search: payload.search,
     sido: payload.sido,
   };
+  console.log(body)
   const page = payload.page;
   const url = `mates?page=${page}`;
   await $axios
@@ -715,7 +716,7 @@ export async function mateFilterChange({ commit }, payload) {
     })
     .then((res) => {
       commit("MATE_ARTICLE_FILTER", body);
-      commit("MATE_ARTICLE_LIST", res.data.list);
+      commit("MATE_ARTICLE_LIST", res.data);
     })
     .catch((err) => {
       console.log(err);

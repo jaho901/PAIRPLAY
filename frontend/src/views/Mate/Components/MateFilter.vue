@@ -5,7 +5,7 @@
         <!-- 지역 -->
         <div class="btn placeSearchFiltersRegion btnPlace">
           <div class="dropdown">
-            <div class="dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">지역</div>
+            <div class="dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">{{ state.region }}</div>
             <ul class="dropdown-menu mt-2" aria-labelledby="dropdownMenuButton" style="height: 60vh;">
               <li class="sido">
                 <a 
@@ -41,7 +41,7 @@
         </div>
         <!-- 카테고리 -->
         <div class="btn-group">
-          <button type="button" class="btn btnPlace dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">운동 종목</button>
+          <button type="button" class="btn btnPlace dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">{{ state.categoryShow }}</button>
           <ul class="dropdown-menu py-2" style="min-width: 15vw; height: auto; font-size: 14px; border-radius: 15px">
             <div v-for="(cate, idx) in state.category" :key="idx" class="d-flex justify-content-start m-3 ms-4 row">
               <div v-for="(ca, index) in cate" :key="index" class="form-check col-6">
@@ -96,8 +96,10 @@ export default {
         '볼링': 5, '골프': 6, '테니스': 7, '배드민턴': 8, 
         '헬스': 9, '필라테스': 10, '격투기': 11, '수영': 12, 
       },
+      categoryShow: "운동 종목",
       sido: "",
       gungu: "",
+      region: "지역",
       sidoList: ["부산", "서울", "경기", "강원", "경남", "경북", "충남", "충북", "전남", "전북"],
       gunguList: {
         "부산": [["중구", "서구", "동구", "영도구"], ["부산진구", "동래구", "남구", "북구"], ["해운대구", "사하구", "금정구", "강서구"], ["연제구", "수영구", "사상구", "기장군"]],
@@ -137,6 +139,7 @@ export default {
 
     const changeGungu = function (event) {
       state.gungu = event.target.value
+      state.region = state.sido + " " + state.gungu
     }
 
     const inputCategory = async function (event) {
@@ -149,6 +152,7 @@ export default {
         }
       }
       state.categoryId = state.checkingCategory[event.target.value]
+      state.categoryShow = event.target.value
     }
 
     const mateFilterInfo = async function () {

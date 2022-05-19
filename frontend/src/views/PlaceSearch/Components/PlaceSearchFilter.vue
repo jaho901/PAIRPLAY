@@ -8,7 +8,7 @@
         <!-- 지역 -->
         <div class="btn placeSearchFiltersRegion btnPlace">
           <div class="dropdown">
-            <div class="dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">지역</div>
+            <div class="dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">{{ state.region }}</div>
             <ul class="dropdown-menu mt-2" aria-labelledby="dropdownMenuButton" style="height: 60vh;">
               <li class="sido">
                 <a 
@@ -44,7 +44,7 @@
         </div>
         <!-- 카테고리 -->
         <div class="btn-group">
-          <button type="button" class="btn btnPlace dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">운동 종목</button>
+          <button type="button" class="btn btnPlace dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">{{ state.categoryShow }}</button>
           <ul class="dropdown-menu py-2" style="min-width: 18vw; height: auto; font-size: 14px; border-radius: 15px">
             <div v-for="(cate, idx) in state.category" :key="idx" class="d-flex justify-content-start m-3 ms-4 row">
               <div v-for="(ca, index) in cate" :key="index" class="form-check col-6">
@@ -122,7 +122,9 @@ export default {
         ['헬스', '필라테스'], 
         ['격투기', '수영']
       ],
-      showMapMarker: computed(() => store.getters["root/showMapMarker"])
+      showMapMarker: computed(() => store.getters["root/showMapMarker"]),
+      region: "지역",
+      categoryShow: "운동 종목"
     })
     const timeData = ref({});
 
@@ -159,6 +161,7 @@ export default {
 
     const changeGungu = function (event) {
       searchFiltersData.gugun = event.target.value
+      state.region = searchFiltersData.sido + "" + searchFiltersData.gugun
     }
 
     const inputCategory = async function (event) {
@@ -171,6 +174,7 @@ export default {
         }
       }
       searchFiltersData.categoryList = [event.target.value]
+      state.categoryShow = event.target.value
     }
 
     const changeFilters = async function () {
