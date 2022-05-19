@@ -31,8 +31,8 @@
         <!-- 카테고리 -->
         <div class="btn-group">
           <button type="button" class="btn btnPlace dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">{{ state.categoryShow }}</button>
-          <ul class="dropdown-menu py-2" style="min-width: 18vw; height: auto; font-size: 14px; border-radius: 15px">
-            <div v-for="(cate, idx) in state.category" :key="idx" class="d-flex justify-content-start m-3 ms-4 row">
+          <ul class="dropdown-menu py-2" style="min-width: 21vw; height: auto; font-size: 14px; border-radius: 15px">
+            <div v-for="(cate, idx) in state.category" :key="idx" class="d-flex justify-content-start my-3 ps-5 row">
               <div v-for="(ca, index) in cate" :key="index" class="form-check col-6">
                 <input class="form-check-input" type="checkbox" name="checkbox" :id="ca" :value="ca" @click="inputCategory($event)" />
                 <label class="form-check-label col-6" :for="ca">{{ ca }}</label>
