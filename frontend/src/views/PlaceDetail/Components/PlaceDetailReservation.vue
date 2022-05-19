@@ -37,6 +37,7 @@ import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import axios from "axios";
 import "@vuepic/vue-datepicker/dist/main.css";
+import Swal from "sweetalert2";
 const BASE_URL = "https://pairplay.site/api/v1";
 
 export default {
@@ -73,7 +74,11 @@ export default {
       }
       // console.log(temp, "temp");
       if (temp.length == 0) {
-        alert("예약하려는 시간을 선택해주세요");
+        Swal.fire({
+          icon: "error",
+          title: "실패...",
+          text: "예약하려는 시간을 선택해주세요",
+        });
       } else {
         const { IMP } = window;
         IMP.init("imp57638465"); //iamport 대신 자신의 "가맹점 식별코드"를 사용
@@ -93,15 +98,22 @@ export default {
           function (rsp) {
             // callback
             if (rsp.success) {
-              let tempbody = { placeId: placeInfos.value.placeId, reservationDt: selectedDate, price: 100, time: temp };
+              console.log("결제성공");
+
+              let tempbody = { placeId: placeInfos.value.placeId, reservationDt: selectedDate, price: 1, time: temp };
               // console.log(body, "제대로?");
               axios({
                 method: "post",
                 data: tempbody,
                 headers: { Authorization: "Bearer " + localStorage.getItem("jwt") },
                 url: `${BASE_URL}/places/reservation`,
-              }).then(() => {
-                alert("예약이 완료되었습니다.");
+              }).then((res) => {
+                console.log(res);
+                Swal.fire({
+                  icon: "success",
+                  title: "성공!",
+                  text: "예약이 완료되었습니다.",
+                });
                 router.go(0);
               });
             } else {

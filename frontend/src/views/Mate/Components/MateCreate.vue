@@ -156,7 +156,6 @@ export default {
   setup() {
     const store = useStore();
     const router = useRouter();
-    // const Swal = require('sweetalert2')
     const state = reactive({
       category: ["축구", "풋살", "농구", "야구", "볼링", "골프", "테니스", "배드민턴", "헬스", "필라테스", "격투기", "수영"],
       genderList: ["남성", "여성", "상관없음"],

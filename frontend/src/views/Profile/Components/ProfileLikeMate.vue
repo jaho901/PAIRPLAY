@@ -47,6 +47,7 @@
 <script>
 import { reactive, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
+import Swal from 'sweetalert2'
 
 export default {
   name: "ProfileLikeMate",
@@ -68,21 +69,32 @@ export default {
       activeBtn.classList.add("active")
     })
 
-    const changePage = async function () {
+    const changePage = async function (event) {
       for (var i=0; i < state.profileLikeMateTotalPages; i++) {
         var Btn = document.getElementsByClassName("page-mate")[i]
         Btn.classList.remove("active")
       }
       var activeBtn = document.getElementsByClassName("page-mate")[Number(event.target.textContent)-1]
       activeBtn.classList.add("active")
-      console.log(Number(event.target.textContent)-1)
       await store.dispatch("root/profileLikeMate", Number(event.target.textContent)-1)
     }
 
     const profileLikeMateCancle = async function (id) {
-      await store.dispatch("root/profileLikeMateCancle", {
-        "id": id,
-        "page": state.page
+      Swal.fire({
+        title: '정말 찜하기를 취소합니까?',
+        showDenyButton: true,
+        showCancelButton: false,
+        confirmButtonText: '찜 취소하기',
+        denyButtonText: `그만두기`,
+      }).then(async (result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          Swal.fire('취소 성공!', '', 'success')
+          await store.dispatch("root/profileLikeMateCancle", {
+            "id": id,
+            "page": state.page
+          })
+        } 
       })
     }
 

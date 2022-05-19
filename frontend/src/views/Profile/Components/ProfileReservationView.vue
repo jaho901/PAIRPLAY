@@ -3,9 +3,9 @@
     <div class="d-flex justify-content-between">
       <div><b>예약 기록</b></div>
       <div class="d-flex align-items-end">
-        <div class="me-5" style="font-size: medium; cursor: pointer;" @click="profileReservationList"><b>모든 장소</b></div>
-        <div class="me-5" style="font-size: medium; cursor: pointer;" @click="profileReservationDoingList"><b>예악 중인 장소</b></div>
-        <div style="font-size: medium; cursor: pointer;" @click="profileReservationDoneList"><b>사용 완료 장소</b></div>
+        <div class="me-5" style="font-size: medium; cursor: pointer;" @click="profileReservationList"><b class="all">모든 장소</b></div>
+        <div class="me-5" style="font-size: medium; cursor: pointer;" @click="profileReservationDoingList"><b class="doing">예악 중인 장소</b></div>
+        <div style="font-size: medium; cursor: pointer;" @click="profileReservationDoneList"><b class="done">사용 완료 장소</b></div>
       </div>
     </div>
     <hr>
@@ -58,7 +58,7 @@
       </div>
       <div v-else-if="data.used==true & data.myReservation.writtenReview==true" class="col-2 d-flex justify-content-evenly align-items-center" style="flex-direction: column;">
         <button class="reser-btn" @click="moveToPlaceDetail(data.myReservation.placeId)">자세히</button>
-        <button class="reser-btn"  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2">내 리뷰</button>
+        <button class="reser-btn"  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2" @click="reviewDetailInfo(data.myReservation.id)">내 리뷰</button>
       </div>
     </div>
     <hr>
@@ -76,9 +76,9 @@
         </div>
         <div class="modal-body">
           <div class="d-flex row">
-            <div class="col-5" style="height: 250px;">
-              <div class="d-flex justify-content-between align-items-center">
-                <span>cleanness: </span>
+            <div class="col-5" style="height: 300px;">
+              <div class="d-flex justify-content-around align-items-end">
+                <span>청결: </span>
                 <div class="stars">
                   <input type="radio" id="clean1" value="1" name="clean" @click="changeClean($event)">
                   <input type="radio" id="clean2" value="2" name="clean" @click="changeClean($event)">
@@ -93,8 +93,8 @@
                   <label for="clean5">5 stars</label>
                 </div>
               </div>
-              <div class="d-flex justify-content-between align-items-center my-3">
-                <span>location: </span>
+              <div class="d-flex justify-content-around align-items-end my-2">
+                <span>위치: </span>
                 <div class="stars">
                   <input type="radio" id="location1" value="1" name="location" @click="changeLocation($event)">
                   <input type="radio" id="location2" value="2" name="location" @click="changeLocation($event)">
@@ -109,8 +109,8 @@
                   <label for="location5">5 stars</label>
                 </div>
               </div>
-              <div class="d-flex justify-content-between align-items-center my-3">
-                <span>place: </span>
+              <div class="d-flex justify-content-around align-items-end my-2">
+                <span>시설: </span>
                 <div class="stars">
                   <input type="radio" id="place1" value="1" name="place" @click="changePlace($event)">
                   <input type="radio" id="place2" value="2" name="place" @click="changePlace($event)">
@@ -125,8 +125,8 @@
                   <label for="place5">5 stars</label>
                 </div>
               </div>
-              <div class="d-flex justify-content-between align-items-center my-3">
-                <span>price: </span>
+              <div class="d-flex justify-content-around align-items-end mt-2 mb-4">
+                <span>가격: </span>
                 <div class="stars">
                   <input type="radio" id="price1" value="1" name="price" @click="changePrice($event)">
                   <input type="radio" id="price2" value="2" name="price" @click="changePrice($event)">
@@ -141,12 +141,16 @@
                   <label for="price5">5 stars</label>
                 </div>
               </div>
+              <div class="d-flex justify-content-around align-items-start my-2">
+                <span>리뷰: </span>
+                <textarea name="" id="" style="resize: none;" v-model="state.description"></textarea>
+              </div>
             </div>
             <div class="col-1"></div>
             <div class="col-6" style="height: 250px;">
               <span class="me-3">사진 등록</span>
               <input type="file" @change="changeImgFile">
-              <div class="my-3">
+              <div v-if="state.reviewImage" class="my-3">
                 <img :src="state.reviewImage" alt="" style="width: 270px; height: 180px;">
               </div>
             </div>
@@ -154,25 +158,87 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-          <button type="button" class="btn btn-primary">리뷰 생성</button>
+          <button type="button" class="btn btn-primary" @click="profileCreateReview">리뷰 생성</button>
         </div>
       </div>
     </div>
   </div>
   <!-- Modal View -->
   <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 750px;">
       <div class="modal-content" style="border: none;">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel2">내 리뷰 보기</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          ...
+          <div class="d-flex row">
+            <div class="col-5" style="height: 300px;">
+              <div class="d-flex justify-content-start align-items-end ms-2">
+                <span>작성자: </span>
+                <div class="ms-4">{{ state.reviewDetailList.nickname }}</div>
+              </div>
+              <div class="d-flex justify-content-start align-items-end my-3 ms-2">
+                <span>청결: </span>
+                <div class="d-flex ms-5">
+                  <div v-for="(star, idx) in state.reviewDetailList.cleanness" :key="idx"
+                    class="view-star-full me-2" style="height: 25px; width: 25px;"
+                  ></div>
+                  <div v-for="(star, idx) in (5-state.reviewDetailList.cleanness)" :key="idx"
+                    class="view-star-none me-2" style="height: 25px; width: 25px;"
+                  ></div>
+                </div>
+              </div>
+              <div class="d-flex justify-content-start align-items-end my-3 ms-2">
+                <span>위치: </span>
+                <div class="d-flex ms-5">
+                  <div v-for="(star, idx) in state.reviewDetailList.location" :key="idx"
+                    class="view-star-full me-2" style="height: 25px; width: 25px;"
+                  ></div>
+                  <div v-for="(star, idx) in (5-state.reviewDetailList.location)" :key="idx"
+                    class="view-star-none me-2" style="height: 25px; width: 25px;"
+                  ></div>
+                </div>
+              </div>
+              <div class="d-flex justify-content-start align-items-end my-3 ms-2">
+                <span>시설: </span>
+                <div class="d-flex ms-5">
+                  <div v-for="(star, idx) in state.reviewDetailList.place" :key="idx"
+                    class="view-star-full me-2" style="height: 25px; width: 25px;"
+                  ></div>
+                  <div v-for="(star, idx) in (5-state.reviewDetailList.place)" :key="idx"
+                    class="view-star-none me-2" style="height: 25px; width: 25px;"
+                  ></div>
+                </div>
+              </div>
+              <div class="d-flex justify-content-start align-items-end mt-3 mb-4 ms-2">
+                <span>가격: </span>
+                <div class="d-flex ms-5">
+                  <div v-for="(star, idx) in state.reviewDetailList.price" :key="idx"
+                    class="view-star-full me-2" style="height: 25px; width: 25px;"
+                  ></div>
+                  <div v-for="(star, idx) in (5-state.reviewDetailList.price)" :key="idx"
+                    class="view-star-none me-2" style="height: 25px; width: 25px;"
+                  ></div>
+                </div>
+              </div>
+              <div class="my-2 ms-2">
+                <p>리뷰: </p>
+                <p>{{ state.reviewDetailList.description }}</p><br>
+              </div>
+            </div>
+            <div class="col-1"></div>
+            <div class="col-6" style="height: 250px;">
+              <span class="me-3">사진</span>
+              <div v-if="state.reviewDetailList.reviewImage" class="my-3">
+                <img :src="state.reviewDetailList.reviewImage" alt="" style="width: 270px; height: 180px;">
+              </div>
+            </div>
+          </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+          <button type="button" class="btn btn-primary">확인</button>
         </div>
       </div>
     </div>
@@ -205,27 +271,50 @@ export default {
       price: 0,
       place: 0,
       reviewImage: "",
+      description: "",
+      reviewImg: "",
+      reviewDetailList: computed(() => store.getters["root/reviewDetailList"])
     })
 
     onMounted(async () => {
       await store.dispatch("root/profileReservationList", 0)
+      var all = document.getElementsByClassName("all")[0]
+      all.classList.add("select")
     })
 
     const profileReservationList = async function () {
       state.status = "All"
       state.page = 0
+      var all = document.getElementsByClassName("all")[0]
+      var doing = document.getElementsByClassName("doing")[0]
+      var done = document.getElementsByClassName("done")[0]
+      all.classList.add("select")
+      doing.classList.remove("select")
+      done.classList.remove("select")
       await store.dispatch("root/profileReservationList", state.page)
     }
 
     const profileReservationDoingList = async function () {
       state.status = "Doing"
       state.page = 0
+      var all = document.getElementsByClassName("all")[0]
+      var doing = document.getElementsByClassName("doing")[0]
+      var done = document.getElementsByClassName("done")[0]
+      all.classList.remove("select")
+      doing.classList.add("select")
+      done.classList.remove("select")
       await store.dispatch("root/profileReservationDoingList", state.page)
     }
 
     const profileReservationDoneList = async function () {
       state.status = "Done"
       state.page = 0
+      var all = document.getElementsByClassName("all")[0]
+      var doing = document.getElementsByClassName("doing")[0]
+      var done = document.getElementsByClassName("done")[0]
+      all.classList.remove("select")
+      doing.classList.remove("select")
+      done.classList.add("select")
       await store.dispatch("root/profileReservationDoneList", state.page)
     }
 
@@ -244,6 +333,13 @@ export default {
 
     const reviewDetail = async function (id) {
       state.reviewCreateId = id
+    }
+
+    const reviewDetailInfo = async function (id) {
+      console.log(id)
+      store.dispatch("root/reviewDetailInfo", {
+        reservationId: id
+      })
     }
 
     const moveToPlaceDetail = function (id) {
@@ -278,10 +374,26 @@ export default {
       if( event.target.files && event.target.files.length > 0 ) {
         const file = event.target.files[0];
         state.reviewImage = URL.createObjectURL(file);
+        state.reviewImg = file
         // let data = new FormData()
         // data.append("profileImage", file)
         // await store.dispatch('root/profileChangeImage', { 'file': file })
       }
+    }
+
+    const profileCreateReview = async function () {
+      const reviewInfo = {
+        reservationId: state.reviewCreateId,
+        description: state.description,
+        cleanness: state.clean,
+        place: state.place,
+        location: state.location,
+        price: state.price,
+      }
+      const formData = new FormData();
+      formData.append('reviewInfo', new Blob([JSON.stringify(reviewInfo)] , {type: "application/json"}));
+      formData.append('reviewImage', state.reviewImg);
+      await store.dispatch("root/profileCreateReview", formData)
     }
 
     return { state, onMounted,
@@ -289,12 +401,14 @@ export default {
       profileReservationDoingList, 
       profileReservationDoneList, 
       profileGetMoreList,
-      reviewDetail, 
+      reviewDetail,
+      reviewDetailInfo,
       moveToPlaceDetail, 
       cancelPlaceReservation, 
       changeImgFile,
       changeClean, changeLocation,
       changePlace, changePrice,
+      profileCreateReview,
     }
   }
 }
@@ -370,6 +484,14 @@ $color: orange;
   @include set-star($color, $color);
 }
 
+.view-star-full {
+  @include set-star($color, $color);
+}
+
+.view-star-none {
+  @include set-star;
+}
+
 .btn-more {
   font-size: large;
   color: white;
@@ -378,6 +500,10 @@ $color: orange;
   border-radius: 30px;
   width: 7rem;
   height: 3rem;
+}
+
+.select {
+  font-size: large;
 }
 
 </style>

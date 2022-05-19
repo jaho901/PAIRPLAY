@@ -8,7 +8,7 @@
         <!-- 지역 -->
         <div class="btn placeSearchFiltersRegion btnPlace">
           <div class="dropdown">
-            <div class="dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">지역</div>
+            <div class="dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">{{ state.region }}</div>
             <ul class="dropdown-menu mt-2" aria-labelledby="dropdownMenuButton" style="height: 60vh">
               <li class="sido">
                 <a v-for="(sido, idx) in state.sidoList" :key="idx" class="dropdown-item d-flex justify-content-between px-4" @mouseover="changeSido($event)">
@@ -30,7 +30,7 @@
         </div>
         <!-- 카테고리 -->
         <div class="btn-group">
-          <button type="button" class="btn btnPlace dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">운동 종목</button>
+          <button type="button" class="btn btnPlace dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">{{ state.categoryShow }}</button>
           <ul class="dropdown-menu py-2" style="min-width: 18vw; height: auto; font-size: 14px; border-radius: 15px">
             <div v-for="(cate, idx) in state.category" :key="idx" class="d-flex justify-content-start m-3 ms-4 row">
               <div v-for="(ca, index) in cate" :key="index" class="form-check col-6">
@@ -77,6 +77,7 @@ import "@vuepic/vue-datepicker/dist/main.css";
 
 import { reactive, onMounted, ref, watch, computed } from "vue";
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 
 // import Slider from "@vueform/slider";
 
@@ -86,6 +87,8 @@ export default {
   components: { Datepicker },
   setup() {
     const store = useStore();
+    const router = useRouter();
+
     const state = reactive({
       sidoList: ["부산", "서울", "경기", "강원", "경남", "경북", "충남", "충북", "전남", "전북"],
       gunguList: {
@@ -171,6 +174,8 @@ export default {
         ["격투기", "수영"],
       ],
       showMapMarker: computed(() => store.getters["root/showMapMarker"]),
+      region: "지역",
+      categoryShow: "운동 종목",
     });
     const timeData = ref({});
 
@@ -205,6 +210,7 @@ export default {
 
     const changeGungu = function (event) {
       searchFiltersData.gugun = event.target.value;
+      state.region = searchFiltersData.sido + "" + searchFiltersData.gugun;
     };
 
     const inputCategory = async function (event) {
@@ -217,6 +223,7 @@ export default {
         }
       }
       searchFiltersData.categoryList = [event.target.value];
+      state.categoryShow = event.target.value;
     };
 
     const changeFilters = async function () {
@@ -233,7 +240,9 @@ export default {
       searchFiltersData.page = 0;
       searchFiltersData.page = 0;
       searchFiltersData.searchWord = "";
-
+      state.region = "지역";
+      state.categoryShow = "운동 종목";
+      router.go(0);
       await changeFilters();
     };
 
