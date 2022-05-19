@@ -17,6 +17,7 @@ export default {
   profileLikeMateTotalPages: 0,
   profileLikeMateList: [],
   mateArticleList: {},
+  mateDetailList: {},
   mateArticleListTotalPage: 0,
   mateArticleListTotalElements: 0,
   mateArticleFilter: {},

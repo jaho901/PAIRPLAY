@@ -62,6 +62,9 @@ export default {
     const store = useStore();
     let gnbSlide = reactive({ ok: "" });
     const router = useRouter();
+    const state = reactive({
+      showMapMarker: computed(() => store.getters["root/showMapMarker"]),
+    });
     const showmarker = reactive({
       longitude: computed(() => store.state.root.showMapMarker.longitude),
       latitude: computed(() => store.state.root.showMapMarker.latitude),
@@ -211,6 +214,7 @@ export default {
       names,
       gnbSlide,
       // name,
+      state,
       marker,
       mapOptions,
       initLayers,

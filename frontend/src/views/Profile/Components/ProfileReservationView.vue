@@ -80,11 +80,11 @@
               <div class="d-flex justify-content-between align-items-center">
                 <span>cleanness: </span>
                 <div class="stars">
-                  <input type="radio" id="clean1" value="1" @click="changeClean($event)">
-                  <input type="radio" id="clean2" value="2" @click="changeClean($event)">
-                  <input type="radio" id="clean3" value="3" @click="changeClean($event)">
-                  <input type="radio" id="clean4" value="4" @click="changeClean($event)">
-                  <input type="radio" id="clean5" value="5" @click="changeClean($event)">
+                  <input type="radio" id="clean1" value="1" name="clean" @click="changeClean($event)">
+                  <input type="radio" id="clean2" value="2" name="clean" @click="changeClean($event)">
+                  <input type="radio" id="clean3" value="3" name="clean" @click="changeClean($event)">
+                  <input type="radio" id="clean4" value="4" name="clean" @click="changeClean($event)">
+                  <input type="radio" id="clean5" value="5" name="clean" @click="changeClean($event)">
                   
                   <label for="clean1" aria-label="Clean">1 star</label>
                   <label for="clean2">2 stars</label>
@@ -96,11 +96,11 @@
               <div class="d-flex justify-content-between align-items-center my-3">
                 <span>location: </span>
                 <div class="stars">
-                  <input type="radio" id="location1" value="1" @click="changeLocation($event)">
-                  <input type="radio" id="location2" value="2" @click="changeLocation($event)">
-                  <input type="radio" id="location3" value="3" @click="changeLocation($event)">
-                  <input type="radio" id="location4" value="4" @click="changeLocation($event)">
-                  <input type="radio" id="location5" value="5" @click="changeLocation($event)">
+                  <input type="radio" id="location1" value="1" name="location" @click="changeLocation($event)">
+                  <input type="radio" id="location2" value="2" name="location" @click="changeLocation($event)">
+                  <input type="radio" id="location3" value="3" name="location" @click="changeLocation($event)">
+                  <input type="radio" id="location4" value="4" name="location" @click="changeLocation($event)">
+                  <input type="radio" id="location5" value="5" name="location" @click="changeLocation($event)">
                   
                   <label for="location1" aria-label="Location">1 star</label>
                   <label for="location2">2 stars</label>
@@ -112,11 +112,11 @@
               <div class="d-flex justify-content-between align-items-center my-3">
                 <span>place: </span>
                 <div class="stars">
-                  <input type="radio" id="place1" value="1" @click="changePlace($event)">
-                  <input type="radio" id="place2" value="2" @click="changePlace($event)">
-                  <input type="radio" id="place3" value="3" @click="changePlace($event)">
-                  <input type="radio" id="place4" value="4" @click="changePlace($event)">
-                  <input type="radio" id="place5" value="5" @click="changePlace($event)">
+                  <input type="radio" id="place1" value="1" name="place" @click="changePlace($event)">
+                  <input type="radio" id="place2" value="2" name="place" @click="changePlace($event)">
+                  <input type="radio" id="place3" value="3" name="place" @click="changePlace($event)">
+                  <input type="radio" id="place4" value="4" name="place" @click="changePlace($event)">
+                  <input type="radio" id="place5" value="5" name="place" @click="changePlace($event)">
                   
                   <label for="place1" aria-label="Place">1 star</label>
                   <label for="place2">2 stars</label>
@@ -128,11 +128,11 @@
               <div class="d-flex justify-content-between align-items-center my-3">
                 <span>price: </span>
                 <div class="stars">
-                  <input type="radio" id="price1" value="1" @click="changePrice($event)">
-                  <input type="radio" id="price2" value="2" @click="changePrice($event)">
-                  <input type="radio" id="price3" value="3" @click="changePrice($event)">
-                  <input type="radio" id="price4" value="4" @click="changePrice($event)">
-                  <input type="radio" id="price5" value="5" @click="changePrice($event)">
+                  <input type="radio" id="price1" value="1" name="price" @click="changePrice($event)">
+                  <input type="radio" id="price2" value="2" name="price" @click="changePrice($event)">
+                  <input type="radio" id="price3" value="3" name="price" @click="changePrice($event)">
+                  <input type="radio" id="price4" value="4" name="price" @click="changePrice($event)">
+                  <input type="radio" id="price5" value="5" name="price" @click="changePrice($event)">
                   
                   <label for="price1" aria-label="Price">1 star</label>
                   <label for="price2">2 stars</label>
@@ -153,8 +153,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+          <button type="button" class="btn btn-primary">리뷰 생성</button>
         </div>
       </div>
     </div>
@@ -344,10 +344,6 @@ $color: orange;
 
 @mixin set-star($border: $color, $fill: transparent) {
   background: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='#{$fill}' stroke='#{$border}' stroke-width='38' d='M259.216 29.942L330.27 173.92l158.89 23.087L374.185 309.08l27.145 158.23-142.114-74.698-142.112 74.698 27.146-158.23L29.274 197.007l158.89-23.088z' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-}
-
-.stars {
-  display: flex;
 }
 
 .stars input {

@@ -81,9 +81,13 @@ export async function login({ commit }, payload) {
   await $axios
     .post(url, body)
     .then((res) => {
-      localStorage.setItem("jwt", res.data.accessToken);
-      commit("USER_INFO", res.data);
-      commit("LOGIN_STATUS", true);
+      if (res.data.code == 200) {
+        localStorage.setItem("jwt", res.data.accessToken);
+        commit("USER_INFO", res.data);
+        commit("LOGIN_STATUS", true);
+      } else {
+        console.log(res)
+      }
     })
     .catch((err) => {
       console.log(err);
@@ -189,22 +193,23 @@ export async function profileChangeImage({ state }, payload) {
     });
 }
 
-export async function profileChangePassword({ state }) {
-  console.log(state);
-  // const url = `profiles`
-  // const header = localStorage.getItem("jwt");
-  // await $axios
-  //   .post(url, {
-  //     headers: {
-  //       Authorization: "Bearer " + header,
-  //     },
-  //   })
-  //   .then((res) => {
-  //     console.log(res)
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   })
+export async function profileChangePassword({ state }, payload) {
+  console.log(state)
+  const url = `profiles`
+  const body = payload
+  const header = localStorage.getItem("jwt");
+  await $axios
+    .post(url, body, {
+      headers: {
+        Authorization: "Bearer " + header,
+      },
+    })
+    .then((res) => {
+      console.log(res)
+    })
+    .catch((err) => {
+      console.log(err);
+    })
 }
 
 export async function profileUserSchedule({ commit }, payload) {
@@ -573,6 +578,25 @@ export async function profileLikeMateCancle({ dispatch }, payload) {
     });
 }
 
+export async function mateCreate({ state }, payload) {
+  console.log(state)
+  const body = payload
+  const url = `mates/mate`
+  const jwt = localStorage.getItem("jwt");
+  await $axios
+    .post(url, body, {
+      headers: {
+        Authorization: "Bearer " + jwt,
+      },
+    })
+    .then((res) => {
+      console.log(res)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+}
+
 export async function mateArticleList({ commit }, payload) {
   const page = payload["page"];
   const jwt = localStorage.getItem("jwt");
@@ -584,18 +608,16 @@ export async function mateArticleList({ commit }, payload) {
       },
     })
     .then(async (res) => {
-      // console.log(res.data.list, "있음?");
       if (res.data.list.length == 0) {
         alert("해당결과가 없습니다.");
       } else {
-        console.log(res);
-        commit("MATE_ARTICLE_FILTER", {
-          categoryId: 0,
-          gungu: "",
-          search: "",
-          sido: "",
-        });
-        await commit("MATE_ARTICLE_LIST", res.data.list);
+        await commit("MATE_ARTICLE_FILTER", {
+          "categoryId": 0,
+          "gungu": "",
+          "search": "",
+          "sido": ""
+        })
+        await commit("MATE_ARTICLE_LIST", res.data);
       }
       // await commit("MATE_ARTICLE_LIST", res.data.list);
       // await commit("MATE_ARTICLE_PAGE", page);
@@ -604,6 +626,27 @@ export async function mateArticleList({ commit }, payload) {
       console.log(err);
     });
 }
+
+export async function mateDetailInfo({ commit }, payload) {
+  const activityId = payload.activityId
+  const url = `mates/${activityId}`
+  const jwt = localStorage.getItem("jwt")
+  await $axios
+    .get(url, {}, {
+      headers: {
+        Authorization: "Bearer " + jwt,
+      },
+    })
+    .then((res) => {
+      console.log(res)
+      commit("MATE_DETAIL_INFO", res.data)
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+
 export async function mateFilterChange({ commit }, payload) {
   const jwt = localStorage.getItem("jwt");
   const body = {
@@ -651,16 +694,17 @@ export async function mateApplyFor({ state }, payload) {
     });
 }
 
-export async function mateLikeChange({ dispatch }, payload) {
-  const body = {
-    categoryId: payload.categoryId,
-    gungu: payload.gungu,
-    search: payload.search,
-    sido: payload.sido,
-    page: payload.page,
-  };
-  const activityId = payload.activityId;
-  const url = `mates/like/${activityId}`;
+export async function mateLikeChange({ state }, payload) {
+  // const body = {
+  //   "categoryId": payload.categoryId,
+  //   "gungu": payload.gungu,
+  //   "search": payload.search,
+  //   "sido": payload.sido,
+  //   "page": payload.page,
+  // }
+  console.log(state)
+  const activityId = payload.activityId
+  const url = `mates/like/${activityId}`
   const jwt = localStorage.getItem("jwt");
   $axios
     .put(
@@ -673,8 +717,8 @@ export async function mateLikeChange({ dispatch }, payload) {
       }
     )
     .then((res) => {
-      console.log(res);
-      dispatch("mateFilterChange", body);
+      console.log(res)
+      // dispatch("mateFilterChange", body)
     })
     .catch((err) => {
       console.log(err);
@@ -703,11 +747,12 @@ export async function getPlaceSearchInfo({ commit }, searchFiltersData) {
       },
     })
     .then((res) => {
+      console.log(res)
       if (res.data.placeList.length >= 1) {
         commit("PLACE_SEARCH_INFO", res.data);
         commit("CHANGE_POSITION", res.data);
       } else {
-        // alert("데이터가없습니다.");
+        alert("데이터가없습니다.");
       }
     })
     .catch((err) => {
