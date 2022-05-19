@@ -246,7 +246,7 @@
           <!-- 총평점 끝 -->
           <!-- 리뷰시작 -->
           <!-- <hr class="class-1" /> -->
-          <div class="place-detail-reviews-frame d-flex flex-row align-items-center my-2">
+          <div class="place-detail-reviews-frame d-flex flex-column align-items-center my-2">
             <place-detail-reviews v-for="(review, idx) in placeInfos.reviewList" :key="idx" :review="review"></place-detail-reviews>
             <!-- {{ placeInfos.reviewList }} -->
           </div>
