@@ -179,33 +179,29 @@
               <div class="d-flex justify-content-start align-items-end my-3 ms-2">
                 <span style="font-weight: bold;">청결: </span>
                 <div class="d-flex ms-5">
-                  <div v-for="(star, idx) in Number(state.reviewDetailList.cleanness)" :key="idx" class="view-star-full me-2" style="height: 25px; width: 25px"></div>
-                  <div v-for="(star, idx) in (5-Number(state.reviewDetailList.cleanness))" :key="idx" class="view-star-none me-2" style="height: 25px; width: 25px"></div>
+                  <div v-for="(star, idx) in state.starList[Number(state.reviewDetailList.cleanness)]" :key="idx" class="view-star-full me-2" style="height: 25px; width: 25px"></div>
+                  <div v-for="(star, idx) in state.starList[(5-Number(state.reviewDetailList.cleanness))]" :key="idx" class="view-star-none me-2" style="height: 25px; width: 25px"></div>
                 </div>
               </div>
               <div class="d-flex justify-content-start align-items-end my-3 ms-2">
                 <span style="font-weight: bold;">위치: </span>
                 <div class="d-flex ms-5">
-                  <div v-for="(star, idx) in Number(state.reviewDetailList.location)" :key="idx" class="view-star-full me-2" style="height: 25px; width: 25px"></div>
-                  <div v-for="(star, idx) in (5-Number(state.reviewDetailList.location))" :key="idx" class="view-star-none me-2" style="height: 25px; width: 25px"></div>
+                  <div v-for="(star, idx) in state.starList[Number(state.reviewDetailList.location)]" :key="idx" class="view-star-full me-2" style="height: 25px; width: 25px"></div>
+                  <div v-for="(star, idx) in state.starList[(5-Number(state.reviewDetailList.location))]" :key="idx" class="view-star-none me-2" style="height: 25px; width: 25px"></div>
                 </div>
               </div>
               <div class="d-flex justify-content-start align-items-end my-3 ms-2">
                 <span style="font-weight: bold;">시설: </span>
                 <div class="d-flex ms-5">
-                  <div v-for="(star, idx) in Number(state.reviewDetailList.place)" :key="idx"
-                    class="view-star-full me-2" style="height: 25px; width: 25px;"
-                  ></div>
-                  <div v-for="(star, idx) in (5-Number(state.reviewDetailList.place))" :key="idx"
-                    class="view-star-none me-2" style="height: 25px; width: 25px;"
-                  ></div>
+                  <div v-for="(star, idx) in state.starList[Number(state.reviewDetailList.place)]" :key="idx" class="view-star-full me-2" style="height: 25px; width: 25px;"></div>
+                  <div v-for="(star, idx) in state.starList[(5-Number(state.reviewDetailList.place))]" :key="idx" class="view-star-none me-2" style="height: 25px; width: 25px;"></div>
                 </div>
               </div>
               <div class="d-flex justify-content-start align-items-end mt-3 mb-4 ms-2">
                 <span style="font-weight: bold;">가격: </span>
                 <div class="d-flex ms-5">
-                  <div v-for="(star, idx) in Number(state.reviewDetailList.price)" :key="idx" class="view-star-full me-2" style="height: 25px; width: 25px"></div>
-                  <div v-for="(star, idx) in (5-Number(state.reviewDetailList.price))" :key="idx" class="view-star-none me-2" style="height: 25px; width: 25px"></div>
+                  <div v-for="(star, idx) in state.starList[Number(state.reviewDetailList.price)]" :key="idx" class="view-star-full me-2" style="height: 25px; width: 25px"></div>
+                  <div v-for="(star, idx) in state.starList[(5-Number(state.reviewDetailList.price))]" :key="idx" class="view-star-none me-2" style="height: 25px; width: 25px"></div>
                 </div>
               </div>
               <div class="my-2 ms-2">
@@ -252,6 +248,7 @@ export default {
       status: "All",
       profileReservationList: computed(() => store.getters["root/profileReservationList"]),
       reviewCreateId: 0,
+      starList: [[], [1], [1,2], [1,2,3], [1,2,3,4], [1,2,3,4,5]],
       page: 0,
       clean: 0,
       location: 0,
