@@ -7,11 +7,11 @@
         class="col-3 mt-4 mb-5"
       >
         <a class="card d-flex justify-content-between" style="flex-direction: column;">
-        <!-- Modal -->    
+        <!-- Modal -->
           <div class="mx-4 mt-4">
             <div class="d-flex justify-content-between">
               <span class="title">{{ card.title }}</span>
-              <button class="detail" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" @click="changeMateDetail(i)">자세히</button>
+              <button class="detail" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" @click="changeMateDetail(card.activityId)">자세히</button>
             </div>
             <div class="d-flex justify-content-between align-items-center pt-4">
               <div>
@@ -26,8 +26,12 @@
           <div
             class="d-flex justify-content-between align-items-center"
           >
-            <label class="like">
-              <input type="checkbox" checked>
+            <label v-if="card.like==true" class="like">
+              <input type="checkbox" checked @click="mateLikeChange(card.activityId)">
+              <div class="hearth" />
+            </label>
+            <label v-else class="like">
+              <input type="checkbox" @click="mateLikeChange(card.activityId)">
               <div class="hearth" />
             </label>
             <div class="me-4" style="color: rgb(174 174 174); font-size: small;">
@@ -40,7 +44,7 @@
           </label> -->
         </a>
         <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-dialog modal-dialog-centered" style="max-width: 50vw;">
             <div class="modal-content" style="border: none;">
               <div class="modal-header">
                 <h5 class="modal-title" id="staticBackdropLabel"><b>자세한 정보</b></h5>
@@ -48,39 +52,55 @@
               </div>
               <div class="modal-body">
                 <br>
-                <div class="row my-3">
-                  <div class="col-1"></div>
-                  <div class="col-3 modal-text" style="padding-bottom: 4%; border-bottom: double; border-color: rgb(226 226 226);">공고 제목</div>
-                  <div class="col-7" style="border-bottom: double; border-color: rgb(226 226 226);">{{ mateDetail.title }}</div>
-                </div>
-                <div class="row my-3">
-                  <div class="col-1"></div>
-                  <div class="col-3 modal-text" style="padding-bottom: 4%; border-bottom: 1px solid rgb(226 226 226);">운동 종류</div>
-                  <div class="col-7" style="border-bottom: 1px solid rgb(226 226 226);">{{ state.category[mateDetail.categoryId] }}</div>
-                </div>
-                <div class="row my-3">
-                  <div class="col-1"></div>
-                  <div class="col-3 modal-text" style="padding-bottom: 4%; border-bottom: 1px solid rgb(226 226 226);">장소</div>
-                  <div class="col-7" style="border-bottom: 1px solid rgb(226 226 226);">{{ mateDetail.location }}</div>
-                </div>
-                <div class="row my-3">
-                  <div class="col-1"></div>
-                  <div class="col-3 modal-text" style="padding-bottom: 4%; border-bottom: 1px solid rgb(226 226 226);">등록일</div>
-                  <div class="col-7" style="border-bottom: 1px solid rgb(226 226 226);">{{ mateDetail.createdDate }}</div>
-                </div>
-                <div class="row my-3">
-                  <div class="col-1"></div>
-                  <div class="col-3 modal-text" style="padding-bottom: 4%; border-bottom: 1px solid rgb(226 226 226);">설명</div>
-                  <div class="col-7" style="border-bottom: 1px solid rgb(226 226 226);">{{ mateDetail.description }}</div>
-                </div>
-                <div class="row mt-5">
-                  <div class="col-1"></div>
-                  <button class="col-3 mate-apply">신청하기</button>
-                </div>
+                <div class="row">
+                  <div class="col-5">
+                    {{ mateDetail }}
+                    <div class="row my-3">
+                      <div class="col-1"></div>
+                      <div class="col-3 modal-text" style="padding-bottom: 4%; border-bottom: double; border-color: rgb(226 226 226);">공고 제목</div>
+                      <div class="col-7" style="border-bottom: double; border-color: rgb(226 226 226);">{{ mateDetail.title }}</div>
+                    </div>
+                    <div class="row my-3">
+                      <div class="col-1"></div>
+                      <div class="col-3 modal-text" style="padding-bottom: 4%; border-bottom: 1px solid rgb(226 226 226);">운동 종류</div>
+                      <div class="col-7" style="border-bottom: 1px solid rgb(226 226 226);">{{ state.category[mateDetail.categoryId] }}</div>
+                    </div>
+                    <div class="row my-3">
+                      <div class="col-1"></div>
+                      <div class="col-3 modal-text" style="padding-bottom: 4%; border-bottom: 1px solid rgb(226 226 226);">장소</div>
+                      <div class="col-7" style="border-bottom: 1px solid rgb(226 226 226);">{{ mateDetail.location }}</div>
+                    </div>
+                    <div class="row my-3">
+                      <div class="col-1"></div>
+                      <div class="col-3 modal-text" style="padding-bottom: 4%; border-bottom: 1px solid rgb(226 226 226);">성별</div>
+                      <div v-if="mateDetail.gender==0" class="col-7" style="border-bottom: 1px solid rgb(226 226 226);">남성</div>
+                      <div v-else-if="mateDetail.gender==1" class="col-7" style="border-bottom: 1px solid rgb(226 226 226);">여성</div>
+                      <div v-else class="col-7" style="border-bottom: 1px solid rgb(226 226 226);">성별무관</div>
+                    </div>
+                    <div class="row my-3">
+                      <div class="col-1"></div>
+                      <div class="col-3 modal-text" style="padding-bottom: 4%; border-bottom: 1px solid rgb(226 226 226);">연령대</div>
+                      <div class="col-7" style="border-bottom: 1px solid rgb(226 226 226);">{{ mateDetail.age }}대 모집</div>
+                    </div>
+                    <div class="row my-3">
+                      <div class="col-1"></div>
+                      <div class="col-3 modal-text" style="padding-bottom: 4%; border-bottom: 1px solid rgb(226 226 226);">설명</div>
+                      <div class="col-7" style="border-bottom: 1px solid rgb(226 226 226);">{{ mateDetail.description }}</div>
+                    </div>
+                    <div class="row mt-5">
+                      <div class="col-1"></div>
+                      <button class="col-3 mate-apply" @click="mateApplyFor(mateDetail.activityId)">신청하기</button>
+                    </div>
+                  </div>
+                  <div class="col-7" style="text-align: center;">
+                    <br>
+                    <img :src="mateDetail.profileImage" alt="" style="width: 70%;">
+                  </div>
+                </div>               
                 <br>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">확인</button>
+                <button type="button" class="btn btn-secondary" id="modal-check" data-bs-dismiss="modal">확인</button>
               </div>
             </div>
           </div>
@@ -128,9 +148,9 @@ export default {
       },
       totalPages: computed(() => store.getters["root/mateArticleListTotalPage"]),
       totalElements: computed(() => store.getters["root/mateArticleListTotalElements"]),
-      // page: computed(() => store.getters["root/matePage"]),
       size: 8,
-      page: computed(() => store.getters["root/mateArticlePage"])
+      page: 0,
+      mateArticleFilter: computed(() => store.getters["root/mateArticleFilter"]),
     })
 
     const mateDetail = ref({});
@@ -140,13 +160,15 @@ export default {
         "page": 0,
         "size": 8,
       })
-      var activeBtn = document.getElementsByClassName("page-item")[state.page-1]
+      var activeBtn = document.getElementsByClassName("page-item")[state.page]
       activeBtn.classList.add("active")
     })
 
-    const changeMateDetail = async function (idx) {
-      mateDetail.value = state.cards[idx]
-      console.log(mateDetail.value)
+    const changeMateDetail = async function (id) {
+      await store.dispatch("root/mateDetailInfo", {
+        activityId: id
+      })
+      mateDetail.value = store.getters["root/mateDetailList"]
     }
 
     const changePage = async function (event) {
@@ -156,13 +178,44 @@ export default {
       }
       var activeBtn = document.getElementsByClassName("page-item")[Number(event.target.textContent)-1]
       activeBtn.classList.add("active")
-      await store.dispatch("root/mateArticleList", {
-        "page": Number(event.target.textContent)-1,
-        "size": 8,
+      if (state.mateArticleFilter.categoryId==0 & state.mateArticleFilter.sido=="" & state.mateArticleFilter.search=="") {
+        state.page = Number(event.target.textContent)-1
+        await store.dispatch("root/mateArticleList", {
+          "page": Number(event.target.textContent)-1,
+        })
+      } else {
+        const body = {
+          "categoryId": state.mateArticleFilter.categoryId,
+          "gungu": state.mateArticleFilter.gungu,
+          "search": state.mateArticleFilter.search,
+          "sido": state.mateArticleFilter.sido,
+          "page": Number(event.target.textContent)-1,
+        }
+        state.page = Number(event.target.textContent)-1
+        await store.dispatch("root/mateFilterChange", body)
+      }
+    }
+
+    const mateApplyFor = async function (activityId) {
+      await store.dispatch("root/mateApplyFor", {
+        'activityId': activityId
+      })
+      var button = document.getElementById("modal-check")
+      button.click()
+    }
+
+    const mateLikeChange = async function (activityId) {
+      await store.dispatch("root/mateLikeChange", {
+        'activityId': activityId,
+        // "categoryId": state.mateArticleFilter.categoryId,
+        // "gungu": state.mateArticleFilter.gungu,
+        // "search": state.mateArticleFilter.search,
+        // "sido": state.mateArticleFilter.sido,
+        // "page": state.page,
       })
     }
 
-    return { state, mateDetail, onMounted, changeMateDetail, changePage };
+    return { state, mateDetail, onMounted, changeMateDetail, changePage, mateApplyFor, mateLikeChange };
   }
 }
 </script>

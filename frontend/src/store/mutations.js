@@ -30,9 +30,9 @@ export function USER_INFO(state, data) {
 }
 
 export function OTHER_INFO(state, data) {
-  state.otherInfo = []
+  state.otherInfo = [];
   state.otherInfo["address"] = data.address;
-  state.otherInfo["birthDt"] = data.birthDt;
+  state.otherInfo["birthDt"] = String(data.birthDt[0]) + "년 " + String(data.birthDt[1]) + "월 " + String(data.birthDt[2]) + "일";
   state.otherInfo["description"] = data.description;
   state.otherInfo["email"] = data.email;
   if (data.gender == 0) {
@@ -48,64 +48,107 @@ export function OTHER_INFO(state, data) {
 }
 
 export function PROFILE_USER_SCHEDULE(state, data) {
-  state.profileUserSchedule = []
+  state.profileUserSchedule = [];
   for (var i in data) {
-    var sub = {}
-    sub['date'] = String(data[i].date[0]) + '-' + String(data[i].date[1]) + '-' + String(data[i].date[2])
-    sub['count'] = data[i].count
-    state.profileUserSchedule.push(sub)
+    var sub = {};
+    sub["date"] = String(data[i].date[0]) + "-" + String(data[i].date[1]) + "-" + String(data[i].date[2]);
+    sub["count"] = data[i].count;
+    state.profileUserSchedule.push(sub);
   }
 }
 
 export function PROFILE_ACTIVITY_PER_DAY(state, data) {
-  state.profileActivityPerDay = data
+  state.profileActivityPerDay = data;
 }
 
 export function PROFILE_DATE_PER_DAY(state, data) {
-  state.profileDatePerDay = data
+  state.profileDatePerDay = data;
 }
 
 export function PROFILE_MATE_LIST_FROM(state, data) {
-  state.profileMateListFromTotalPage = 0
-  state.profileMateListFromTotalPage = data.totalPages
-  state.profileMateListFrom = []
-  state.profileMateListFrom = data.list
+  state.profileMateListFromTotalPage = 0;
+  state.profileMateListFromTotalPage = data.totalPages;
+  state.profileMateListFrom = [];
+  state.profileMateListFrom = data.list;
 }
 
 export function PROFILE_MATE_LIST_TO(state, data) {
-  state.profileMateListFromTotalPage = 0
-  state.profileMateListToTotalPage = data.totalPages
-  state.profileMateListTo = []
-  state.profileMateListTo = data.list
+  state.profileMateListToTotalPage = 0;
+  state.profileMateListToTotalPage = data.totalPages;
+  state.profileMateListTo = [];
+  state.profileMateListTo = data.list;
 }
 
-export function MATE_ARTICLE_PAGE(state, data) {
-  state.mateArticlePage = 0
-  state.mateArticlePage = data + 1
+export function PROFILE_RESERVATION_LIST(state, data) {
+  state.profileReservationList = [];
+  state.profileReservationList = data.list;
+}
+
+export function PROFILE_RESERVATION_LIST_MORE(state, data) {
+  console.log(data.dataList);
+  const dataList = data.dataList;
+  var page = data.page;
+  var totalPages = dataList.totalPages;
+  var totalElements = dataList.totalElements;
+  if (page < totalPages) {
+    for (var i = 0; i < 10; i++) {
+      state.profileReservationList.push(dataList.list[i]);
+    }
+  } else {
+    for (var j = totalPages * 10; j < totalElements; j++) {
+      state.profileReservationList.push(dataList.list[j - 10 * totalPages]);
+    }
+  }
+}
+
+export function PROFILE_LIKE_PLACE(state, data) {
+  state.profileLikePlaceTotalPages = -1;
+  state.profileLikePlaceTotalPages = data.totalPages;
+  state.profileLikePlaceList = [];
+  state.profileLikePlaceList = data.list;
+}
+
+export function PROFILE_LIKE_MATE(state, data) {
+  state.profileLikeMateTotalPages = -1;
+  state.profileLikeMateTotalPages = data.totalPages;
+  state.profileLikeMateList = [];
+  state.profileLikeMateList = data.list;
 }
 
 export async function MATE_ARTICLE_LIST(state, data) {
-  state.mateArticleListTotalElements = 0
-  state.mateArticleListTotalElements = data.totalElements
-  state.mateArticleListTotalPage = 0
-  state.mateArticleListTotalPage = data.totalPages
+  state.mateArticleListTotalElements = 0;
+  state.mateArticleListTotalElements = data.totalElements;
+  state.mateArticleListTotalPage = 0;
+  state.mateArticleListTotalPage = data.totalPages;
   state.mateArticleList = [];
-  for (var i in data.content) {
-    var sub = {}
-    sub['activityId'] = data.content[i]['activityId']
-    sub['categoryId'] = data.content[i]['categoryId']
-    sub['description'] = data.content[i]['description']
-    sub['location'] = data.content[i]['location']
-    sub['title'] = data.content[i]['title']
-    var startDate = new Date(data.content[i]['createdDate'][0], data.content[i]['createdDate'][1]-1, data.content[i]['createdDate'][2])
-    var today = new Date
-    var diff = today.getTime() - startDate.getTime()
-    sub['createdDate'] = String(data.content[i]['createdDate'][0]) + '-' + String(data.content[i]['createdDate'][1]) + '-' + String(data.content[i]['createdDate'][2])
-    sub['timeDiff'] = Math.floor(diff / (1000*60*60*24))
+  for (var i in data.list) {
+    var sub = {};
+    sub["activityId"] = data.list[i]["activityId"];
+    sub["categoryId"] = data.list[i]["categoryId"];
+    sub["description"] = data.list[i]["description"];
+    sub["location"] = data.list[i]["location"];
+    sub["title"] = data.list[i]["title"];
+    sub["like"] = data.list[i]["like"];
+    var startDate = new Date(data.list[i]["createdDate"][0], data.list[i]["createdDate"][1] - 1, data.list[i]["createdDate"][2]);
+    var today = new Date();
+    var diff = today.getTime() - startDate.getTime();
+    sub["createdDate"] = String(data.list[i]["createdDate"][0]) + "-" + String(data.list[i]["createdDate"][1]) + "-" + String(data.list[i]["createdDate"][2]);
+    sub["timeDiff"] = Math.floor(diff / (1000 * 60 * 60 * 24));
+    sub["profileImage"] = data.list[i]["profileImage"];
     // console.log(new Date(k.getTimezoneOffset() * 60000).toISOString())
     // String(data[i].date[0]) + '-' + String(data[i].date[1]) + '-' + String(data[i].date[2])
     state.mateArticleList.push(sub);
   }
+}
+
+export async function MATE_DETAIL_INFO(state, data) {
+  state.mateDetailList = []
+  state.mateDetailList = data
+}
+
+export async function MATE_ARTICLE_FILTER(state, data) {
+  state.mateArticleFilter = {};
+  state.mateArticleFilter = data;
 }
 
 export async function PLACE_SEARCH_INFO(state, data) {
@@ -137,14 +180,31 @@ export async function CHANGE_POSITION(state, data) {
   state.mapPosition = [];
   let longitude;
   let latitude;
-  console.log(data);
+  let placeName;
+  // console.log(data);
   const markers = [];
   for (let i = 0; i < data.placeList.length; i++) {
     longitude = data.placeList[i].longitude;
     latitude = data.placeList[i].latitude;
+    placeName = data.placeList[i].name;
     // console.log(tempLat);
-    let tempList = { longitude, latitude };
+    let tempList = { longitude, latitude, placeName };
     markers.push(tempList);
   }
+  console.log(markers, "마커임");
+  // console.log(markers, "템프리스트");
   state.mapPosition = markers;
+}
+export async function PLACE_RECOMMEND(state, data) {
+  state.placeRecommend = data;
+}
+export async function PLACE_RECENT(state, data) {
+  state.placeRecent = data;
+}
+export async function CHECK_RESERVATION(state, data) {
+  state.reservationCheck = data;
+}
+export async function SHOW_MAP_MARKER(state, data) {
+  state.showMapMarker = []
+  state.showMapMarker = data;
 }

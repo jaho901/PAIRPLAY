@@ -62,6 +62,7 @@ export default {
       }
       let payload = {
         'date': date,
+        'memberId': state.otherInfo.memberId
       }
       await store.dispatch("root/profileDateTodo", payload)
     }
