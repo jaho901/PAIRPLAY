@@ -12,6 +12,7 @@
 ### IDE
 
 - VSCode
+- IntelliJ IDEA
 
 ### Frontend
 
@@ -24,12 +25,10 @@
 
 ### Backend
 
-| Name | Version |
-| ---- | ------- |
-|      |         |
-|      |         |
-|      |         |
-|      |         |
+| Name       | Version                     |
+| :--------- | --------------------------- |
+| JAVA       | openjdk version "1.8.0_292" |
+| SpringBoot | V2.6.7                      |
 
 
 
@@ -39,8 +38,8 @@
 | ------- | -------------------------------------- |
 | Docker  | Docker version 20.10.12, build e91ed57 |
 | Jenkins | jenkins/jenkins:lts 이미지 사용        |
-|         |                                        |
-|         |                                        |
+| MySQL   | V8.0.29                                |
+| MongoDB | mongo latest 이미지 사용               |
 
 
 
@@ -171,6 +170,131 @@ ARG JAR_FILE=build/libs/*.jar
 COPY ${JAR_FILE} app.jar
 ENTRYPOINT ["java","-jar","/app.jar","--spring.config.name=application-prod"]
 ```
+
+``` properties
+# /backend/src/main/resources/application-prod.properties
+
+# 새로 추가함
+build.date = @build.date@
+# 변경함
+server.address= 0.0.0.0
+# 젠킨스때문에 바꿈
+server.port= 8088
+
+# http로 사용하기위해 잠시 주석처리05.06.12:43
+server.ssl.enabled=true
+server.ssl.key-store-type=PKCS12
+server.ssl.key-store=/root/key.p12
+server.ssl.key-store-password=205ssafy205!!
+# server.ssl.key-alias=tomcat
+security.require-ssl=true
+
+# 새로 추가함
+server.servlet.contextPath=/
+# Charset of HTTP requests and responses. Added to the "Content-Type" header if not set explicitly.
+server.servlet.encoding.charset=UTF-8
+# Enable http encoding support.
+server.servlet.encoding.enabled=true
+# Force the encoding to the configured charset on HTTP requests and responses.
+server.servlet.encoding.force=true
+
+spring.data.web.pageable.one-indexed-parameters = true
+
+spring.datasource.url = jdbc:mysql://k6e205.p.ssafy.io:3663/pairplay?autoReconnect=true&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true&useSSL=false
+# spring.datasource.url = jdbc:mysql://localhost:3663/pairplay?autoReconnect=true&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true&useSSL=false
+spring.datasource.hikari.username = ssafy205
+spring.datasource.hikari.password = 205ssafy205!!
+spring.datasource.driver-class-name = com.mysql.cj.jdbc.Driver
+
+spring.devtools.livereload.enabled = ture
+
+spring.jpa.hibernate.ddl-auto = update
+spring.jpa.hibernate.naming.implicit-strategy = org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+spring.jpa.hibernate.naming.physical-strategy = org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL57Dialect
+spring.jpa.properties.hibernate.show_sql = true
+spring.jpa.properties.hibernate.format_sql = ture
+#spring.jpa.properties.hibernate.ddl-auto = update
+
+# spring.mvc.throw-exception-if-no-handler-found = true
+# spring.mvc.pathmatch.matching-strategy = ant_path_matcher # springboot 2.6 version swagger 3.0.0 version error
+
+# springfox.documentation.swagger.use-modle-v3 = false
+
+# for SPA 새로 추가함
+spring.resources.static-locations=classpath:/dist/
+spa.default-file=/dist/index.html
+spring.mvc.throw-exception-if-no-handler-found=true
+spring.resources.add-mappings=false
+
+# Swagger
+springfox.documentation.swagger.use-model-v3=false
+
+
+jwt.secret = dyAeHubOOc8KaOfYB6XEQoEj1QzRlVgtjNL8PYs1A1tymZvvqkcEU7L1imkKHeDa
+jwt.expiration = 1296000000
+
+# spring.main.allow-bean-definition-overriding = true
+
+spring.servlet.multipart.file-size-threshold=1MB
+spring.servlet.multipart.location=C:/Temp
+spring.servlet.multipart.max-file-size=30MB
+spring.servlet.multipart.max-request-size=30MB
+
+# ------------------------Mongo DB------------------------
+spring.data.mongodb.host=k6e205.p.ssafy.io
+spring.data.mongodb.port=3333
+spring.data.mongodb.database=region
+spring.data.mongodb.authentication-database=admin
+spring.data.mongodb.username=ssafy205
+spring.data.mongodb.password=205ssafy205!!
+
+# ------------------------Google Email------------------------
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=pairplay.teams@gmail.com
+spring.mail.password=mixzzzexmamgfoow
+spring.mail.properties.mail.smtp.starttls.enable=true
+spring.mail.properties.mail.smtp.starttls.required=true
+spring.mail.properties.mail.smtp.auth=true
+
+# ------------------------AWS S3------------------------
+# AWS S3 Cloud key
+cloud.aws.credentials.accessKey=AKIATXNG4RNQ6N453QVY
+cloud.aws.credentials.secretKey=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
+cloud.aws.stack.auto=false
+
+# AWS S3 Service bucket
+cloud.aws.s3.bucket=pairplayteams
+cloud.aws.region.static=ap-northeast-2
+
+# AWS S3 Bucket URL
+cloud.aws.s3.bucket.url=https://s3.ap-northeast-2.amazonaws.com/pairplayteams
+
+# ------------------------Social Login------------------------
+spring.security.oauth2.client.registration.google.client-id=991733611056-08iuusghc1763lsiu5duam907tgpg299.apps.googleusercontent.com
+spring.security.oauth2.client.registration.google.client-secret=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
+spring.security.oauth2.client.registration.google.scope=profile,email
+spring.profiles.include=oauth
+
+spring.security.oauth2.client.registration.kakao.client-id=b4ac983b7dd7fa10a5f84963936e69f9
+spring.security.oauth2.client.registration.kakao.client-secret=djNt2xli8QnZOFAUTH7MtTBkVIBdVWJI
+spring.security.oauth2.client.registration.kakao.client-authentication-method=post
+spring.security.oauth2.client.registration.kakao.authorization-grant-type=authorization_code
+spring.security.oauth2.client.registration.kakao.redirect-uri={baseUrl}/{action}/oauth2/code/{registrationId}
+spring.security.oauth2.client.registration.kakao.scope=profile_nickname, profile_image, account_email
+spring.security.oauth2.client.registration.kakao.client-name=Kakao
+
+spring.security.oauth2.client.provider.kakao.authorization-uri=https://kauth.kakao.com/oauth/authorize
+spring.security.oauth2.client.provider.kakao.token-uri=https://kauth.kakao.com/oauth/token
+spring.security.oauth2.client.provider.kakao.user-info-uri=https://kapi.kakao.com/v2/user/me
+spring.security.oauth2.client.provider.kakao.user-name-attribute=id
+
+```
+
+
+
+
 
 ### 3. 배포방법
 
@@ -502,7 +626,22 @@ node {
 
 ### 4. DB 접속 정보 등 프로젝트(ERD)에 활용되는 주요 계정 및 프로퍼티가 정의된 파일 목록
 
-- 접속 정보
+- MySQL
 
-- erd
+  ```properties
+  spring.datasource.url = jdbc:mysql://k6e205.p.ssafy.io:3663/pairplay?autoReconnect=true&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true&useSSL=false
+  spring.datasource.hikari.username = ssafy205
+  spring.datasource.hikari.password = 205ssafy205!!
+  spring.datasource.driver-class-name = com.mysql.cj.jdbc.Driver
+  ```
 
+- MongoDB
+
+  ```properties
+  spring.data.mongodb.host=k6e205.p.ssafy.io
+  spring.data.mongodb.port=3333
+  spring.data.mongodb.database=region
+  spring.data.mongodb.authentication-database=admin
+  spring.data.mongodb.username=ssafy205
+  spring.data.mongodb.password=205ssafy205!!
+  ```
