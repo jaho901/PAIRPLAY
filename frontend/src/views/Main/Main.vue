@@ -8,7 +8,7 @@
       <div class="PlaceBackgroundImage">
         <div class="PlaceBackgroundImageCover">
           <div class="PlaceBackground-Content ms-5 ps-2">
-            <p>PAIR PLAY</p>
+            <p style="font-size: 3rem">PAIR PLAY</p>
           </div>
         </div>
       </div>
@@ -20,29 +20,33 @@
           <div class="container-in mt-4 mb-5">
             <div class="thumbex">
               <div class="thumbnail one">
-                <a href="javascript:void(0)">
-                  <span>장소</span>
-                  <button @click="moveToPlace" class="py-1">참가하기</button>
-                </a>
+                <div class="thumbnail-one-cover">
+                  <a href="javascript:void(0)">
+                    <span style="color: white">장소</span>
+                    <button @click="moveToPlace" class="py-1">참가하기</button>
+                  </a>
+                </div>
               </div>
             </div>
             <div class="thumbex">
               <div class="thumbnail two">
-                <a href="javascript:void(0)">
-                  <span style="color: white;">메이트</span>
-                  <button @click="moveToMate" class="py-1">참가하기</button>
-                </a>
+                <div class="thumbnail-two-cover">
+                  <a href="javascript:void(0)">
+                    <span style="color: white">메이트</span>
+                    <button @click="moveToMate" class="py-1">참가하기</button>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
           <div class="pt-5 fs-2 fw-bold">핵심 기술</div>
-          <div class="container-in mt-5">
+          <div class="container-in mt-4">
             <div class="box">
               <div class="thumbnail three">
                 <div class="thumbnail-post">
                   <a href="javascript:void(0)">
                     <span class="serv-1">운동할 장소를 직접 확인해보세요!</span>
-                    <span class="desc-1">12개의 운동과 지역에 따라 존재하는<br>모든 체육관과 시설을 찾고 예약할 수 있습니다.</span>
+                    <span class="desc-1">12개의 운동과 지역에 따라 존재하는<br />모든 체육관과 시설을 찾고 예약할 수 있습니다.</span>
                   </a>
                 </div>
               </div>
@@ -54,7 +58,7 @@
                 <div class="thumbnail-post">
                   <a href="javascript:void(0)">
                     <span class="serv-2">운동할 메이트를 직접 확인해보세요!</span>
-                    <span class="desc-2">우리가 원하는 지역에서 원하는 운동을 <br>같이 수행할 메이트를 만나 기록 관리가 가능합니다.</span>
+                    <span class="desc-2">우리가 원하는 지역에서 원하는 운동을 <br />같이 수행할 메이트를 만나 기록 관리가 가능합니다.</span>
                   </a>
                 </div>
               </div>
@@ -71,32 +75,34 @@
 <script>
 import Header from "../Common/Header.vue";
 import Footer from "../Common/Footer.vue";
-import { useRouter } from "vue-router"
+import { useRouter } from "vue-router";
 export default {
   name: "Main",
   components: {
     Header,
     Footer,
   },
-  setup () {
-    const router = useRouter()
+  setup() {
+    const router = useRouter();
 
     const moveToPlace = function () {
-      router.push({
-        name: "Place"
-      })
-      .then(() => window.scrollTo(0, 0))
-    }
+      router
+        .push({
+          name: "Place",
+        })
+        .then(() => window.scrollTo(0, 0));
+    };
 
     const moveToMate = function () {
-      router.push({
-        name: "Mate"
-      })
-      .then(() => window.scrollTo(0, 0))
-    }
+      router
+        .push({
+          name: "Mate",
+        })
+        .then(() => window.scrollTo(0, 0));
+    };
 
-    return { moveToPlace, moveToMate }
-  }
+    return { moveToPlace, moveToMate };
+  },
 };
 </script>
 
@@ -215,11 +221,11 @@ export default {
   }
 
   .box {
-    margin: 10px 0px 30px;
+    margin: 2rem 0px 30px;
     width: 100%;
     min-width: 250px;
     max-width: 100%;
-    height: 300px;
+    height: 350px;
     -webkit-flex: 1;
     -ms-flex: 1;
     flex: 1;
@@ -235,7 +241,7 @@ export default {
     .thumbnail {
       overflow: hidden;
       // min-width: 250px;
-      
+
       width: 100%;
       height: 100%;
       position: relative;
@@ -302,7 +308,24 @@ export default {
   background-image: url("@/assets/images/Main/Place.jpeg");
   background-size: cover;
 }
-
+.thumbnail-one-cover {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(80deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0) 100%);
+  /* background-color: rgba(0, 0, 0, 0.3); */
+  z-index: 1;
+  color: white;
+}
+.thumbnail-two-cover {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(80deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0) 100%);
+  /* background-color: rgba(0, 0, 0, 0.3); */
+  z-index: 1;
+  color: white;
+}
 .two {
   background-image: url("@/assets/images/Main/Mate.jpeg");
   background-size: cover;

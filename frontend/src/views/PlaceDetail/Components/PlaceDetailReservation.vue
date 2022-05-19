@@ -71,7 +71,7 @@ export default {
           //
         }
       }
-      console.log(temp, "temp");
+      // console.log(temp, "temp");
       if (temp.length == 0) {
         alert("예약하려는 시간을 선택해주세요");
       } else {
@@ -93,8 +93,6 @@ export default {
           function (rsp) {
             // callback
             if (rsp.success) {
-              console.log("결제성공");
-              alert("예약이 완료되었습니다.");
               let tempbody = { placeId: placeInfos.value.placeId, reservationDt: selectedDate, price: 100, time: temp };
               // console.log(body, "제대로?");
               axios({
@@ -102,8 +100,7 @@ export default {
                 data: tempbody,
                 headers: { Authorization: "Bearer " + localStorage.getItem("jwt") },
                 url: `${BASE_URL}/places/reservation`,
-              }).then((res) => {
-                console.log(res);
+              }).then(() => {
                 alert("예약이 완료되었습니다.");
                 router.go(0);
               });

@@ -142,8 +142,8 @@ export async function MATE_ARTICLE_LIST(state, data) {
 }
 
 export async function MATE_DETAIL_INFO(state, data) {
-  state.mateDetailList = []
-  state.mateDetailList = data
+  state.mateDetailList = [];
+  state.mateDetailList = data;
 }
 
 export async function MATE_ARTICLE_FILTER(state, data) {
@@ -181,18 +181,14 @@ export async function CHANGE_POSITION(state, data) {
   let longitude;
   let latitude;
   let placeName;
-  // console.log(data);
   const markers = [];
   for (let i = 0; i < data.placeList.length; i++) {
     longitude = data.placeList[i].longitude;
     latitude = data.placeList[i].latitude;
     placeName = data.placeList[i].name;
-    // console.log(tempLat);
     let tempList = { longitude, latitude, placeName };
     markers.push(tempList);
   }
-  console.log(markers, "마커임");
-  // console.log(markers, "템프리스트");
   state.mapPosition = markers;
 }
 export async function PLACE_RECOMMEND(state, data) {
@@ -205,6 +201,6 @@ export async function CHECK_RESERVATION(state, data) {
   state.reservationCheck = data;
 }
 export async function SHOW_MAP_MARKER(state, data) {
-  state.showMapMarker = []
+  state.showMapMarker = [];
   state.showMapMarker = data;
 }

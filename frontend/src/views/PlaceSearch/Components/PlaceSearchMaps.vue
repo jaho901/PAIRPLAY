@@ -81,7 +81,6 @@ export default {
     // { latitude: 36.5759477, longitude: 128.5056462 },
     // ];
     // let cards = reactive(computed(() => store.state.root.placeSearchInfo.placeList));
-    console.log(showmarker);
     const positionYX = ref({});
     const map = ref();
     const marker = ref();
@@ -102,42 +101,30 @@ export default {
       zoomControl: true,
       zoomControlOptions: { position: "RIGHT_TOP" },
     });
-    // console.log(showmarker, "showmarker");
     const initLayers = ["BACKGROUND", "BACKGROUND_DETAIL", "POI_KOREAN", "TRANSIT", "ENGLISH"];
     let checkLatitude = () => {
       if (store.state.root.placeSearchInfo.placeList) {
         tempLatitude = store.state.root.placeSearchInfo.placeList[0].latitude;
-        console.log(tempLatitude, "있다 래티튜드");
       } else {
         tempLatitude = 127;
-        console.log(tempLatitude, "없다 latitude");
       }
       return tempLatitude;
     };
     let checkLongitude = () => {
       if (store.state.root.placeSearchInfo.placeList) {
         tempLongitude = store.state.root.placeSearchInfo.placeList[0].longitude;
-        console.log(tempLongitude, "있다 롱기튜드");
       } else {
         tempLongitude = 6;
-        console.log(tempLongitude, "없다 longitude");
       }
       return tempLongitude;
     };
     const popUP = (id) => {
-      // 이전거랑 다른거면
-      // console.log(id);
-      // if (gnbSlide.ok != event.pointerEvent.target.innerText) {
-      //      // console.log(id.domEvent.target, "event");
-      // console.log(gnbSlide.ok);
       var showElements = document.getElementsByClassName("show");
       console.log(showElements, "showElements");
       for (var i in showElements) {
         if (i < showElements.length) {
           // console.log(i);
           var element = document.getElementsByClassName("show")[i];
-          console.log(element, "element");
-          console.log(element.id, "아이디");
           if (element.classList.contains("active") & (element.id == id)) {
             element.classList.remove("active");
           } else if (!element.classList.contains("active") & (element.id == id)) {
@@ -149,39 +136,12 @@ export default {
           } else {
             //
           }
-
-          // element.classList.remove("active");
         }
-        // element.classList.remove("active");
       }
-      // var activeElement = document.getElementById(id);
-      // console.log(activeElement, "activeElement");
-      // activeElement.classList.add("active");
-
-      // console.log(showElement);
-      // if ()
-      // var target = showElement.style.;
-      // if (target === "none") {
-      //   target = "block";
-      // } else {
-      //   target = "none";
-      // }
-      // showElement.style.display = target;
-      // gnbSlide.ok = event.pointerEvent.target.innerText;
     };
 
     watch(showmarker, () => {
       showmarker.name = names;
-      // console.log(showmarker.name);
-
-      // console.log(showmarker.name, "showmarker");
-      //   markers = reactive(computed(() => store.state.root.placeSearchInfo.placeList));
-      //   // console.log(timeData, "timeData");
-      //   // console.log(searchFiltersData.value, "searchFiltersData");
-      // });
-      // const LatLng = new window.naver.maps.LatLng(37, 127);
-      // onMounted(async () => {
-      // changeMarkers();
     });
 
     const onLoadMap = (mapObject) => {
@@ -191,11 +151,11 @@ export default {
     const onLoadMarker = (markerObject) => {
       marker.value = markerObject;
     };
-    const onMarkerClicked = (event) => {
-      console.log(event, "onMarkerClicked");
+    const onMarkerClicked = () => {
+      // console.log(event, "onMarkerClicked");
     };
-    const checkPosition = (event) => {
-      console.log(event, "checkPosition");
+    const checkPosition = () => {
+      // console.log(event, "checkPosition");
     };
     const moveToDetail = (res) => {
       // console.log(res, "여기디테일어디");

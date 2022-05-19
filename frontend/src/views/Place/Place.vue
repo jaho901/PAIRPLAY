@@ -39,7 +39,7 @@
         </div>
         <place-recommend></place-recommend>
       </div>
-      <div class="placeRecentView container my-5" v-if="recentCards.length >= 1">
+      <div class="placeRecentView container my-5" v-if="recentCards">
         <div class="category-title ps-3 mt-3 mb-2 d-flex justify-content-between">
           <div class="fs-5 fw-bold mb-4">최근 조회한 시설</div>
           <!-- <p class="fw-bold pe-2 pt-3" style="font-size: 16px">전체보기</p> -->
