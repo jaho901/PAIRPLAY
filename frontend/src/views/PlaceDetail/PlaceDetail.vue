@@ -316,8 +316,7 @@ export default {
       getPlaceDetailInfo();
     });
     const getPlaceDetailInfo = async () => await store.dispatch("root/getPlaceDetailInfo", pageId.value);
-    const clickLike = async (id) => {
-      console.log(id, "id는?");
+    const clickLike = async () => {
       await axios({ method: "put", headers: { Authorization: "Bearer " + localStorage.getItem("jwt") }, url: `${BASE_URL}/places/like/${pageId.value}` });
       await store.dispatch("root/getPlaceDetailInfo", pageId.value);
     };

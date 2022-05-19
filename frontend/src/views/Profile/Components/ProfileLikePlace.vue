@@ -1,12 +1,8 @@
 <template>
-  <div class="d-flex" style="width: 100%;">
-    <div
-      v-for="(data, idx) in state.profileLikePlaceList"
-      :key="idx"
-      class="col-4"
-    >
+  <div class="d-flex" style="width: 100%">
+    <div v-for="(data, idx) in state.profileLikePlaceList" :key="idx" class="col-4">
       <div class="container">
-        <img :src="data.img[0]" alt="" class="like-img" style="cursor: pointer;" @click="moveToPlace(data.placeId)">
+        <img :src="data.img[0]" alt="" class="like-img" style="cursor: pointer" @click="moveToPlace(data.placeId)" />
       </div>
       <div class="container d-flex justify-content-between">
         <div>
@@ -16,7 +12,7 @@
         </div>
         <div class="me-3">
           <label class="like">
-            <input type="checkbox" checked @click="profileLikePlaceCancle(data.placeId)">
+            <input type="checkbox" checked @click="profileLikePlaceCancle(data.placeId)" />
             <div class="hearth" />
           </label>
         </div>
@@ -30,7 +26,7 @@
         <a class="page-link" style="font-family: bootstrap-icons"> &#xF284; </a>
       </li>
       <!-- aria-current="page" -->
-      <li v-for="idx in state.profileLikePlaceTotalPages+1" :key="idx" class="page-item">
+      <li v-for="idx in state.profileLikePlaceTotalPages + 1" :key="idx" class="page-item">
         <a class="page-link" @click="changePage($event)">{{ idx }}</a>
       </li>
       <!-- <li class="page-item active">
@@ -44,76 +40,76 @@
 </template>
 
 <script>
-import { reactive, computed, onMounted } from 'vue'
-import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
-import Swal from 'sweetalert2'
+import { reactive, computed, onMounted } from "vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+import Swal from "sweetalert2";
 
 export default {
   name: "ProfileLikePlace",
-  setup () {
-    const store = useStore()
-    const router = useRouter()
+  setup() {
+    const store = useStore();
+    const router = useRouter();
     const state = reactive({
       page: 0,
       profileLikePlaceTotalPages: computed(() => store.getters["root/profileLikePlaceTotalPages"]),
       profileLikePlaceList: computed(() => store.getters["root/profileLikePlaceList"]),
-    })
+    });
 
-    onMounted (async () => {
-      var activeBtn = document.getElementsByClassName("page-item")[state.page]
-      activeBtn.classList.add("active")
-    })
+    onMounted(async () => {
+      var activeBtn = document.getElementsByClassName("page-item")[state.page];
+      activeBtn.classList.add("active");
+    });
 
     const changePage = async function (event) {
-      for (var i=0; i <= state.profileLikePlaceTotalPages; i++) {
-        var Btn = document.getElementsByClassName("page-item")[i]
-        Btn.classList.remove("active")
+      for (var i = 0; i <= state.profileLikePlaceTotalPages; i++) {
+        var Btn = document.getElementsByClassName("page-item")[i];
+        Btn.classList.remove("active");
       }
-      var activeBtn = document.getElementsByClassName("page-item")[Number(event.target.textContent)-1]
-      activeBtn.classList.add("active")
-      await store.dispatch("root/profileLikePlace", Number(event.target.textContent)-1)
-    }
+      var activeBtn = document.getElementsByClassName("page-item")[Number(event.target.textContent) - 1];
+      activeBtn.classList.add("active");
+      await store.dispatch("root/profileLikePlace", Number(event.target.textContent) - 1);
+    };
 
     const profileLikePlaceCancle = async function (id) {
       Swal.fire({
-        title: '정말 찜하기를 취소합니까?',
+        title: "정말 찜하기를 취소합니까?",
         showDenyButton: true,
         showCancelButton: false,
-        confirmButtonText: '찜 취소하기',
+        confirmButtonText: "찜 취소하기",
         denyButtonText: `그만두기`,
       }).then(async (result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
-          Swal.fire('취소 성공!', '', 'success')
+          Swal.fire("취소 성공!", "", "success");
           await store.dispatch("root/profileLikePlaceCancle", {
-            "id": id,
-            "page": state.page
-          })
-        } 
-      })
-    }
+            id: id,
+            page: state.page,
+          });
+        }
+      });
+    };
 
-    const moveToPlace = function(placeId) {
+    const moveToPlace = function (placeId) {
       router.push({
         name: "PlaceDetail",
         params: {
-          id: placeId
-        }
-      })
-    }
+          id: placeId,
+        },
+      });
+    };
 
-    return { state, onMounted, changePage, profileLikePlaceCancle, moveToPlace }
-  }
-}
+    return { state, onMounted, changePage, profileLikePlaceCancle, moveToPlace };
+  },
+};
 </script>
 
 <style scoped lang="scss">
-
 .like-img {
   width: 90%;
   height: 13rem;
   border-radius: 10px;
+  object-fit: cover;
 }
 
 .address {
@@ -131,7 +127,6 @@ export default {
   font-weight: bold;
 }
 
-
 input {
   display: none;
 }
@@ -145,12 +140,12 @@ input {
   overflow: visible;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -webkit-tap-highlight-color: transparent;
-    --size: 80px;
+  --size: 80px;
   --frames: 62;
 }
 
 .hearth {
-  background-image: url('https://assets.codepen.io/23500/Hashflag-AppleEvent.svg');
+  background-image: url("https://assets.codepen.io/23500/Hashflag-AppleEvent.svg");
   background-size: calc(var(--size) * var(--frames)) var(--size);
   background-repeat: no-repeat;
   background-position-x: calc(var(--size) * (var(--frames) * -1 + 2));
@@ -159,12 +154,12 @@ input {
   height: var(--size);
   --size: 80px;
   --frames: 62;
-  animation: like 1s steps(calc(var(--frames) - 3));  
+  animation: like 1s steps(calc(var(--frames) - 3));
   animation-fill-mode: forwards;
 }
 
 input:checked + .hearth {
-  animation: like 1s steps(calc(var(--frames) - 3));  
+  animation: like 1s steps(calc(var(--frames) - 3));
   animation-fill-mode: forwards;
 }
 
@@ -179,16 +174,14 @@ input:checked + .hearth {
 
 @media (hover: hover) {
   .like:hover {
-    background-color: #E1255E15;
+    background-color: #e1255e15;
     .hearth {
       background-position-x: calc(var(--size) * (var(--frames) * -1 + 1));
     }
   }
 }
 
-
 /* pagination */
-
 
 .pagination {
   margin: auto;
@@ -246,5 +239,4 @@ input:checked + .hearth {
   box-shadow: (0 0 8px rgba(24, 24, 24, 0.05));
   margin: 0rem 0.5rem 0rem 0.5rem;
 }
-
 </style>

@@ -116,7 +116,7 @@ export function PROFILE_LIKE_MATE(state, data) {
 }
 
 export function REVIEW_DETAIL_INFO(state, data) {
-  state.reviewDetailList = data
+  state.reviewDetailList = data;
 }
 
 export async function MATE_ARTICLE_LIST(state, data) {
@@ -125,7 +125,7 @@ export async function MATE_ARTICLE_LIST(state, data) {
   state.mateArticleListTotalPage = 0;
   state.mateArticleListTotalPage = data.totalPages;
   state.mateArticleList = [];
-  console.log(data)
+  console.log(data);
   for (var i in data.list) {
     var sub = {};
     sub["activityId"] = data.list[i]["activityId"];
@@ -148,8 +148,8 @@ export async function MATE_ARTICLE_LIST(state, data) {
 }
 
 export async function MATE_DETAIL_INFO(state, data) {
-  state.mateDetailList = []
-  state.mateDetailList = data
+  state.mateDetailList = [];
+  state.mateDetailList = data;
 }
 
 export async function MATE_ARTICLE_FILTER(state, data) {
@@ -187,13 +187,11 @@ export async function CHANGE_POSITION(state, data) {
   let longitude;
   let latitude;
   let placeName;
-  // console.log(data);
   const markers = [];
   for (let i = 0; i < data.placeList.length; i++) {
     longitude = data.placeList[i].longitude;
     latitude = data.placeList[i].latitude;
     placeName = data.placeList[i].name;
-    // console.log(tempLat);
     let tempList = { longitude, latitude, placeName };
     markers.push(tempList);
   }
@@ -210,6 +208,6 @@ export async function CHECK_RESERVATION(state, data) {
   state.reservationCheck = data;
 }
 export async function SHOW_MAP_MARKER(state, data) {
-  state.showMapMarker = []
+  state.showMapMarker = [];
   state.showMapMarker = data;
 }

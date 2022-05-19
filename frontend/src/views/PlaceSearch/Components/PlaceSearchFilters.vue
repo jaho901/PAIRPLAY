@@ -59,7 +59,6 @@ export default {
     });
     const word = ref("");
     const selectRegion = (res) => {
-      console.log(res, "지역나오나");
       searchFiltersData.sido = res.sido;
       searchFiltersData.gugun = res.gugun;
     };
