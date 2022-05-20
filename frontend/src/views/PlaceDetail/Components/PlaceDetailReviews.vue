@@ -28,7 +28,6 @@
             <div class="review-score-button"><strong>청결이</strong> {{ reviewScore.cleannessScore }}</div>
             <div class="review-score-button"><strong>위치가</strong> {{ reviewScore.locationScore }}</div>
             <div class="review-score-button"><strong>가격이</strong> {{ reviewScore.priceScore }}</div>
-            {{ reviewScore }}
           </div>
         </div>
       </div>
@@ -47,61 +46,65 @@ export default {
   props: ["review"],
   setup(props) {
     const reviewData = reactive(props);
-    const reviewScore = reactive({});
-    const checkScore = () => {
-      let score = { cleannessScore: "", placeScore: "", locationScore: "", priceScore: "" };
+    // console.log(props, "프롭스");
+    const reviewScore = reactive({
+      cleannessScore: "",
+      placeScore: "",
+      locationScore: "",
+      priceScore: "",
+    });
+    onMounted(async () => {
       if (0 <= reviewData.review.cleanness <= 1) {
-        score.cleannessScore = "매우 별로에요";
+        reviewScore.cleannessScore = "매우 별로에요";
+        console.log(reviewScore.cleannessScore);
       } else if (1 < reviewData.review.cleanness <= 2) {
-        score.cleannessScore = "별로에요";
+        reviewScore.cleannessScore = "별로에요";
       } else if (2 < reviewData.review.cleanness <= 3) {
-        score.cleannessScore = "보통이에요";
+        reviewScore.cleannessScore = "보통이에요";
       } else if (3 < reviewData.review.cleanness <= 4) {
-        score.cleannessScore = "좋아요";
+        reviewScore.cleannessScore = "좋아요";
       } else {
-        score.cleannessScore = "매우 좋아요";
+        reviewScore.cleannessScore = "매우 좋아요";
       }
+
       if (0 <= reviewData.review.place <= 1) {
-        score.placeScore = "매우 좋지 않아요";
+        reviewScore.placeScore = "매우 좋지 않아요";
       } else if (1 < reviewData.review.place <= 2) {
-        score.placeScore = "좋지 않아요";
+        reviewData.review.placeScore = "좋지 않아요";
       } else if (2 < reviewData.review.place <= 3) {
-        score.placeScore = "보통이에요";
+        reviewScore.placeScore = "보통이에요";
       } else if (3 < reviewData.review.place <= 4) {
-        score.placeScore = "좋아요";
+        reviewScore.placeScore = "좋아요";
       } else {
-        score.placeScore = "매우 좋아요";
+        reviewScore.placeScore = "매우 좋아요";
       }
 
       if (0 <= reviewData.review.location <= 1) {
-        score.locationScore = "매우 좋지 않아요";
+        reviewScore.locationScore = "매우 좋지 않아요";
       } else if (1 < reviewData.review.location <= 2) {
-        score.locationScore = "좋지 않아요";
+        reviewScore.locationScore = "좋지 않아요";
       } else if (2 < reviewData.review.location <= 3) {
-        score.locationScore = "보통이에요";
+        reviewScore.locationScore = "보통이에요";
       } else if (3 < reviewData.review.location <= 4) {
-        score.locationScore = "좋아요";
+        reviewScore.locationScore = "좋아요";
       } else {
-        score.locationScore = "매우 좋아요";
+        reviewScore.locationScore = "매우 좋아요";
       }
 
       if (0 <= reviewData.review.price <= 1) {
-        score.priceScore = "매우 비싸요";
+        reviewScore.priceScore = "매우 비싸요";
       } else if (1 < reviewData.review.price <= 2) {
-        score.priceScore = "비싸요";
+        reviewScore.priceScore = "비싸요";
       } else if (2 < reviewData.review.price <= 3) {
-        score.priceScore = "보통이에요";
+        reviewScore.priceScore = "보통이에요";
       } else if (3 < reviewData.review.price <= 4) {
-        score.priceScore = "저렴해요";
+        reviewScore.priceScore = "저렴해요";
       } else {
-        score.priceScore = "매우 저렴해요";
+        reviewScore.priceScore = "매우 저렴해요";
       }
-      reviewScore.props.memberId = score;
-    };
-    onMounted(async () => {
-      checkScore();
     });
-    return { reviewData, reviewScore, checkScore };
+
+    return { reviewData, reviewScore };
   },
 };
 </script>
