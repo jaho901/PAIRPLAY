@@ -1,54 +1,46 @@
 # 운동할 메이트와 장소를 같이 찾아요!
 
+## 프로젝트 개요
+- 운동 카테고리별 자신의 거주지와 가까운 운동장 및 체육관의 정보를 알려주고 예약을 할 수 있는 기능을 제공한다.
 
+- 혼자하는 운동이 아닌 다양한 사람과의 만남을 통해 흥미를 가지고 함께 할 수 있는 운동을 제공한다.
+![main](README.assets/main.png)
 
 ## 👭팀원 소개
 
+
+![team_image](README.assets/team_image.png)
+
 ##### 조영현 (Yeonghyeon Jo)
 
-- **총괄 팀장, 프론트 엔드, Vue 개발**
+- **총괄 팀장 / 프론트 엔드**
 - 🍎 Github : https://github.com/doyosaedog
 
 ##### 정재호 ( Jaeho Jeong )
 
-- **프론트 엔드, Vue 개발**
+- **프론트 엔드**
 - 🍋 Github : https://github.com/jaho901
 
 ##### 조해성 (Haesung Cho)
 
-- **프론트 엔드, Vue 개발**
+- **프론트 엔드**
 - 🍌 Github : https://github.com/daedaem
 
 ##### 김현민 (Hyunmin Kim)
 
-- **백엔드, SpringBoot 개발**
+- **백엔드**
 - 🍇 Github : https://github.com/hyunmin2439
 
 ##### 배소원 (Sowon Bae)
 
-- **백엔드, SpringBoot 개발**
+- **백엔드**
 - 🍓 Github : https://github.com/SowonBae
 
 ##### 임창현 (Changhyeon Lim)
 
-- **백엔드, SpringBoot 개발**
+- **백엔드**
 - 🍑 Github : https://github.com/ckdgus777
 
-
-
-
-
-## 프로젝트 개요
-
-<img src="https://img.shields.io/badge/vue.js-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white"> <img src="https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=SpringBoot&logoColor=white">  <img src="https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=MongoDB&logoColor=white"> <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white"> <img src="https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=Jenkins&logoColor=white"> <img src="https://img.shields.io/badge/NGINX-009639?style=for-the-badge&logo=NGINX&logoColor=white"> <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=Docker&logoColor=white">
-
-
-
-- 운동 카테고리별 자신의 거주지와 가까운 운동장 및 체육관의 정보를 알려주고 예약을 할 수 있는 기능을 제공한다.
-
-- 혼자하는 운동이 아닌 다양한 사람과의 만남을 통해 흥미를 가지고 함께 할 수 있는 운동을 제공한다.
-
-  
 
 #### 프로젝트 관련 사이트
 
@@ -68,12 +60,18 @@
 
 ##### [Jira](https://jira.ssafy.com/projects/S06P31E205?selectedItem=com.atlassian.jira.jira-projects-plugin:report-page)
 
----
 
+## 기술 스택
+---
+<img src="https://img.shields.io/badge/vue.js-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white"> <img src="https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=SpringBoot&logoColor=white">  <img src="https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=MongoDB&logoColor=white"> <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white"> <img src="https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=Jenkins&logoColor=white"> <img src="https://img.shields.io/badge/NGINX-009639?style=for-the-badge&logo=NGINX&logoColor=white"> <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=Docker&logoColor=white">
+
+
+## 프로젝트 아키텍처
+---
+![team_image](README.assets/stack.png)
 
 
 ### 기획 의도
-
 ---
 
 ####  ‘체육활동을 위한 **장소**와 **사람**을 중개함으로써, 국민생활체육 활동 증진 도모하는 **운동 중개 플랫폼**’
@@ -85,11 +83,6 @@
 - 체육 동호회 조직 가입 이유 1위, 59.4% '여러 사람들과 어울려서 운동하고 싶어서' -> '**운동을 함께 할 사람 필요'**
 
 <img src="README.assets/intentionOfProject.png" alt="프레젠테이션1" style="zoom:67%;" />
-
-## 프로젝트 소개
-
-![image-20220415195611472](README.assets/image-20220415195611472.png)
-
 
 
 #### 주요 서비스
