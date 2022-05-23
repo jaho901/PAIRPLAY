@@ -1,13 +1,13 @@
-# 운동할 메이트와 장소를 같이 찾아요!
-
+# PairPlay - 운동할 메이트와 장소를 같이 찾아요!
 ## 프로젝트 개요
 - 운동 카테고리별 자신의 거주지와 가까운 운동장 및 체육관의 정보를 알려주고 예약을 할 수 있는 기능을 제공한다.
 
 - 혼자하는 운동이 아닌 다양한 사람과의 만남을 통해 흥미를 가지고 함께 할 수 있는 운동을 제공한다.
 ![main](README.assets/main.png)
 
-## 👭팀원 소개
+<br><br>
 
+## 👭팀원 소개
 
 ![team_image](README.assets/team_image.png)
 
@@ -41,11 +41,9 @@
 - **백엔드**
 - 🍑 Github : https://github.com/ckdgus777
 
+<br><br>
 
-#### 프로젝트 관련 사이트
-
----
-
+## 프로젝트 설계 링크
 ##### [기능 명세서](https://docs.google.com/spreadsheets/d/1kfCWI3TbXJp1Jj8yONFbBbaU0l_I9F6j67QyKznPYfg/edit#gid=0)
 
 ##### [마인드맵](https://www.mindmeister.com/map/2250153434)
@@ -60,20 +58,9 @@
 
 ##### [Jira](https://jira.ssafy.com/projects/S06P31E205?selectedItem=com.atlassian.jira.jira-projects-plugin:report-page)
 
+<br><br>
 
-## 기술 스택
----
-<img src="https://img.shields.io/badge/vue.js-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white"> <img src="https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=SpringBoot&logoColor=white">  <img src="https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=MongoDB&logoColor=white"> <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white"> <img src="https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=Jenkins&logoColor=white"> <img src="https://img.shields.io/badge/NGINX-009639?style=for-the-badge&logo=NGINX&logoColor=white"> <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=Docker&logoColor=white">
-
-
-## 프로젝트 아키텍처
----
-![team_image](README.assets/stack.png)
-
-
-### 기획 의도
----
-
+## 기획 의도
 ####  ‘체육활동을 위한 **장소**와 **사람**을 중개함으로써, 국민생활체육 활동 증진 도모하는 **운동 중개 플랫폼**’
 
 - 2021년, 문체부 국민생활체육조사에 따르면 생활체육 참여율 50%로 부족. -> **'국민의 생활체육 참여 부족'**
@@ -84,37 +71,69 @@
 
 <img src="README.assets/intentionOfProject.png" alt="프레젠테이션1" style="zoom:67%;" />
 
+<br><br>
 
-#### 주요 서비스
+## 프로젝트 특장점 및 차별점
 
-##### 1. 운동 장소
+### 특장점
+
+- 운동 스케줄 기록을 관리하여 이용자에게 동기부여
+- 네이버 지도 API를 통해 위치 기반 체육 시설 정보 제공
+- i`m port 결제 대행 API를 통한 실제 결제 시스템을 연동
+
+### 차별점
+   - 타 플랫폼들은 사람 또는 장소에 단일화된 서비스를 제공 하지만, PairPlay는 ***사람과 장소를 모두 중개***하는 플랫폼
+
+
+<br><br>
+
+## 기술 스택
+<img src="https://img.shields.io/badge/vue.js-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white"> <img src="https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=SpringBoot&logoColor=white">  <img src="https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=MongoDB&logoColor=white"> <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white"> <img src="https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=Jenkins&logoColor=white"> <img src="https://img.shields.io/badge/NGINX-009639?style=for-the-badge&logo=NGINX&logoColor=white"> <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=Docker&logoColor=white">
+
+<br><br>
+
+## 프로젝트 아키텍처
+![team_image](README.assets/stack.png)
+
+<br><br>
+
+## DB 설계
+![team_image](README.assets/team_image.png)
+![team_image](README.assets/team_image.png)
+
+<br><br>
+
+## 주요 서비스
+
+### 1. 운동 장소
 - 운동 카테고리별 검색을 통해 원하는 운동 시설을 조회하고 예약할 수 있는 서비스를 제공합니다.
 ![장소수정](README.assets/장소수정.gif)
 
 
-##### 2. 운동 메이트
+### 2. 운동 메이트
 - 자신의 지역 기반으로 메이트 목록을 확인하고 운동 종목별로 같이 운동을 원하는 메이트를 찾을 수 있는 서비스를 제공합니다.
 ![메이트](README.assets/메이트.gif) 
 
 
-##### 3. 프로필
+### 3. 프로필
 - 자신의 개인화된 정보를 보여주고, 자신의 활동 이력을 조회할 수 있는 서비스를 제공합니다.
 ![프로필](README.assets/프로필.gif)
 
+<br><br>
 
-#### 기능 소개
+## 기능 소개
 
-##### 1. 카카오 로그인
+### 1. 카카오 로그인
 
 ![로그인](exec/4. 시연 시나리오/image/01.PNG)
 
 ![카카오 로그인](exec/4. 시연 시나리오/image/02.PNG)
 
-##### 2. 메인 페이지
+### 2. 메인 페이지
 
 ![메인 페이지](exec/4. 시연 시나리오/image/03.PNG)
 
-##### 3. 장소 페이지
+### 3. 장소 페이지
 
 ![장소 페이지](exec/4. 시연 시나리오/image/04.PNG)
 
@@ -124,7 +143,7 @@
 
 ![장소 예약 결제](exec/4. 시연 시나리오/image/07.PNG)
 
-##### 4. 메이트 페이지
+### 4. 메이트 페이지
 
 ![메이트 페이지](exec/4. 시연 시나리오/image/08.PNG)
 
@@ -132,7 +151,7 @@
 
 ![메이트 상세 조회](exec/4. 시연 시나리오/image/10.PNG)
 
-##### 5. 프로필 페이지
+### 5. 프로필 페이지
 
 ![프로필 소개](exec/4. 시연 시나리오/image/11.PNG)
 
