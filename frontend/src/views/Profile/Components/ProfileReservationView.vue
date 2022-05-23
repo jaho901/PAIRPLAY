@@ -173,50 +173,46 @@
           <div class="d-flex row">
             <div class="col-5" style="height: 300px">
               <div class="d-flex justify-content-start align-items-end ms-2">
-                <span>작성자: </span>
+                <span style="font-weight: bold;">작성자: </span>
                 <div class="ms-4">{{ state.reviewDetailList.nickname }}</div>
               </div>
               <div class="d-flex justify-content-start align-items-end my-3 ms-2">
-                <span>청결: </span>
+                <span style="font-weight: bold;">청결: </span>
                 <div class="d-flex ms-5">
-                  <div v-for="(star, idx) in state.reviewDetailList.cleanness" :key="idx" class="view-star-full me-2" style="height: 25px; width: 25px"></div>
-                  <div v-for="(star, idx) in 5 - state.reviewDetailList.cleanness" :key="idx" class="view-star-none me-2" style="height: 25px; width: 25px"></div>
+                  <div v-for="(star, idx) in state.starList[Number(state.reviewDetailList.cleanness)]" :key="idx" class="view-star-full me-2" style="height: 25px; width: 25px"></div>
+                  <div v-for="(star, idx) in state.starList[(5-Number(state.reviewDetailList.cleanness))]" :key="idx" class="view-star-none me-2" style="height: 25px; width: 25px"></div>
                 </div>
               </div>
               <div class="d-flex justify-content-start align-items-end my-3 ms-2">
-                <span>위치: </span>
+                <span style="font-weight: bold;">위치: </span>
                 <div class="d-flex ms-5">
-                  <div v-for="(star, idx) in state.reviewDetailList.location" :key="idx" class="view-star-full me-2" style="height: 25px; width: 25px"></div>
-                  <div v-for="(star, idx) in 5 - state.reviewDetailList.location" :key="idx" class="view-star-none me-2" style="height: 25px; width: 25px"></div>
+                  <div v-for="(star, idx) in state.starList[Number(state.reviewDetailList.location)]" :key="idx" class="view-star-full me-2" style="height: 25px; width: 25px"></div>
+                  <div v-for="(star, idx) in state.starList[(5-Number(state.reviewDetailList.location))]" :key="idx" class="view-star-none me-2" style="height: 25px; width: 25px"></div>
                 </div>
               </div>
               <div class="d-flex justify-content-start align-items-end my-3 ms-2">
-                <span>시설: </span>
+                <span style="font-weight: bold;">시설: </span>
                 <div class="d-flex ms-5">
-                  <div v-for="(star, idx) in Number(state.reviewDetailList.place)" :key="idx"
-                    class="view-star-full me-2" style="height: 25px; width: 25px;"
-                  ></div>
-                  <div v-for="(star, idx) in (5-Number(state.reviewDetailList.place))" :key="idx"
-                    class="view-star-none me-2" style="height: 25px; width: 25px;"
-                  ></div>
+                  <div v-for="(star, idx) in state.starList[Number(state.reviewDetailList.place)]" :key="idx" class="view-star-full me-2" style="height: 25px; width: 25px;"></div>
+                  <div v-for="(star, idx) in state.starList[(5-Number(state.reviewDetailList.place))]" :key="idx" class="view-star-none me-2" style="height: 25px; width: 25px;"></div>
                 </div>
               </div>
               <div class="d-flex justify-content-start align-items-end mt-3 mb-4 ms-2">
-                <span>가격: </span>
+                <span style="font-weight: bold;">가격: </span>
                 <div class="d-flex ms-5">
-                  <div v-for="(star, idx) in state.reviewDetailList.price" :key="idx" class="view-star-full me-2" style="height: 25px; width: 25px"></div>
-                  <div v-for="(star, idx) in 5 - state.reviewDetailList.price" :key="idx" class="view-star-none me-2" style="height: 25px; width: 25px"></div>
+                  <div v-for="(star, idx) in state.starList[Number(state.reviewDetailList.price)]" :key="idx" class="view-star-full me-2" style="height: 25px; width: 25px"></div>
+                  <div v-for="(star, idx) in state.starList[(5-Number(state.reviewDetailList.price))]" :key="idx" class="view-star-none me-2" style="height: 25px; width: 25px"></div>
                 </div>
               </div>
               <div class="my-2 ms-2">
-                <p>리뷰:</p>
+                <p style="font-weight: bold;">리뷰:</p>
                 <p>{{ state.reviewDetailList.description }}</p>
-                <br />
+                <br>
               </div>
             </div>
             <div class="col-1"></div>
             <div class="col-6" style="height: 250px">
-              <span class="me-3">사진</span>
+              <span class="me-3" style="font-weight: bold;">사진</span>
               <div v-if="state.reviewDetailList.reviewImage" class="my-3">
                 <img :src="state.reviewDetailList.reviewImage" alt="" style="width: 270px; height: 180px" />
               </div>
@@ -252,6 +248,7 @@ export default {
       status: "All",
       profileReservationList: computed(() => store.getters["root/profileReservationList"]),
       reviewCreateId: 0,
+      starList: [[], [1], [1,2], [1,2,3], [1,2,3,4], [1,2,3,4,5]],
       page: 0,
       clean: 0,
       location: 0,

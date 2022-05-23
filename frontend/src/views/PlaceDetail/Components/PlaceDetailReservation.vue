@@ -81,24 +81,25 @@ export default {
         });
       } else {
         // 임시
-        let tempbody = { placeId: placeInfos.value.placeId, reservationDt: selectedDate, price: 1, time: temp };
-        // console.log(body, "제대로?");
-        axios({
-          method: "post",
-          data: tempbody,
-          headers: { Authorization: "Bearer " + localStorage.getItem("jwt") },
-          url: `${BASE_URL}/places/reservation`,
-        }).then(() => {
-          // console.log(res);
-          Swal.fire({
-            icon: "success",
-            title: "성공!",
-            text: "예약이 완료되었습니다.",
-          });
-          router.go(0);
-        });
+        // let tempbody = { placeId: placeInfos.value.placeId, reservationDt: selectedDate, price: 1, time: temp };
+        // // console.log(body, "제대로?");
+        // axios({
+        //   method: "post",
+        //   data: tempbody,
+        //   headers: { Authorization: "Bearer " + localStorage.getItem("jwt") },
+        //   url: `${BASE_URL}/places/reservation`,
+        // }).then(() => {
+        //   // console.log(res);
+        //   Swal.fire({
+        //     icon: "success",
+        //     title: "성공!",
+        //     text: "예약이 완료되었습니다.",
+        //   });
+        //   router.go(0);
+        // });
 
         // 아래가 정답
+<<<<<<< HEAD
         // const { IMP } = window;
         // IMP.init("imp57638465"); //iamport 대신 자신의 "가맹점 식별코드"를 사용
         //   IMP.request_pay(
@@ -140,6 +141,49 @@ export default {
         //       }
         //     }
         //   );
+=======
+        const { IMP } = window;
+        IMP.init("imp57638465"); //iamport 대신 자신의 "가맹점 식별코드"를 사용
+          IMP.request_pay(
+            {
+              pg: "inicis",
+              pay_method: "card",
+              merchantuid: "merchant" + new Date().getTime(),
+              name: placeInfos.value.name + " 예약",
+              amount: 100, // 결제금액,
+              buyer_email: store.state.root.userInfo.email,
+              buyer_name: store.state.root.userInfo.name,
+              buyer_tel: store.state.root.userInfo.phone,
+              buyer_addr: store.state.root.userInfo.address,
+              buyer_postcode: "123-456",
+            },
+            function (rsp) {
+              // callback
+              if (rsp.success) {
+                console.log("결제성공");
+
+                let tempbody = { placeId: placeInfos.value.placeId, reservationDt: selectedDate, price: 1, time: temp };
+                // console.log(body, "제대로?");
+                axios({
+                  method: "post",
+                  data: tempbody,
+                  headers: { Authorization: "Bearer " + localStorage.getItem("jwt") },
+                  url: `${BASE_URL}/places/reservation`,
+                }).then(() => {
+                  // console.log(res);
+                  Swal.fire({
+                    icon: "success",
+                    title: "성공!",
+                    text: "예약이 완료되었습니다.",
+                  });
+                  router.go(0);
+                });
+              } else {
+                console.log("결제실패");
+              }
+            }
+          );
+>>>>>>> 6c269af2938e4d875e751e7702bb0c18348eeb12
       }
     };
     const changeData = async () => {

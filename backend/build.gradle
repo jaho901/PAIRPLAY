@@ -1,0 +1,124 @@
+buildscript {
+	ext {
+		queryDslVersion = "5.0.0"
+	}
+}
+
+plugins {
+	id 'org.springframework.boot' version '2.6.4'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+	//querydsl 추가
+	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+}
+
+group = 'com.ssafy'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+// 각종 의존성(라이브러리)들을 어떤 원격 저장소에서 받을지 정함
+repositories {
+	mavenCentral()
+//	jcenter() // 더 이상 지원 되지 않는 서비스 종료된 저장소
+	google()
+
+//	의존성 선언이 안되면 다운받을 저장소 직접 url로 지정해서 사용
+//	maven { url "https://~~~" }
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'mysql:mysql-connector-java'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+
+	implementation 'commons-io:commons-io:2.6'
+//	implementation 'commons-fileupload:commons-fileupload:1.3.1'
+	implementation 'org.apache.commons:commons-collections4:4.4'
+	implementation 'org.apache.commons:commons-lang3:3.9'
+
+	implementation 'com.google.guava:guava:29.0-jre'
+	annotationProcessor("com.google.guava:guava:29.0-jre")
+	annotationProcessor("jakarta.persistence:jakarta.persistence-api")
+
+	compile("javax.annotation:javax.annotation-api:1.2")
+	compile('org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE')
+
+	implementation("com.squareup.retrofit2:retrofit:2.7.1")
+	implementation("com.squareup.retrofit2:converter-jackson:2.7.1")
+	implementation("com.squareup.okhttp3:logging-interceptor:3.9.0")
+
+	// ------------------- swagger ----------------------
+	implementation 'io.springfox:springfox-swagger2:3.0.0'
+	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+	// Swagger NumberFormat Exception 해결 두줄
+	implementation("io.swagger:swagger-annotations:1.5.21")
+	implementation("io.swagger:swagger-models:1.5.21")
+
+	// ------------------- querydsl 설정관련 ---------------------
+	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
+
+	// ------------------- jwt ---------------------
+	implementation 'com.auth0:java-jwt:3.10.3'
+
+	// ------------------- oauth 2.0 ---------------------
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+	// ------------------- mail ---------------------
+	implementation("org.springframework.boot:spring-boot-starter-mail")
+
+	// ------------------- mongo db -----------------------
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+//	implementation 'com.querydsl:querydsl-mongodb' // 이 설정을 안넣어도 기본 queryDSL 설정이 들어가 있어서 동작함
+//	annotationProcessor 'com.querydsl:querydsl-apt:4.3.1:morphia'
+	// mongoDB QueryDsl을 사용할 수 없음. MongoDB QueryDsl을 사용하기 위해 위 의존성 주입을 해야하지만
+	// 위 의존성 주입을 하면 기존의 MySQL과 연동하여 사용하는 QEntity들이 사용이 안되는 상황.
+	// 현재 이에 대한 해답을 찾지 못해 MongoDB는 QueryDSL을 포기하고 다른 방식으로 사용
+
+	//  aws s3
+	implementation("org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE")
+	implementation("io.awspring.cloud:spring-cloud-aws-context:2.3.3")
+	implementation("org.springframework.cloud:spring-cloud-aws-autoconfigure:2.2.6.RELEASE")
+
+
+}
+
+//querydsl 추가 시작
+def querydslDir = "$buildDir/generated/querydsl"
+
+querydsl {
+	jpa = true
+	springDataMongo = true
+	querydslSourcesDir = querydslDir
+}
+sourceSets {
+	main.java.srcDir querydslDir
+}
+configurations {
+	querydsl.extendsFrom compileClasspath
+}
+compileQuerydsl {
+	options.annotationProcessorPath = configurations.querydsl
+}
+//querydsl 추가 끝
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+
+jar {
+	enabled = false
+}
