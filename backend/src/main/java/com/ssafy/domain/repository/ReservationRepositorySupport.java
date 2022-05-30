@@ -52,7 +52,6 @@ public class ReservationRepositorySupport {
                                 Collections.singletonList(
                                         new Document("$match", new Document("$expr", new Document("$and",
                                                 Arrays.asList(
-                                                        new Document("$eq", Arrays.asList("$_id", "$$reviewId")),
                                                         new Document("$eq", Arrays.asList("$_id", "$$reviewId"))
                                                 )))
                                         )
