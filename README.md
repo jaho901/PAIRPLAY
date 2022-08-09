@@ -129,40 +129,40 @@
 
 ### 1. 카카오 로그인
 
-![로그인](exec/시연 시나리오/image/01.PNG)
+![로그인](exec/시연시나리오/image/01.PNG)
 
-![카카오 로그인](exec/시연 시나리오/image/02.PNG)
+![카카오 로그인](exec/시연시나리오/image/02.PNG)
 
 ### 2. 메인 페이지
 
-![메인 페이지](exec/시연 시나리오/image/03.PNG)
+![메인 페이지](exec/시연시나리오/image/03.PNG)
 
 ### 3. 장소 페이지
 
-![장소 페이지](exec/시연 시나리오/image/04.PNG)
+![장소 페이지](exec/시연시나리오/image/04.PNG)
 
-![장소 검색](exec/시연 시나리오/image/05.PNG)
+![장소 검색](exec/시연시나리오/image/05.PNG)
 
-![장소 상세 페이지](exec/시연 시나리오/image/06.PNG)
+![장소 상세 페이지](exec/시연시나리오/image/06.PNG)
 
-![장소 예약 결제](exec/시연 시나리오/image/07.PNG)
+![장소 예약 결제](exec/시연시나리오/image/07.PNG)
 
 ### 4. 메이트 페이지
 
-![메이트 페이지](exec/시연 시나리오/image/08.PNG)
+![메이트 페이지](exec/시연시나리오/image/08.PNG)
 
-![메이트 생성](exec/시연 시나리오/image/09.PNG)
+![메이트 생성](exec/시연시나리오/image/09.PNG)
 
-![메이트 상세 조회](exec/시연 시나리오/image/10.PNG)
+![메이트 상세 조회](exec/시연시나리오/image/10.PNG)
 
 ### 5. 프로필 페이지
 
-![프로필 소개](exec/시연 시나리오/image/11.PNG)
+![프로필 소개](exec/시연시나리오/image/11.PNG)
 
-![찜한 목록](exec/시연 시나리오/image/12.PNG)
+![찜한 목록](exec/시연시나리오/image/12.PNG)
 
-![예약 목록](exec/시연 시나리오/image/13.PNG)
+![예약 목록](exec/시연시나리오/image/13.PNG)
 
-![운동 스케줄](exec/시연 시나리오/image/14.PNG)
+![운동 스케줄](exec/시연시나리오/image/14.PNG)
 
-![메이트 신청 목록](exec/시연 시나리오/image/15.PNG)
+![메이트 신청 목록](exec/시연시나리오/image/15.PNG)
